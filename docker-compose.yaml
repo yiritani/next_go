@@ -12,6 +12,10 @@ services:
     ports:
       - 3000:3000
     restart: always
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8080
+    env_file:
+      - .env.local
     develop:
       watch:
         - action: sync
@@ -24,27 +28,6 @@ services:
     depends_on:
       - backend
 
-  frontend-docs:
-    networks:
-      - next_go
-    build:
-      context: .
-      dockerfile: ./apps/docs/Dockerfile
-    ports:
-      - 3001:3001
-    restart: always
-    develop:
-      watch:
-        - action: sync
-          path: ./apps/docs
-          target: ./app/apps/docs
-        - action: rebuild
-          path: ./apps/docs/package.json
-        - action: rebuild
-          path: ./packages/ui/package.json
-    depends_on:
-      - backend
-
   page_router:
     networks:
       - next_go
@@ -52,8 +35,12 @@ services:
       context: .
       dockerfile: ./apps/page_router/Dockerfile
     ports:
-      - 3002:3002
+      - 3001:3001
     restart: always
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8080
+    env_file:
+      - .env.local
     develop:
       watch:
         - action: sync
