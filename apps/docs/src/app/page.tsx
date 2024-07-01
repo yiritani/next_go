@@ -1,5 +1,7 @@
+'use client';
 import Image from "next/image";
 import { Card } from "@repo/ui/card";
+import {useState} from "react";
 
 function Gradient({
   conic,
@@ -44,6 +46,16 @@ const LINKS = [
 ];
 
 export default function Page(): JSX.Element {
+  const [response, setResponse] = useState('');
+  const apiFetch = async () => {
+    try {
+      const res = await fetch("http://localhost:8080/ping");
+      const data = await res.json();
+      console.log(data.message);
+    } catch (err) {
+      console.error(err);
+    }
+  }
   return (
     <main className="flex flex-col items-center justify-between min-h-screen p-24">
       <div className="z-10 items-center justify-between w-full max-w-5xl font-mono text-sm lg:flex">
@@ -124,6 +136,13 @@ export default function Page(): JSX.Element {
             </svg>
           </div>
         </div>
+      </div>
+
+      <div>
+        <button onClick={apiFetch} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="button">
+          Submit
+        </button>
+        {response ? <p className="text-center mt-4">{response}</p> : null}
       </div>
 
       <div className="grid mb-32 text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
