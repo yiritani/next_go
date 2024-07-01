@@ -14,8 +14,6 @@ services:
     restart: always
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:8080
-    env_file:
-      - .env.local
     develop:
       watch:
         - action: sync
@@ -39,8 +37,6 @@ services:
     restart: always
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:8080
-    env_file:
-      - .env.local
     develop:
       watch:
         - action: sync

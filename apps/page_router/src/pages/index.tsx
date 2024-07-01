@@ -7,8 +7,6 @@ const inter = Inter({ subsets: ["latin"] });
 export default function Home() {
   const [data, setData] = useState<string>();
   const apiFetch = async () => {
-    console.log(`${process.env.NEXT_PUBLIC_API_URL}/ping`)
-    console.log('process.env',process.env)
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ping`);
     const data = await response.json();
     setData(data.message);
