@@ -61,7 +61,7 @@ services:
           path: ./apps/backend
           target: ./app/apps/backend
     volumes:
-      - ./backend:/app
+      - ./apps/backend:/app
     depends_on:
       - db
 
@@ -72,8 +72,9 @@ services:
     ports:
       - "5432:5432"
     environment:
+      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=db
+      - POSTGRES_DB=postgres
     volumes:
       - db-store:/var/lib/postgresql/data
 
