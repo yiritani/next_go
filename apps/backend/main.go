@@ -13,16 +13,14 @@ import (
 )
 
 func dbSel(c *gin.Context) {
-	print("dbSel")
 	ctx := context.Background()
 
-	conn, _ := pgx.Connect(ctx, "user=postgres dbname=postgres sslmode=verify-full")
-
+	conn, _ := pgx.Connect(ctx, "user=postgres dbname=public sslmode=verify-full")
 	defer conn.Close(ctx)
 
 	queries := sqlc.New(conn)
 
-	system, _ := queries.GetSystemUsers(ctx)
+	system, _ := queries.ListSystems(ctx)
 	println(system)
 
 	c.JSON(http.StatusOK, gin.H{

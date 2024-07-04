@@ -73,3 +73,27 @@ func (q *Queries) GetUser(ctx context.Context, id pgtype.UUID) (User, error) {
 	)
 	return i, err
 }
+
+const listSystems = `-- name: ListSystems :many
+SELECT id, system_name, created_at from "system"
+`
+
+func (q *Queries) ListSystems(ctx context.Context) ([]System, error) {
+	rows, err := q.db.Query(ctx, listSystems)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []System
+	for rows.Next() {
+		var i System
+		if err := rows.Scan(&i.ID, &i.SystemName, &i.CreatedAt); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}

@@ -12,3 +12,6 @@ SELECT
 "user".name as user_name
 from "system"
 INNER JOIN "user" ON "system"."id" = "user"."system_id";
+
+-- name: ListSystems :many
+SELECT * from "system";
