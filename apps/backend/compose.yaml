@@ -10,3 +10,4 @@ services:
     # Important to bind/mount your codebase dir to /app dir for live reload
     volumes:
       - ./:/app
+    command: sh -c 'go mod tidy && air'

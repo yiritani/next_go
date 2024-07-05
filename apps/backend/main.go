@@ -2,14 +2,13 @@ package main
 
 import (
 	"context"
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"net/http"
 	"os"
 	"time"
 	db "tutorial.sqlc.dev/app/src/sqlc"
-
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
 )
 
 var pool *pgxpool.Pool
@@ -28,8 +27,9 @@ func dbSel(c *gin.Context) {
 }
 
 func main() {
-	connString := "user=postgres password=password host=localhost port=5432 dbname=public sslmode=disable"
-	pool, err := pgxpool.New(context.Background(), connString)
+	connString := "user=postgres password=password host=db port=5432 dbname=postgres sslmode=disable"
+	var err error
+	pool, err = pgxpool.New(context.Background(), connString)
 	if err != nil {
 		panic(err)
 		os.Exit(1)
@@ -52,5 +52,8 @@ func main() {
 		})
 	})
 	r.GET("/db-sel", dbSel)
-	r.Run()
+	err = r.Run()
+	if err != nil {
+		return
+	}
 }

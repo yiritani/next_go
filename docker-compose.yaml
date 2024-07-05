@@ -62,6 +62,7 @@ services:
           target: ./app/apps/backend
     volumes:
       - ./apps/backend:/app
+    command: sh -c 'go mod tidy && air'
     depends_on:
       - db
 
