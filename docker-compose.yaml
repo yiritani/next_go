@@ -52,7 +52,7 @@ services:
       - next_go
     build:
       context: ./apps/backend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     ports:
       - 8080:8080
     develop:
@@ -62,7 +62,6 @@ services:
           target: ./app/apps/backend
     volumes:
       - ./apps/backend:/app
-    command: sh -c 'go mod tidy && air'
     depends_on:
       - db
 
