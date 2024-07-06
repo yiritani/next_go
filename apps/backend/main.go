@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	connString := "user=postgres password=password host=localhost port=5432 dbname=postgres sslmode=disable"
+	connString := "user=postgres password=password host=db port=5432 dbname=postgres sslmode=disable"
 	var err error
 	pool, err := pgxpool.New(context.Background(), connString)
 	if err != nil {

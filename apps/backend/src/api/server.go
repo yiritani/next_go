@@ -35,8 +35,8 @@ func NewServer(pool *pgxpool.Pool) *Server {
 			"message": "pong",
 		})
 	})
-	r.GET("get-system-users", server.getSystemUsers)
-	r.POST("create-system", server.createSystem)
+	r.GET("/get-system-users", server.getSystemUsers)
+	r.POST("/create-system", server.createSystem)
 
 	server.router = r
 	server.pool = pool
