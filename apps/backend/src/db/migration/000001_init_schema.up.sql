@@ -1,17 +1,43 @@
--- Active: 1720083798212@@127.0.0.1@5432@postgres@public
-CREATE TABLE "system" (
-  "id" UUID PRIMARY KEY DEFAULT (gen_random_uuid()),
-  "system_name" VARCHAR(255) NOT NULL,
+-- Active: 1718882202514@@127.0.0.1@5432@postgres@public
+CREATE TABLE "accounts" (
+  "id" bigserial PRIMARY KEY,
+  "owner" varchar NOT NULL,
+  "balance" bigint NOT NULL,
+  "currency" varchar NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
-CREATE TABLE "user" (
-  "id" UUID PRIMARY KEY DEFAULT (gen_random_uuid()),
-  "system_id" UUID NOT NULL,
-  "name" VARCHAR(255) NOT NULL,
-  "email" VARCHAR(255) NOT NULL,
-  "created_at" TIMESTAMP NOT NULL DEFAULT (now())
+CREATE TABLE "entries" (
+  "id" bigserial PRIMARY KEY,
+  "account_id" bigint NOT NULL,
+  "amount" bigint NOT NULL,
+  "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
+CREATE TABLE "transfers" (
+  "id" bigserial PRIMARY KEY,
+  "from_account_id" bigint NOT NULL,
+  "to_account_id" bigint NOT NULL,
+  "amount" bigint NOT NULL,
+  "created_at" timestamptz NOT NULL DEFAULT (now())
+);
 
-ALTER TABLE "user" ADD CONSTRAINT "fk_system_id" FOREIGN KEY ("system_id") REFERENCES "system" ("id") ON DELETE CASCADE;
+ALTER TABLE "entries" ADD FOREIGN KEY ("account_id") REFERENCES "accounts" ("id");
+
+ALTER TABLE "transfers" ADD FOREIGN KEY ("from_account_id") REFERENCES "accounts" ("id");
+
+ALTER TABLE "transfers" ADD FOREIGN KEY ("to_account_id") REFERENCES "accounts" ("id");
+
+CREATE INDEX ON "accounts" ("owner");
+
+CREATE INDEX ON "entries" ("account_id");
+
+CREATE INDEX ON "transfers" ("from_account_id");
+
+CREATE INDEX ON "transfers" ("to_account_id");
+
+CREATE INDEX ON "transfers" ("from_account_id", "to_account_id");
+
+COMMENT ON COLUMN "entries"."amount" IS 'can be negative or positive';
+
+COMMENT ON COLUMN "transfers"."amount" IS 'must be positive';
