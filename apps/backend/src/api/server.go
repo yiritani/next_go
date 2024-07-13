@@ -10,10 +10,10 @@ import (
 )
 
 type Server struct {
-	router *gin.Engine
-	// TODO: 多分要らない
-	pool    *pgxpool.Pool
+	router  *gin.Engine
 	Queries *sqlc.Queries
+	// TODO: 多分要らない
+	pool *pgxpool.Pool
 }
 
 func NewServer(pool *pgxpool.Pool) *Server {

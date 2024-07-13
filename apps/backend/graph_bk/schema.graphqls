@@ -1,0 +1,16 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+
+type System {
+  id: ID!
+  system_name: String!
+}
+
+input NewSystem{
+  systemName: String!
+}
+
+type Mutation {
+  createSystem(input: NewSystem!): System!
+}
