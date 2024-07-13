@@ -2,8 +2,6 @@ package sqlc
 
 import (
 	"context"
-	"tutorial.sqlc.dev/app/src/util"
-
 	"github.com/jackc/pgx/v5"
 )
 
@@ -11,33 +9,7 @@ type AccountTxResult struct {
 	Account Account
 }
 
-func accountTx(ctx context.Context, db *pgx.Conn, queries *Queries) error {
-	tx, err := db.Begin(ctx)
-	if err != nil {
-		return err
-	}
-
-	defer tx.Rollback(ctx)
-	qtx := queries.WithTx(tx)
-	r, err := qtx.CreateAccount(ctx, CreateAccountParams{
-		Owner:    util.RandomOwner(),
-		Balance:  util.RandomMoney(),
-		Currency: util.RandomCurrency(),
-	})
-	if err != nil {
-		return err
-	}
-
-	if _, err := qtx.UpdateAccount(ctx, UpdateAccountParams{
-		ID:      r.ID,
-		Balance: r.Balance + util.RandomMoney(),
-	}); err != nil {
-		return err
-	}
-	return tx.Commit(ctx)
-}
-
-type TransferTxParamas struct {
+type TransferTxParams struct {
 	FromAccountID int64 `json:"from_account_id"`
 	ToAccountID   int64 `json:"to_account_id"`
 	Amount        int64 `json:"amount"`
@@ -51,7 +23,7 @@ type TransferTxResult struct {
 	ToAccount   Account
 }
 
-func TransferTx(ctx context.Context, db *pgx.Conn, queries *Queries, args TransferTxParamas) (TransferTxResult, error) {
+func TransferTx(ctx context.Context, db *pgx.Conn, queries *Queries, args TransferTxParams) (TransferTxResult, error) {
 	tx, err := db.Begin(ctx)
 	if err != nil {
 		return (TransferTxResult{}), err
