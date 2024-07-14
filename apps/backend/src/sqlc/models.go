@@ -11,52 +11,52 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-type Role string
+type SystemRole string
 
 const (
-	RolePmoOwner        Role = "pmo_owner"
-	RolePmoUser         Role = "pmo_user"
-	RolePjmoOwner       Role = "pjmo_owner"
-	RolePjmoUser        Role = "pjmo_user"
-	RoleVendorPmoOwner  Role = "vendor_pmo_owner"
-	RoleVendorPmoUser   Role = "vendor_pmo_user"
-	RoleVendorPjmoOwner Role = "vendor_pjmo_owner"
-	RoleVendorPjmoUser  Role = "vendor_pjmo_user"
+	SystemRolePmoOwner        SystemRole = "pmo_owner"
+	SystemRolePmoUser         SystemRole = "pmo_user"
+	SystemRolePjmoOwner       SystemRole = "pjmo_owner"
+	SystemRolePjmoUser        SystemRole = "pjmo_user"
+	SystemRoleVendorPmoOwner  SystemRole = "vendor_pmo_owner"
+	SystemRoleVendorPmoUser   SystemRole = "vendor_pmo_user"
+	SystemRoleVendorPjmoOwner SystemRole = "vendor_pjmo_owner"
+	SystemRoleVendorPjmoUser  SystemRole = "vendor_pjmo_user"
 )
 
-func (e *Role) Scan(src interface{}) error {
+func (e *SystemRole) Scan(src interface{}) error {
 	switch s := src.(type) {
 	case []byte:
-		*e = Role(s)
+		*e = SystemRole(s)
 	case string:
-		*e = Role(s)
+		*e = SystemRole(s)
 	default:
-		return fmt.Errorf("unsupported scan type for Role: %T", src)
+		return fmt.Errorf("unsupported scan type for SystemRole: %T", src)
 	}
 	return nil
 }
 
-type NullRole struct {
-	Role  Role
-	Valid bool // Valid is true if Role is not NULL
+type NullSystemRole struct {
+	SystemRole SystemRole
+	Valid      bool // Valid is true if SystemRole is not NULL
 }
 
 // Scan implements the Scanner interface.
-func (ns *NullRole) Scan(value interface{}) error {
+func (ns *NullSystemRole) Scan(value interface{}) error {
 	if value == nil {
-		ns.Role, ns.Valid = "", false
+		ns.SystemRole, ns.Valid = "", false
 		return nil
 	}
 	ns.Valid = true
-	return ns.Role.Scan(value)
+	return ns.SystemRole.Scan(value)
 }
 
 // Value implements the driver Valuer interface.
-func (ns NullRole) Value() (driver.Value, error) {
+func (ns NullSystemRole) Value() (driver.Value, error) {
 	if !ns.Valid {
 		return nil, nil
 	}
-	return string(ns.Role), nil
+	return string(ns.SystemRole), nil
 }
 
 type System struct {
@@ -66,10 +66,10 @@ type System struct {
 }
 
 type SystemUserRelation struct {
-	SystemID  pgtype.UUID
-	UserID    pgtype.UUID
-	Role      Role
-	CreatedAt pgtype.Timestamptz
+	SystemID   pgtype.UUID
+	UserID     pgtype.UUID
+	SystemRole SystemRole
+	CreatedAt  pgtype.Timestamptz
 }
 
 type User struct {

@@ -7,6 +7,8 @@ package sqlc
 
 import (
 	"context"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
 
 const insertSystem = `-- name: InsertSystem :one
@@ -17,5 +19,26 @@ func (q *Queries) InsertSystem(ctx context.Context, systemName string) (System, 
 	row := q.db.QueryRow(ctx, insertSystem, systemName)
 	var i System
 	err := row.Scan(&i.ID, &i.SystemName, &i.CreatedAt)
+	return i, err
+}
+
+const insertSystemUserRelation = `-- name: InsertSystemUserRelation :one
+INSERT INTO "systemUserRelation" (system_id, user_id) VALUES ($1, $2) RETURNING system_id, user_id, system_role, created_at
+`
+
+type InsertSystemUserRelationParams struct {
+	SystemID pgtype.UUID
+	UserID   pgtype.UUID
+}
+
+func (q *Queries) InsertSystemUserRelation(ctx context.Context, arg InsertSystemUserRelationParams) (SystemUserRelation, error) {
+	row := q.db.QueryRow(ctx, insertSystemUserRelation, arg.SystemID, arg.UserID)
+	var i SystemUserRelation
+	err := row.Scan(
+		&i.SystemID,
+		&i.UserID,
+		&i.SystemRole,
+		&i.CreatedAt,
+	)
 	return i, err
 }
