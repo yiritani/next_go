@@ -10,9 +10,7 @@ import (
 )
 
 type Server struct {
-	router *gin.Engine
-	// TODO: 多分要らない
-	pool    *pgxpool.Pool
+	router  *gin.Engine
 	Queries *sqlc.Queries
 }
 
@@ -39,7 +37,6 @@ func NewServer(pool *pgxpool.Pool) *Server {
 	r.POST("/create-system", server.createSystem)
 
 	server.router = r
-	server.pool = pool
 	server.Queries = sqlc.New(pool)
 	return server
 }
