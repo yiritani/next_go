@@ -4,18 +4,17 @@
 ## コンセプト
 - Next.jsとgolang/ginを使ったフルスタック開発のテンプレート
 - Next.jsでは特段何もしておらず、主にgolangのスタートアップ
-- production Dockerfileはまだ未完成
+- production Dockerfileはまだ未着手
 - Turborepoでモノリポ化
 
 ### Frontend: Next.js
-### Backend: golang/gin
+### Backend: golang/gin/sqlc
 - Framework: Gin
 - SQL Builder: sqlc
-とりあえずローカルでは'air'でホットリロードできるようにしています。
+
+ローカルでは'air'でホットリロードできるようにしている。
 
 ### Database: PostgreSQL
-
-
 
 ## ディレクトリ
 ```

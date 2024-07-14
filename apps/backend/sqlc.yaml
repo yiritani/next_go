@@ -10,4 +10,5 @@ sql:
         package: "sqlc"
         out: "src/sqlc"
         sql_package: "pgx/v5"
+        # こうするとreturnがmanyの関数でnilだった時に空のスライスを返すようになる
         emit_empty_slices: true
