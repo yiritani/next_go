@@ -13,7 +13,7 @@ import (
 var testQueries *Queries
 
 func TestMain(m *testing.M) {
-	// IDEで実施しないとgoの機能のソース上どこテストしたかしてないかを表示できないので、それを環境変数でどうすれば良いのか不明
+	// ローカルで実施しないとgoの機能のソース上どこテストしたかしてないかを表示できないので、それを環境変数でどうすれば良いのか不明
 	//postgresUser := os.Getenv("TEST_POSTGRES_USER")
 	//postgresPassword := os.Getenv("TEST_POSTGRES_PASSWORD")
 	//postgresHost := os.Getenv("TEST_POSTGRES_HOST")
