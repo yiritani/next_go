@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"tutorial.sqlc.dev/app/src/lib"
 )
 
 type createSystemParams struct {
@@ -12,8 +11,6 @@ type createSystemParams struct {
 }
 
 func (server *Server) createSystem(c *gin.Context) {
-	lib.Msging("createSystem")
-
 	var req createSystemParams
 	if err := c.ShouldBindJSON(&req); err != nil {
 		errorResponse(c, http.StatusBadRequest, err.Error())
