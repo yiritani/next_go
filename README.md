@@ -8,11 +8,12 @@
 - Turborepoでモノリポ化
 
 ### Frontend: Next.js
+App Routerで謎のlintエラー出ている
 ### Backend: golang/gin/sqlc
 - Framework: Gin
 - SQL Builder: sqlc
 
-ローカルでは'air'でホットリロードできるようにしている。
+ローカルでは`air`でホットリロード。
 
 ### Database: PostgreSQL
 
