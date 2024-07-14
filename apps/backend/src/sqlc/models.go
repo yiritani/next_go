@@ -5,8 +5,59 @@
 package sqlc
 
 import (
+	"database/sql/driver"
+	"fmt"
+
 	"github.com/jackc/pgx/v5/pgtype"
 )
+
+type Role string
+
+const (
+	RolePmoOwner        Role = "pmo_owner"
+	RolePmoUser         Role = "pmo_user"
+	RolePjmoOwner       Role = "pjmo_owner"
+	RolePjmoUser        Role = "pjmo_user"
+	RoleVendorPmoOwner  Role = "vendor_pmo_owner"
+	RoleVendorPmoUser   Role = "vendor_pmo_user"
+	RoleVendorPjmoOwner Role = "vendor_pjmo_owner"
+	RoleVendorPjmoUser  Role = "vendor_pjmo_user"
+)
+
+func (e *Role) Scan(src interface{}) error {
+	switch s := src.(type) {
+	case []byte:
+		*e = Role(s)
+	case string:
+		*e = Role(s)
+	default:
+		return fmt.Errorf("unsupported scan type for Role: %T", src)
+	}
+	return nil
+}
+
+type NullRole struct {
+	Role  Role
+	Valid bool // Valid is true if Role is not NULL
+}
+
+// Scan implements the Scanner interface.
+func (ns *NullRole) Scan(value interface{}) error {
+	if value == nil {
+		ns.Role, ns.Valid = "", false
+		return nil
+	}
+	ns.Valid = true
+	return ns.Role.Scan(value)
+}
+
+// Value implements the driver Valuer interface.
+func (ns NullRole) Value() (driver.Value, error) {
+	if !ns.Valid {
+		return nil, nil
+	}
+	return string(ns.Role), nil
+}
 
 type System struct {
 	ID         pgtype.UUID
@@ -14,9 +65,15 @@ type System struct {
 	CreatedAt  pgtype.Timestamptz
 }
 
+type SystemUserRelation struct {
+	SystemID  pgtype.UUID
+	UserID    pgtype.UUID
+	Role      Role
+	CreatedAt pgtype.Timestamptz
+}
+
 type User struct {
 	ID        pgtype.UUID
-	SystemID  pgtype.UUID
 	Name      string
 	Email     string
 	CreatedAt pgtype.Timestamp

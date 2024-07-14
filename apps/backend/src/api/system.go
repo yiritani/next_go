@@ -20,7 +20,7 @@ func (server *Server) createSystem(c *gin.Context) {
 		return
 	}
 
-	result, err := server.Queries.CreateSystem(context.Background(), req.SystemName)
+	result, err := server.Queries.InsertSystem(context.Background(), req.SystemName)
 	if err != nil {
 		errorResponse(c, http.StatusInternalServerError, err.Error())
 		return

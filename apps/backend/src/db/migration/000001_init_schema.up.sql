@@ -7,11 +7,7 @@ CREATE TABLE "system" (
 
 CREATE TABLE "user" (
   "id" UUID PRIMARY KEY DEFAULT (gen_random_uuid()),
-  "system_id" UUID NOT NULL,
   "name" VARCHAR(255) NOT NULL,
   "email" VARCHAR(255) NOT NULL,
   "created_at" TIMESTAMP NOT NULL DEFAULT (now())
 );
-
-
-ALTER TABLE "user" ADD CONSTRAINT "fk_system_id" FOREIGN KEY ("system_id") REFERENCES "system" ("id") ON DELETE CASCADE;
