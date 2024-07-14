@@ -62,6 +62,8 @@ services:
           target: ./app/apps/backend
     volumes:
       - ./apps/backend:/app
+    env_file:
+      - .env.local
     depends_on:
       - db
 
@@ -78,5 +80,23 @@ services:
     volumes:
       - db-store:/var/lib/postgresql/data
 
+  test_db:
+    image: "postgres:16-alpine"
+    networks:
+      - next_go
+    ports:
+      - "54321:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=test_password
+      - POSTGRES_DB=test_postgres
+    volumes:
+      - test-db-store:/var/lib/postgresql/data
+
 volumes:
   db-store:
+    name: db-store
+  test-db-store:
+    name: test-db-store
+
+

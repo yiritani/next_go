@@ -13,7 +13,10 @@ func TestGetEntry(t *testing.T) {
 }
 
 func TestListEntries(t *testing.T) {
-	entries, err := testQueries.ListEntries(context.Background())
+	entries, err := testQueries.ListEntries(context.Background(), ListEntriesParams{
+		Limit:  5,
+		Offset: 5,
+	})
 	require.NoError(t, err)
 	require.NotEmpty(t, entries)
 }

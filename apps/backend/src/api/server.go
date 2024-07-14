@@ -10,9 +10,7 @@ import (
 )
 
 type Server struct {
-	router *gin.Engine
-	// TODO: 多分要らない
-	pool    *pgxpool.Pool
+	router  *gin.Engine
 	Queries *sqlc.Queries
 }
 
@@ -35,9 +33,11 @@ func NewServer(pool *pgxpool.Pool) *Server {
 			"message": "pong",
 		})
 	})
+	r.POST("/accounts", server.createAccount)
+	r.GET("/accounts/:id", server.getAccount)
+	r.GET("/accounts", server.listAccount)
 
 	server.router = r
-	server.pool = pool
 	server.Queries = sqlc.New(pool)
 	return server
 }
@@ -46,8 +46,6 @@ func (server *Server) Run() error {
 	return server.router.Run()
 }
 
-func errorResponse(c *gin.Context, code int, message string) {
-	c.JSON(code, gin.H{
-		"error": message,
-	})
+func errorResponse(err error) gin.H {
+	return gin.H{"error": err.Error()}
 }

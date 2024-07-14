@@ -10,3 +10,4 @@ sql:
         package: "sqlc"
         out: "src/sqlc"
         sql_package: "pgx/v5"
+        emit_empty_slices: true
