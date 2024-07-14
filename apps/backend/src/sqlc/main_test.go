@@ -13,11 +13,17 @@ import (
 var testQueries *Queries
 
 func TestMain(m *testing.M) {
-	postgresUser := os.Getenv("TEST_POSTGRES_USER")
-	postgresPassword := os.Getenv("TEST_POSTGRES_PASSWORD")
-	postgresHost := os.Getenv("TEST_POSTGRES_HOST")
-	postgresPort := os.Getenv("TEST_POSTGRES_PORT")
-	postgresDb := os.Getenv("TEST_POSTGRES_DB")
+	// IDEで実施しないとgoの機能のソース上どこテストしたかしてないかを表示できないので、それを環境変数でどうすれば良いのか不明
+	//postgresUser := os.Getenv("TEST_POSTGRES_USER")
+	//postgresPassword := os.Getenv("TEST_POSTGRES_PASSWORD")
+	//postgresHost := os.Getenv("TEST_POSTGRES_HOST")
+	//postgresPort := os.Getenv("TEST_POSTGRES_PORT")
+	//postgresDb := os.Getenv("TEST_POSTGRES_DB")
+	postgresUser := "postgres"
+	postgresPassword := "test_password"
+	postgresHost := "localhost"
+	postgresPort := "54321"
+	postgresDb := "postgres"
 	connString := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=disable", postgresUser, postgresPassword, postgresHost, postgresPort, postgresDb)
 
 	ctx := context.Background()

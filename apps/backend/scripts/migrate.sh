@@ -29,12 +29,7 @@ while getopts "tud" opt; do
   esac
 done
 
+# elseはエラーにしているものの、念の為余計なのが来たらエラーにしておく。
 ACTION=${ACTION:-"error"}
 
 migrate -path src/db/migration -database "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?sslmode=disable" -verbose $ACTION
-
-#if [ "$1" == "-t" ]; then
-#  migrate -path src/db/migration -database "postgresql://${TEST_POSTGRES_USER}:${TEST_POSTGRES_PASSWORD}@${TEST_POSTGRES_HOST}:${TEST_POSTGRES_PORT}/${TEST_POSTGRES_DB}?sslmode=disable" -verbose up
-#else
-#  migrate -path src/db/migration -database "postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?sslmode=disable" -verbose up
-#fi

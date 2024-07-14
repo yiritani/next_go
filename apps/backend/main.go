@@ -14,8 +14,8 @@ func main() {
 	postgresHost := os.Getenv("POSTGRES_HOST")
 	postgresPort := os.Getenv("POSTGRES_PORT")
 	postgresDb := os.Getenv("POSTGRES_DB")
-
 	connString := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=disable", postgresUser, postgresPassword, postgresHost, postgresPort, postgresDb)
+
 	var err error
 	pool, err := pgxpool.New(context.Background(), connString)
 	if err != nil {
