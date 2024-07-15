@@ -24,3 +24,20 @@ func insertTestSystem(t *testing.T) System {
 func TestQueries_InsertSystem(t *testing.T) {
 	insertTestSystem(t)
 }
+
+func TestQueries_InsertSystemUserRelation(t *testing.T) {
+	roleName := SystemRolePmoOwner
+	system := insertTestSystem(t)
+	user := insertTestUser(t)
+	systemUserRelation, err := testQueries.InsertSystemUserRelation(context.Background(), InsertSystemUserRelationParams{
+		SystemID:   system.ID,
+		UserID:     user.ID,
+		SystemRole: roleName,
+	})
+	require.NoError(t, err)
+	require.NotEmpty(t, systemUserRelation)
+	require.Equal(t, system.ID, systemUserRelation.SystemID)
+	require.Equal(t, user.ID, systemUserRelation.UserID)
+	require.Equal(t, roleName, systemUserRelation.SystemRole)
+	require.NotZero(t, systemUserRelation.CreatedAt)
+}

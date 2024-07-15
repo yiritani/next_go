@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"net/http"
 	"time"
@@ -12,9 +13,10 @@ import (
 type Server struct {
 	router  *gin.Engine
 	Queries *sqlc.Queries
+	conn    *pgx.Conn
 }
 
-func NewServer(pool *pgxpool.Pool) *Server {
+func NewServer(pool *pgxpool.Pool, conn *pgx.Conn) *Server {
 	server := &Server{}
 
 	r := gin.Default()
@@ -38,6 +40,7 @@ func NewServer(pool *pgxpool.Pool) *Server {
 
 	server.router = r
 	server.Queries = sqlc.New(pool)
+	server.conn = conn
 	return server
 }
 

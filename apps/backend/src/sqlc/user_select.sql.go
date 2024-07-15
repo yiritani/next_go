@@ -28,11 +28,40 @@ func (q *Queries) SelectUser(ctx context.Context, id pgtype.UUID) (User, error) 
 }
 
 const selectUserInEmail = `-- name: SelectUserInEmail :many
-SELECT id, name, email, created_at from "user" WHERE "email" IN ($1)
+SELECT id, name, email, created_at from "user" WHERE "email" = ANY($1::varchar[])
 `
 
-func (q *Queries) SelectUserInEmail(ctx context.Context, email string) ([]User, error) {
-	rows, err := q.db.Query(ctx, selectUserInEmail, email)
+func (q *Queries) SelectUserInEmail(ctx context.Context, dollar_1 []string) ([]User, error) {
+	rows, err := q.db.Query(ctx, selectUserInEmail, dollar_1)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []User{}
+	for rows.Next() {
+		var i User
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Email,
+			&i.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const selectUserLikeEmail = `-- name: SelectUserLikeEmail :many
+SELECT id, name, email, created_at from "user" WHERE "email" LIKE $1
+`
+
+func (q *Queries) SelectUserLikeEmail(ctx context.Context, email string) ([]User, error) {
+	rows, err := q.db.Query(ctx, selectUserLikeEmail, email)
 	if err != nil {
 		return nil, err
 	}

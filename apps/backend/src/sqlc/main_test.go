@@ -11,6 +11,7 @@ import (
 )
 
 var testQueries *Queries
+var connString string
 
 func TestMain(m *testing.M) {
 	// ローカルで実施しないとgoの機能のソース上どこテストしたかしてないかを表示できないので、それを環境変数でどうすれば良いのか不明
@@ -24,7 +25,7 @@ func TestMain(m *testing.M) {
 	postgresHost := "localhost"
 	postgresPort := "54321"
 	postgresDb := "postgres"
-	connString := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=disable", postgresUser, postgresPassword, postgresHost, postgresPort, postgresDb)
+	connString = fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=disable", postgresUser, postgresPassword, postgresHost, postgresPort, postgresDb)
 
 	ctx := context.Background()
 	conn, err := pgx.Connect(ctx, connString)

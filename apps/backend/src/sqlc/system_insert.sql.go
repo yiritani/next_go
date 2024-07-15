@@ -23,16 +23,17 @@ func (q *Queries) InsertSystem(ctx context.Context, systemName string) (System, 
 }
 
 const insertSystemUserRelation = `-- name: InsertSystemUserRelation :one
-INSERT INTO "systemUserRelation" (system_id, user_id) VALUES ($1, $2) RETURNING system_id, user_id, system_role, created_at
+INSERT INTO "system_user_relation" (system_id, user_id, system_role) VALUES ($1, $2, $3) RETURNING system_id, user_id, system_role, created_at
 `
 
 type InsertSystemUserRelationParams struct {
-	SystemID pgtype.UUID
-	UserID   pgtype.UUID
+	SystemID   pgtype.UUID
+	UserID     pgtype.UUID
+	SystemRole SystemRole
 }
 
 func (q *Queries) InsertSystemUserRelation(ctx context.Context, arg InsertSystemUserRelationParams) (SystemUserRelation, error) {
-	row := q.db.QueryRow(ctx, insertSystemUserRelation, arg.SystemID, arg.UserID)
+	row := q.db.QueryRow(ctx, insertSystemUserRelation, arg.SystemID, arg.UserID, arg.SystemRole)
 	var i SystemUserRelation
 	err := row.Scan(
 		&i.SystemID,

@@ -58,18 +58,20 @@ SELECT
 "system".id as system_id,
 "user".id as user_id,
 "user".name as user_name,
-"user".email as email
+"user".email as email,
+"system_user_relation".system_role as system_role
 from "system"
-INNER JOIN "systemUserRelation" ON "system"."id" = "systemUserRelation"."system_id"
-INNER JOIN "user" ON "systemUserRelation"."user_id" = "user"."id"
+INNER JOIN "system_user_relation" ON "system"."id" = "system_user_relation"."system_id"
+INNER JOIN "user" ON "system_user_relation"."user_id" = "user"."id"
 WHERE "system"."id" = $1
 `
 
 type SelectSystemUsersRow struct {
-	SystemID pgtype.UUID
-	UserID   pgtype.UUID
-	UserName string
-	Email    string
+	SystemID   pgtype.UUID
+	UserID     pgtype.UUID
+	UserName   string
+	Email      string
+	SystemRole SystemRole
 }
 
 func (q *Queries) SelectSystemUsers(ctx context.Context, id pgtype.UUID) ([]SelectSystemUsersRow, error) {
@@ -86,6 +88,7 @@ func (q *Queries) SelectSystemUsers(ctx context.Context, id pgtype.UUID) ([]Sele
 			&i.UserID,
 			&i.UserName,
 			&i.Email,
+			&i.SystemRole,
 		); err != nil {
 			return nil, err
 		}
