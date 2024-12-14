@@ -1,14 +1,21 @@
+postgres:
+	docker run --name postgres -e POSTGRES_PASSWORD=postgres -d -p 5432:5432 postgres:latest
+
+
+createdb:
+	createdb -U postgres -h localhost -p 5432 -e -O postgres -T template0 -E UTF8 -l en_US.UTF-8
+
 migrate_up:
-	docker compose exec backend sh scripts/migrate.sh -u
+	cd apps/backend/src && migrate -path db/migration -database "postgresql://postgres:password@localhost:5432/postgres?sslmode=disable" -verbose up
+
 migrate_down:
-	docker compose exec backend sh scripts/migrate.sh -d
-migrate_up_test:
-	docker compose exec backend sh scripts/migrate.sh -u -t
-migrate_down_test:
-	docker compose exec backend sh scripts/migrate.sh -d -t
+	cd apps/backend/src && migrate -path db/migration -database "postgresql://postgres:password@localhost:5432/postgres?sslmode=disable" -verbose down
 
 sqlc:
-	docker compose exec backend sqlc generate
+	sqlc generate
 
 test:
-	cd apps/backend && go test -v -cover ./...
+	go test -v -cover ./...
+
+server:
+	cd apps/backend && air -c .air.toml

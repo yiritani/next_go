@@ -5,30 +5,57 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 	"testing"
 
 	"github.com/jackc/pgx/v5"
 )
 
+const (
+	dbSource = "postgresql://postgres:test_password@localhost:54321/postgres?sslmode=disable"
+)
+
 var testQueries *Queries
-var connString string
+
+func runMigrations(connString string) error {
+	cmd := exec.Command(
+		"migrate",
+		"-path", "../db/migration",
+		"-database", fmt.Sprintf("\"%s\"", connString),
+		"-verbose",
+		"up")
+	fmt.Print(cmd)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	return cmd.Run()
+}
+
+func runMigrationsDown(connString string) error {
+	cmd := exec.Command(
+		"migrate",
+		"-path", "../db/migration",
+		"-database", fmt.Sprintf("\"%s\"", connString),
+		" -verbose", "down")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	return cmd.Run()
+}
 
 func TestMain(m *testing.M) {
-	// ローカルで実施しないとgoの機能のソース上どこテストしたかしてないかを表示できないので、それを環境変数でどうすれば良いのか不明
-	//postgresUser := os.Getenv("TEST_POSTGRES_USER")
-	//postgresPassword := os.Getenv("TEST_POSTGRES_PASSWORD")
-	//postgresHost := os.Getenv("TEST_POSTGRES_HOST")
-	//postgresPort := os.Getenv("TEST_POSTGRES_PORT")
-	//postgresDb := os.Getenv("TEST_POSTGRES_DB")
-	postgresUser := "postgres"
-	postgresPassword := "test_password"
-	postgresHost := "localhost"
-	postgresPort := "54321"
-	postgresDb := "postgres"
-	connString = fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=disable", postgresUser, postgresPassword, postgresHost, postgresPort, postgresDb)
+	defer func(dbSource string) {
+		err := runMigrationsDown(dbSource)
+		if err != nil {
+
+		}
+	}(dbSource)
+
+	//err := runMigrations(dbSource)
+	//if err != nil {
+	//	return
+	//}
 
 	ctx := context.Background()
-	conn, err := pgx.Connect(ctx, connString)
+	conn, err := pgx.Connect(ctx, dbSource)
 	if err != nil {
 		log.Fatal("cannot connect to db:", err)
 	}

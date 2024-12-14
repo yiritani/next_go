@@ -1,23 +1,32 @@
 package api
 
 import (
+	"net/http"
+	"os"
+	"time"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"net/http"
-	"time"
 	"tutorial.sqlc.dev/app/src/sqlc"
+	"tutorial.sqlc.dev/app/src/token"
 )
 
 type Server struct {
 	router  *gin.Engine
 	Queries *sqlc.Queries
-	conn    *pgx.Conn
+	tokenMaker token.Maker
 }
 
-func NewServer(pool *pgxpool.Pool, conn *pgx.Conn) *Server {
-	server := &Server{}
+func NewServer(pool *pgxpool.Pool) *Server {
+	tokenMaker, err := token.NewPasetoMaker(os.Getenv("TOKEN_SYMMETRIC_KEY"))
+	if err != nil {
+		panic(err)
+	}
+
+	server := &Server{
+		tokenMaker: tokenMaker,
+	}
 
 	r := gin.Default()
 	r.Use(cors.New(cors.Config{
@@ -35,12 +44,12 @@ func NewServer(pool *pgxpool.Pool, conn *pgx.Conn) *Server {
 			"message": "pong",
 		})
 	})
-	r.GET("/list-systems", server.listSystems)
-	r.POST("/create-system", server.createSystem)
+	r.POST("/accounts", server.createAccount)
+	r.GET("/accounts/:id", server.getAccount)
+	r.GET("/accounts", server.listAccount)
 
 	server.router = r
 	server.Queries = sqlc.New(pool)
-	server.conn = conn
 	return server
 }
 
@@ -48,8 +57,7 @@ func (server *Server) Run() error {
 	return server.router.Run()
 }
 
-func errorResponse(c *gin.Context, code int, message string) {
-	c.JSON(code, gin.H{
-		"error": message,
-	})
+func errorResponse(err error) gin.H {
+	return gin.H{"error": err.Error()}
 }
+

@@ -55,8 +55,6 @@ services:
       dockerfile: Dockerfile.dev
     ports:
       - 8080:8080
-    env_file:
-      - .env.local
     develop:
       watch:
         - action: sync
@@ -64,6 +62,8 @@ services:
           target: ./app/apps/backend
     volumes:
       - ./apps/backend:/app
+    env_file:
+      - .env.local
     depends_on:
       - db
 
@@ -73,8 +73,10 @@ services:
       - next_go
     ports:
       - "5432:5432"
-    env_file:
-      - .env.local
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=postgres
     volumes:
       - db-store:/var/lib/postgresql/data
 
@@ -84,8 +86,10 @@ services:
       - next_go
     ports:
       - "54321:5432"
-    env_file:
-      - .env.local
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=test_password
+      - POSTGRES_DB=test_postgres
     volumes:
       - test-db-store:/var/lib/postgresql/data
 
@@ -94,3 +98,5 @@ volumes:
     name: db-store
   test-db-store:
     name: test-db-store
+
+
