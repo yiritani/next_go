@@ -1,21 +1,32 @@
 package api
 
 import (
+	"net/http"
+	"os"
+	"time"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"net/http"
-	"time"
 	"tutorial.sqlc.dev/app/src/sqlc"
+	"tutorial.sqlc.dev/app/src/token"
 )
 
 type Server struct {
 	router  *gin.Engine
 	Queries *sqlc.Queries
+	tokenMaker token.Maker
 }
 
 func NewServer(pool *pgxpool.Pool) *Server {
-	server := &Server{}
+	tokenMaker, err := token.NewPasetoMaker(os.Getenv("TOKEN_SYMMETRIC_KEY"))
+	if err != nil {
+		panic(err)
+	}
+
+	server := &Server{
+		tokenMaker: tokenMaker,
+	}
 
 	r := gin.Default()
 	r.Use(cors.New(cors.Config{
@@ -49,3 +60,4 @@ func (server *Server) Run() error {
 func errorResponse(err error) gin.H {
 	return gin.H{"error": err.Error()}
 }
+

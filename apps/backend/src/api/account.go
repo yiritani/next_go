@@ -3,14 +3,15 @@ package api
 import (
 	"database/sql"
 	"errors"
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 	"tutorial.sqlc.dev/app/src/sqlc"
 )
 
 type createAccountRequest struct {
 	Owner    string `json:"owner" binding:"required"`
-	Currency string `json:"currency" binding:"required"`
+	Currency string `json:"currency" binding:"required oneof=USD EUR JPY"`
 }
 
 type getAccountRequest struct {
@@ -61,7 +62,7 @@ func (server *Server) getAccount(ctx *gin.Context) {
 
 type listAccountRequest struct {
 	PageID   int64 `form:"page_id" binding:"required,min=1"`
-	PageSize int64 `form:"page_size" binding:"required,min=5,max=10"`
+	PageSize int64 `form:"page_size" binding:"required,min=5"`
 }
 
 func (server *Server) listAccount(ctx *gin.Context) {
@@ -75,7 +76,8 @@ func (server *Server) listAccount(ctx *gin.Context) {
 		Limit:  req.PageSize,
 		Offset: (req.PageID - 1) * req.PageSize,
 	}
-	account, err := server.Queries.ListAccounts(ctx, arg)
+
+	accounts, err := server.Queries.ListAccounts(ctx, arg)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			ctx.JSON(http.StatusNotFound, errorResponse(err))
@@ -85,5 +87,5 @@ func (server *Server) listAccount(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, account)
+	ctx.JSON(http.StatusOK, accounts)
 }
