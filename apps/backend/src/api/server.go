@@ -4,7 +4,6 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgxpool"
 	"net/http"
 	"time"
 	"tutorial.sqlc.dev/app/src/sqlc"
@@ -16,7 +15,8 @@ type Server struct {
 	conn    *pgx.Conn
 }
 
-func NewServer(pool *pgxpool.Pool, conn *pgx.Conn) *Server {
+// func NewServer(pool *pgxpool.Pool, conn *pgx.Conn) *Server {
+func NewServer() *Server {
 	server := &Server{}
 
 	r := gin.Default()
@@ -35,12 +35,10 @@ func NewServer(pool *pgxpool.Pool, conn *pgx.Conn) *Server {
 			"message": "pong",
 		})
 	})
-	r.GET("/list-systems", server.listSystems)
-	r.POST("/create-system", server.createSystem)
+	//r.GET("/list-systems", server.listSystems)
+	//r.POST("/create-system", server.createSystem)
 
 	server.router = r
-	server.Queries = sqlc.New(pool)
-	server.conn = conn
 	return server
 }
 

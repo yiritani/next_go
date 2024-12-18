@@ -1,10 +1,10 @@
-FROM golang:1.22-alpine
+FROM golang:1.23-alpine
 
 WORKDIR /app
 
 COPY ./scripts /scripts
 
-RUN go install github.com/air-verse/air@latest
+RUN go install github.com/air-verse/air@v1.61.1
 # TODO: 最新バージョン不明
 RUN go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
 RUN go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
