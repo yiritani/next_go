@@ -23,7 +23,7 @@ steps:
       - 'deploy'
       - 'backend'
       - '--image=gcr.io/$PROJECT_ID/backend:latest'
-      - '--platform=managed'
+      - '--platform=linux/amd64'
       - '--region=us-central1'
       - '--allow-unauthenticated'
 
@@ -35,7 +35,7 @@ steps:
       - 'deploy'
       - 'frontend'
       - '--image=gcr.io/$PROJECT_ID/frontend:latest'
-      - '--platform=managed'
+      - '--platform=linux/amd64'
       - '--region=us-central1'
       - '--allow-unauthenticated'
 
