@@ -1,5 +1,5 @@
 ARG GO_VERSION=1.22.4
-FROM --platform=$BUILDPLATFORM golang:${GO_VERSION} AS build
+FROM golang:${GO_VERSION} AS build
 WORKDIR /src
 
 RUN --mount=type=cache,target=/go/pkg/mod/ \
