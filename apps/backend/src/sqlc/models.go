@@ -5,76 +5,39 @@
 package sqlc
 
 import (
-	"database/sql/driver"
-	"fmt"
-
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-type SystemRole string
-
-const (
-	SystemRolePmoOwner        SystemRole = "pmo_owner"
-	SystemRolePmoUser         SystemRole = "pmo_user"
-	SystemRolePjmoOwner       SystemRole = "pjmo_owner"
-	SystemRolePjmoUser        SystemRole = "pjmo_user"
-	SystemRoleVendorPmoOwner  SystemRole = "vendor_pmo_owner"
-	SystemRoleVendorPmoUser   SystemRole = "vendor_pmo_user"
-	SystemRoleVendorPjmoOwner SystemRole = "vendor_pjmo_owner"
-	SystemRoleVendorPjmoUser  SystemRole = "vendor_pjmo_user"
-)
-
-func (e *SystemRole) Scan(src interface{}) error {
-	switch s := src.(type) {
-	case []byte:
-		*e = SystemRole(s)
-	case string:
-		*e = SystemRole(s)
-	default:
-		return fmt.Errorf("unsupported scan type for SystemRole: %T", src)
-	}
-	return nil
+type Account struct {
+	ID        int64
+	Owner     string
+	Balance   int64
+	Currency  string
+	CreatedAt pgtype.Timestamptz
 }
 
-type NullSystemRole struct {
-	SystemRole SystemRole
-	Valid      bool // Valid is true if SystemRole is not NULL
+type Entry struct {
+	ID        int64
+	AccountID int64
+	// can be negative or positive
+	Amount    int64
+	CreatedAt pgtype.Timestamptz
 }
 
-// Scan implements the Scanner interface.
-func (ns *NullSystemRole) Scan(value interface{}) error {
-	if value == nil {
-		ns.SystemRole, ns.Valid = "", false
-		return nil
-	}
-	ns.Valid = true
-	return ns.SystemRole.Scan(value)
-}
-
-// Value implements the driver Valuer interface.
-func (ns NullSystemRole) Value() (driver.Value, error) {
-	if !ns.Valid {
-		return nil, nil
-	}
-	return string(ns.SystemRole), nil
-}
-
-type System struct {
-	ID         pgtype.UUID
-	SystemName string
-	CreatedAt  pgtype.Timestamptz
-}
-
-type SystemUserRelation struct {
-	SystemID   pgtype.UUID
-	UserID     pgtype.UUID
-	SystemRole SystemRole
-	CreatedAt  pgtype.Timestamptz
+type Transfer struct {
+	ID            int64
+	FromAccountID int64
+	ToAccountID   int64
+	// must be positive
+	Amount    int64
+	CreatedAt pgtype.Timestamptz
 }
 
 type User struct {
-	ID        pgtype.UUID
-	Name      string
-	Email     string
-	CreatedAt pgtype.Timestamp
+	Username          string
+	HashedPassword    string
+	FullName          string
+	Email             string
+	PasswordChangedAt pgtype.Timestamptz
+	CreatedAt         pgtype.Timestamptz
 }
