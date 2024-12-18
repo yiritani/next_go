@@ -1,0 +1,44 @@
+steps:
+  # Build the backend (Go)
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/backend:latest', './apps/backend']
+
+  # Build the frontend (Next.js)
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/frontend:latest', './apps/frontend']
+
+  # Push the backend image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/backend:latest']
+
+  # Push the frontend image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/frontend:latest']
+
+  # Deploy backend to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'backend'
+      - '--image=gcr.io/$PROJECT_ID/backend:latest'
+      - '--platform=managed'
+      - '--region=us-central1'
+      - '--allow-unauthenticated'
+
+  # Deploy frontend to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'frontend'
+      - '--image=gcr.io/$PROJECT_ID/frontend:latest'
+      - '--platform=managed'
+      - '--region=us-central1'
+      - '--allow-unauthenticated'
+
+images:
+  - 'gcr.io/$PROJECT_ID/backend:latest'
+  - 'gcr.io/$PROJECT_ID/frontend:latest'
