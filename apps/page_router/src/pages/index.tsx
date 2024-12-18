@@ -24,17 +24,17 @@ export default function Home() {
     setData(data.message);
   };
 
-  const systemFetch = async (limit: number, offset: number) => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/list-systems?limit=${limit}&offset=${offset}`,
-    );
-    const data = await response.json();
-    setSystems(data);
-  };
-
-  useEffect(() => {
-    systemFetch(10, 0);
-  }, []);
+  // const systemFetch = async (limit: number, offset: number) => {
+  //   const response = await fetch(
+  //     `${process.env.NEXT_PUBLIC_API_URL}/list-systems?limit=${limit}&offset=${offset}`,
+  //   );
+  //   const data = await response.json();
+  //   setSystems(data);
+  // };
+  //
+  // useEffect(() => {
+  //   systemFetch(10, 0);
+  // }, []);
 
   const systemPage = (systemId: string) => {
     router.push(`systems/${systemId}`);

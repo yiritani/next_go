@@ -1,40 +1,30 @@
-ARG GO_VERSION=1.22.4
-FROM golang:${GO_VERSION} AS build
-WORKDIR /src
+# Stage 1: Build the Go application
+FROM golang:1.22 AS build
 
-RUN --mount=type=cache,target=/go/pkg/mod/ \
-    --mount=type=bind,source=go.sum,target=go.sum \
-    --mount=type=bind,source=go.mod,target=go.mod \
-    go mod download -x
+# Set working directory
+WORKDIR /app
 
-ARG TARGETARCH
+# Copy dependency files and download modules
+COPY go.mod go.sum ./
+RUN go mod download
 
-RUN --mount=type=cache,target=/go/pkg/mod/ \
-    --mount=type=bind,target=. \
-    CGO_ENABLED=0 GOARCH=$TARGETARCH go build -o /bin/server .
+# Copy the source code
+COPY . .
 
-FROM alpine:latest AS final
+# Build the Go binary
+RUN CGO_ENABLED=0 GOOS=linux go build -o main .
 
-RUN --mount=type=cache,target=/var/cache/apk \
-    apk --update add \
-        ca-certificates \
-        tzdata \
-        && \
-        update-ca-certificates
+# Stage 2: Create a lightweight image for running
+FROM gcr.io/distroless/base-debian11
 
-ARG UID=10001
-RUN adduser \
-    --disabled-password \
-    --gecos "" \
-    --home "/nonexistent" \
-    --shell "/sbin/nologin" \
-    --no-create-home \
-    --uid "${UID}" \
-    appuser
-USER appuser
+# Set working directory
+WORKDIR /app
 
-COPY --from=build /bin/server /bin/
+# Copy the built binary
+COPY --from=build /app/main .
 
+# Expose port for Cloud Run
 EXPOSE 8080
 
-ENTRYPOINT [ "/bin/server" ]
+# Command to run the binary
+ENTRYPOINT ["./main"]
