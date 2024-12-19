@@ -19,7 +19,7 @@ variable "dockerfile_backend" {
 variable "dockerfile_frontend" {
   description = "フロントエンドのDockerfileパス"
   type        = string
-  default     = "../apps/frontend/Dockerfile"
+  default     = "apps/frontend/Dockerfile"
 }
 
 variable "service_name" {

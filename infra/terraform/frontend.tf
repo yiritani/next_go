@@ -1,9 +1,3 @@
-resource "google_service_account" "cloudbuild_service_account" {
-  account_id   = "cloudbuild-sa"
-  display_name = "cloudbuild-sa"
-  description  = "Cloud build service account"
-}
-
 resource "google_artifact_registry_repository" "frontend" {
   description   = "frontend-repo"
   format        = "DOCKER"
@@ -12,9 +6,8 @@ resource "google_artifact_registry_repository" "frontend" {
 }
 
 resource "google_cloudbuild_trigger" "frontend" {
-  name = "${var.service_name}-build-trigger"
+  name = "${var.service_name}-build-trigger-frontend"
 
-  # 動的に指定されたDockerfileを利用するように変更
   substitutions = {
     _IMAGE      = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo_frontend}"
     _REGION     = var.region
@@ -22,35 +15,39 @@ resource "google_cloudbuild_trigger" "frontend" {
     _DOCKERFILE = var.dockerfile_frontend
   }
 
-  trigger_template {
-    branch_name = "main"
-    repo_name   = "next_go"
+  github {
+    owner = "yiritani"
+    name  = "next_go"
+    push {
+      branch = "main"
+    }
   }
 
   service_account = google_service_account.cloudbuild_service_account.id
+  filename = "cloudbuild.yaml"
 
-  build {
-    step {
-      name = "gcr.io/cloud-builders/docker"
-      args = [
-        "build",
-        "-t",
-        "latest",
-        "-f",
-        var.dockerfile_frontend,
-        "../apps/frontend"
-      ]
-    }
-
-    step {
-      name = "gcr.io/cloud-builders/docker"
-      args = [
-        "push",
-        "latest",
-        "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo_frontend}"
-      ]
-    }
-  }
+  # build {
+  #   step {
+  #     name = "gcr.io/cloud-builders/docker"
+  #     args = [
+  #       "build",
+  #       "-t",
+  #       "latest",
+  #       "-f",
+  #       var.dockerfile_frontend,
+  #       "../apps/frontend"
+  #     ]
+  #   }
+  #
+  #   step {
+  #     name = "gcr.io/cloud-builders/docker"
+  #     args = [
+  #       "push",
+  #       "latest",
+  #       "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo_frontend}"
+  #     ]
+  #   }
+  # }
 }
 
 # resource "google_cloud_run_service" "frontend" {
