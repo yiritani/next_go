@@ -1,3 +1,4 @@
+# 動かないので使ってないです
 steps:
   # Backend (Go) のDockerイメージをビルドしてプッシュ
   - name: 'gcr.io/cloud-builders/docker'
@@ -55,7 +56,3 @@ images:
   # ビルドされたイメージを記録
   - 'gcr.io/$PROJECT_ID/backend:latest'
   - 'gcr.io/$PROJECT_ID/frontend:latest'
-
-options:
-  logging: CLOUD_LOGGING_ONLY
-  logsBucket: 'gs://$PROJECT_ID-build-logs-bucket-1234/logs'
