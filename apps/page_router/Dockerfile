@@ -1,7 +1,7 @@
 FROM node:22.11.0-alpine AS base
 
 RUN  apk add --no-cache libc6-compat && \
-     yarn global add turbo@1.13.4 pnpm@8.9.0 \
+     yarn global add turbo@1.13.4 pnpm@8.9.0
 WORKDIR /app
 
 FROM base AS builder-app
