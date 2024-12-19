@@ -7,11 +7,11 @@ steps:
       - '${_IMAGE}:$BUILD_ID'
       - '-f'
       - 'apps/frontend/Dockerfile'
-#  - name: 'gcr.io/cloud-builders/docker'
-#    args:
-#      - 'push'
-#      - 'latest'
-#      - '${_IMAGE}:$BUILD_ID'
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'latest'
+      - '${_IMAGE}:$BUILD_ID'
 #  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
 #    args:
 #      - 'run'
