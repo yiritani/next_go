@@ -13,6 +13,7 @@ resource "google_cloudbuild_trigger" "frontend" {
     _REGION     = var.region
     _SERVICE    = var.service_name
     _DOCKERFILE = var.dockerfile_frontend
+    _REPO       = var.image_repo_frontend
   }
 
   github {
