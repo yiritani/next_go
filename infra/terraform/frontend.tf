@@ -24,7 +24,7 @@ resource "google_cloudbuild_trigger" "frontend" {
   }
 
   service_account = google_service_account.cloudbuild_service_account.id
-  filename = "cloudbuild.yaml"
+  filename = "cloudbuild.frontend.yaml"
 }
 
 # resource "google_cloud_run_service" "frontend" {
