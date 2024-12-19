@@ -1,44 +1,57 @@
 steps:
-  # Build the backend (Go)
+  # Backend (Go) のDockerイメージをビルドしてプッシュ
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/backend:latest', './apps/backend']
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/backend:latest'
+      - './apps/backend'
+    dir: './apps/backend'
 
-  # Build the frontend (Next.js)
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/frontend:latest', './apps/frontend']
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/backend:latest'
 
-  # Push the backend image
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/backend:latest']
-
-  # Push the frontend image
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/frontend:latest']
-
-  # Deploy backend to Cloud Run
+  # Backend (Go) をCloud Runにデプロイ
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: 'gcloud'
+    entrypoint: gcloud
     args:
       - 'run'
       - 'deploy'
-      - 'backend'
+      - 'backend-service'
       - '--image=gcr.io/$PROJECT_ID/backend:latest'
       - '--platform=managed'
       - '--region=us-central1'
       - '--allow-unauthenticated'
 
-  # Deploy frontend to Cloud Run
+  # Frontend (Next.js) のDockerイメージをビルドしてプッシュ
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/frontend:latest'
+      - './apps/frontend'
+    dir: './apps/frontend'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/frontend:latest'
+
+  # Frontend (Next.js) をCloud Runにデプロイ
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: 'gcloud'
+    entrypoint: gcloud
     args:
       - 'run'
       - 'deploy'
-      - 'frontend'
+      - 'frontend-service'
       - '--image=gcr.io/$PROJECT_ID/frontend:latest'
       - '--platform=managed'
       - '--region=us-central1'
       - '--allow-unauthenticated'
 
 images:
+  # ビルドされたイメージを記録
   - 'gcr.io/$PROJECT_ID/backend:latest'
   - 'gcr.io/$PROJECT_ID/frontend:latest'
