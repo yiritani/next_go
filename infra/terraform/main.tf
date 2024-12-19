@@ -33,3 +33,9 @@ resource "google_storage_bucket_iam_binding" "logs_bucket_writer" {
     "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
   ]
 }
+
+resource "google_project_iam_member" "logs_logging_writer" {
+  project = var.project_id
+  role    = "roles/logging.logWriter"
+  member  = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
+}
