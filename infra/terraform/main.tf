@@ -9,31 +9,6 @@ resource "google_service_account" "cloudbuild_service_account" {
   description  = "Cloud build service account"
 }
 
-resource "google_storage_bucket" "logs_bucket" {
-  name                        = "${var.project_id}-build-logs"
-  location                    = var.region
-  storage_class               = "STANDARD"
-  force_destroy               = true
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-    condition {
-      age = 30
-    }
-  }
-}
-
-resource "google_storage_bucket_iam_binding" "logs_bucket_writer" {
-  bucket = google_storage_bucket.logs_bucket.name
-  role = "roles/storage.objectAdmin"
-
-  members = [
-    "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
-  ]
-}
-
 resource "google_project_iam_member" "logs_logging_writer" {
   project = var.project_id
   role    = "roles/logging.logWriter"
