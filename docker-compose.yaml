@@ -7,43 +7,15 @@ services:
     networks:
       - next_go
     build:
-      context: .
-      dockerfile: ./apps/web/Dockerfile
+      context: ./apps/frontend
+      dockerfile: Dockerfile.dev
     ports:
       - 3000:3000
     restart: always
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:8080
-    develop:
-      watch:
-        - action: sync
-          path: ./apps/web
-          target: ./app/apps/web
-        - action: rebuild
-          path: ./apps/web/package.json
-        - action: rebuild
-          path: ./packages/ui/package.json
-    depends_on:
-      - backend
-
-  page_router:
-    networks:
-      - next_go
-    build:
-      context: .
-      dockerfile: ./apps/page_router/Dockerfile
-    ports:
-      - 3001:3001
-    restart: always
-    environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:8080
-    develop:
-      watch:
-        - action: sync
-          path: ./apps/page_router
-          target: ./app/apps/page_router
-        - action: rebuild
-          path: ./apps/page_router/package.json
+    volumes:
+      - ./apps/frontend:/app
     depends_on:
       - backend
 
