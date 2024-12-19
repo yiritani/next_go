@@ -35,7 +35,7 @@ resource "google_cloudbuild_trigger" "frontend" {
 #   template {
 #     spec {
 #       containers {
-#         image = "us-central1-docker.pkg.dev/next-go-445113/next-go-frontend:latest"
+#         image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo_frontend}:latest"
 #         env {
 #           name  = "NEXT_PUBLIC_API_URL"
 #           value = "https://backend-service-${var.region}.a.run.app"

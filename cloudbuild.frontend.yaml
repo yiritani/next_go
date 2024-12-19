@@ -10,7 +10,6 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
-      - 'latest'
       - '${_IMAGE}:$BUILD_ID'
 #  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
 #    args:
