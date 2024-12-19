@@ -18,6 +18,6 @@ steps:
 #      - '--image=${_IMAGE}:$BUILD_ID'
 #      - '--region=${_REGION}'
 #      - '--allow-unauthenticated'
-logsBucket: 'gs://next-go-445113-build-logs'
+logsBucket: 'gs://next-go-build-logs'
 options:
   substitutionOption: ALLOW_LOOSE
