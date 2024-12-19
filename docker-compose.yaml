@@ -11,6 +11,11 @@ services:
       dockerfile: Dockerfile.dev
     ports:
       - 3000:3000
+    develop:
+      watch:
+        - action: sync
+          path: ./apps/frontend
+          target: ./app/apps/frontend
     restart: always
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:8080
