@@ -4,7 +4,8 @@ steps:
       - 'build'
       - '-t'
       - '${_IMAGE}:$BUILD_ID'
-      - '.'
+      - '-f'
+      - 'apps/frontend/Dockerfile'
 #  - name: 'gcr.io/cloud-builders/docker'
 #    args:
 #      - 'push'
