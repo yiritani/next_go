@@ -23,9 +23,7 @@ export default function Home() {
           click
         </div>
       </button>
-      <div
-        className={`font-sans text-xl`}
-      >
+      <div className={`font-sans text-xl`}>
         {fetchedData ? fetchedData : "no data"}
       </div>
       <button
