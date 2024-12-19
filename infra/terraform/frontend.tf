@@ -13,6 +13,7 @@ resource "google_cloudbuild_trigger" "frontend" {
     _REGION     = var.region
     _SERVICE    = var.service_name
     _DOCKERFILE = var.dockerfile_frontend
+    _LOGS       = google_storage_bucket.logs_bucket.url
   }
 
   github {
@@ -25,29 +26,6 @@ resource "google_cloudbuild_trigger" "frontend" {
 
   service_account = google_service_account.cloudbuild_service_account.id
   filename = "cloudbuild.yaml"
-
-  # build {
-  #   step {
-  #     name = "gcr.io/cloud-builders/docker"
-  #     args = [
-  #       "build",
-  #       "-t",
-  #       "latest",
-  #       "-f",
-  #       var.dockerfile_frontend,
-  #       "../apps/frontend"
-  #     ]
-  #   }
-  #
-  #   step {
-  #     name = "gcr.io/cloud-builders/docker"
-  #     args = [
-  #       "push",
-  #       "latest",
-  #       "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo_frontend}"
-  #     ]
-  #   }
-  # }
 }
 
 # resource "google_cloud_run_service" "frontend" {

@@ -1,59 +1,23 @@
-# 動かないので使ってないです
-
 steps:
-  # Backend (Go) のDockerイメージをビルドしてプッシュ
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'build'
       - '-t'
-      - 'gcr.io/$PROJECT_ID/backend:latest'
-      - './apps/backend'
-    dir: './apps/backend'
-
-  - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'push'
-      - 'gcr.io/$PROJECT_ID/backend:latest'
-
-  # Backend (Go) をCloud Runにデプロイ
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: gcloud
-    args:
-      - 'run'
-      - 'deploy'
-      - 'backend-service'
-      - '--image=gcr.io/$PROJECT_ID/backend:latest'
-      - '--platform=managed'
-      - '--region=us-central1'
-      - '--allow-unauthenticated'
-
-  # Frontend (Next.js) のDockerイメージをビルドしてプッシュ
-  - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'build'
-      - '-t'
-      - 'gcr.io/$PROJECT_ID/frontend:latest'
-      - './apps/frontend'
-    dir: './apps/frontend'
-
-  - name: 'gcr.io/cloud-builders/docker'
-    args:
-      - 'push'
-      - 'gcr.io/$PROJECT_ID/frontend:latest'
-
-  # Frontend (Next.js) をCloud Runにデプロイ
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: gcloud
-    args:
-      - 'run'
-      - 'deploy'
-      - 'frontend-service'
-      - '--image=gcr.io/$PROJECT_ID/frontend:latest'
-      - '--platform=managed'
-      - '--region=us-central1'
-      - '--allow-unauthenticated'
-
-images:
-  # ビルドされたイメージを記録
-  - 'gcr.io/$PROJECT_ID/backend:latest'
-  - 'gcr.io/$PROJECT_ID/frontend:latest'
+      - '${_IMAGE}:$BUILD_ID'
+      - '.'
+#  - name: 'gcr.io/cloud-builders/docker'
+#    args:
+#      - 'push'
+#      - 'latest'
+#      - '${_IMAGE}:$BUILD_ID'
+#  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+#    args:
+#      - 'run'
+#      - 'deploy'
+#      - '${_SERVICE}'
+#      - '--image=${_IMAGE}:$BUILD_ID'
+#      - '--region=${_REGION}'
+#      - '--allow-unauthenticated'
+logsBucket: ${_LOGS_BUCKET}
+options:
+  substitutionOption: ALLOW_LOOSE
