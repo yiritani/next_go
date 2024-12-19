@@ -1,0 +1,19 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - '${_IMAGE}:$BUILD_ID'
+      - '.'
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - '${_IMAGE}:$BUILD_ID'
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    args:
+      - 'run'
+      - 'deploy'
+      - '${_SERVICE}'
+      - '--image=${_IMAGE}:$BUILD_ID'
+      - '--region=${_REGION}'
+      - '--allow-unauthenticated'
