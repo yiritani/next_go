@@ -21,11 +21,6 @@ App Routerで謎のlintエラー出ている
 ```
 ├── apps
 │ ├── backend     # golang/gin
-│ ├── page_router # nextjs/page router
-│ └── web         # nextjs/App router
-└── packages
-    ├── config-eslint
-    ├── config-tailwind
-    ├── config-typescript
-    └── ui
+│ └── frontend         # nextjs/App router
+
 ```
