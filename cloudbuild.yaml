@@ -50,7 +50,6 @@ steps:
       - '--platform=managed'
       - '--region=us-central1'
       - '--allow-unauthenticated'
-
 images:
   # ビルドされたイメージを記録
   - 'gcr.io/$PROJECT_ID/backend:latest'
