@@ -21,8 +21,13 @@ resource "google_project_iam_member" "artifact_registry_reader" {
   member  = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
 }
 
-resource "google_project_iam_member" "cloud_run_admin" {
+resource "google_project_iam_member" "cloud_run_developer" {
   project = var.project_id
-  role    = "roles/run.admin"
+  role    = "roles/run.developer"
   member  = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
+}
+resource "google_service_account_iam_member" "compute_service_account_user" {
+    service_account_id = google_service_account.cloudbuild_service_account.id
+    role               = "roles/iam.serviceAccountUser"
+    member             = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
 }
