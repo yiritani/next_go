@@ -29,6 +29,16 @@ resource "google_project_iam_member" "artifact_registry_reader" {
   role    = "roles/artifactregistry.reader"
   member  = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
 }
+resource "google_project_iam_member" "artifact_registry_writer_job" {
+  project = var.project_id
+  role   = "roles/artifactregistry.writer"
+  member = "serviceAccount:${google_service_account.job_service_account.email}"
+}
+resource "google_project_iam_member" "artifact_registry_reader_job" {
+  project = var.project_id
+  role    = "roles/artifactregistry.reader"
+  member  = "serviceAccount:${google_service_account.job_service_account.email}"
+}
 
 resource "google_project_iam_member" "cloud_run_developer" {
   project = var.project_id
