@@ -9,7 +9,7 @@ resource "google_cloudbuild_trigger" "frontend" {
   name = "${var.service_name}-build-trigger-frontend"
 
   substitutions = {
-    _IMAGE      = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}"
+    _IMAGE      = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}/frontend"
     _REGION     = var.region
     _SERVICE    = var.service_name
     _DOCKERFILE = var.dockerfile_frontend
@@ -40,6 +40,9 @@ resource "google_cloud_run_service" "frontend" {
           name  = "NEXT_PUBLIC_API_URL"
           value = "https://backend-service-${var.region}.a.run.app"
         }
+        ports {
+          container_port = 3000
+        }
       }
     }
   }
@@ -49,4 +52,17 @@ resource "google_cloud_run_service" "frontend" {
       "run.googleapis.com/client-name" = "terraform"
     }
   }
+}
+
+data "google_iam_policy" "noauth" {
+  binding {
+    role    = "roles/run.invoker"
+    members = ["allUsers"]
+  }
+}
+resource "google_cloud_run_service_iam_policy" "noauth" {
+  location = var.region
+  project  = var.project_id
+  service  = google_cloud_run_service.frontend.name
+  policy_data = data.google_iam_policy.noauth.policy_data
 }
