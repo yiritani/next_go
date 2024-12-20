@@ -28,8 +28,8 @@ variable "service_name" {
   default     = "next-go"
 }
 
-variable "image_repo_frontend" {
+variable "image_repo" {
   description = "イメージリポジトリ名"
   type        = string
-  default     = "next-go-frontend"
+  default     = "next-go"
 }

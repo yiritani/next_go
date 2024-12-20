@@ -1,21 +1,16 @@
 steps:
-  - name: 'gcr.io/cloud-builders/gcloud'
-    entrypoint: '/bin/sh'
-    args:
-      - '-c'
-      - 'echo "Image: us-central1-docker.pkg.dev/next-go-445113/next-go-frontend:${BUILD_ID}"'
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'build'
       - './apps/frontend'
       - '-t'
-      - 'us-central1-docker.pkg.dev/next-go-445113/next-go-frontend/first:${BUILD_ID}'
+      - '${_IMAGE}/frontend/first:${BUILD_ID}'
       - '-f'
       - 'apps/frontend/Dockerfile'
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
-      - 'us-central1-docker.pkg.dev/next-go-445113/next-go-frontend/first:${BUILD_ID}'
+      - '${_IMAGE}/frontend/first:${BUILD_ID}'
 #  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
 #    args:
 #      - 'run'

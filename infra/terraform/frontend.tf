@@ -2,18 +2,18 @@ resource "google_artifact_registry_repository" "frontend" {
   description   = "frontend-repo"
   format        = "DOCKER"
   location      = var.region
-  repository_id = var.image_repo_frontend
+  repository_id = var.image_repo
 }
 
 resource "google_cloudbuild_trigger" "frontend" {
   name = "${var.service_name}-build-trigger-frontend"
 
   substitutions = {
-    _IMAGE      = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo_frontend}"
+    _IMAGE      = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}"
     _REGION     = var.region
     _SERVICE    = var.service_name
     _DOCKERFILE = var.dockerfile_frontend
-    _REPO       = var.image_repo_frontend
+    _REPO       = var.image_repo
   }
 
   github {
