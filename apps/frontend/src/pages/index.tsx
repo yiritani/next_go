@@ -5,7 +5,7 @@ export default function Home() {
   const fetchPing = async () => {
     console.log('%o', process.env.NEXT_PUBLIC_API_URL);
     // const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ping`);
-    const res = await fetch(`https://next-go-cloudrun-frontend-d6cnpggbya-uc.a.run.app/ping`);
+    const res = await fetch(`https://next-go-cloudrun-backend-1063239685310.us-central1.run.app/ping`);
     const data = await res.json();
     console.log(data);
     setFetchedData(data.message);
