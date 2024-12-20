@@ -1,0 +1,14 @@
+FROM golang:1.23-alpine
+
+RUN apk add --no-cache curl git
+
+COPY ./scripts /scripts
+
+WORKDIR /app
+
+COPY . .
+COPY ./src/main.go .src/main.go
+COPY go.mod go.sum ./
+RUN go mod download
+
+CMD ["go", "run", ".src/main.go"]

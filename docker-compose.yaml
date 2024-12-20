@@ -44,6 +44,22 @@ services:
     depends_on:
       - db
 
+  job:
+    networks:
+      - next_go
+    build:
+      context: ./apps/job
+      dockerfile: Dockerfile.dev
+    ports:
+      - 8081:8080
+    volumes:
+      - ./apps/job:/app
+    command: ["go", "run", "./src/main.go"]
+    env_file:
+      - .env.local
+    environment:
+      NEXT_PUBLIC_API_URL: "http://backend:8080"
+
   db:
     image: "postgres:16-alpine"
     networks:
@@ -75,5 +91,3 @@ volumes:
     name: db-store
   test-db-store:
     name: test-db-store
-
-
