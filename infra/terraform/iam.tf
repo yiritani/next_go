@@ -36,3 +36,18 @@ resource "google_service_account_iam_member" "cloudrun_service_account_user" {
     role               = "roles/iam.serviceAccountUser"
     member             = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
 }
+
+data "google_iam_policy" "frontend_invoker" {
+  binding {
+    role    = "roles/run.invoker"
+    members = [
+      "serviceAccount:${google_service_account.cloudrun_service_account.email}"
+    ]
+  }
+}
+resource "google_cloud_run_service_iam_policy" "restrict-backend" {
+  location    = var.region
+  project     = var.project_id
+  service     = google_cloud_run_service.backend.name
+  policy_data = data.google_iam_policy.frontend_invoker.policy_data
+}

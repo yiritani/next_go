@@ -33,3 +33,7 @@ variable "image_repo" {
   type        = string
   default     = "next-go"
 }
+
+# variable "app_db_user_password" {
+#   type = string
+# }

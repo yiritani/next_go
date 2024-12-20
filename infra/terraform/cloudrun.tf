@@ -11,6 +11,34 @@ resource "google_cloud_run_service" "backend" {
         ports {
           container_port = 8080
         }
+        # env {
+        #   name  = "DATABASE_AUTO_MIGRATION"
+        #   value = "true"
+        # }
+        # env {
+        #   name  = "DATABASE_PROTOCOL"
+        #   value = "cloudsql"
+        # }
+        # env {
+        #   name  = "DATABASE_HOST"
+        #   value = google_sql_database_instance.db_instance.connection_name
+        # }
+        # env {
+        #   name  = "DATABASE_TIMEZONE"
+        #   value = "JST"
+        # }
+        # env {
+        #   name  = "DATABASE_NAME"
+        #   value = google_sql_database.main_database.name
+        # }
+        # env {
+        #   name  = "DATABASE_USER"
+        #   value = google_sql_user.db_user.name
+        # }
+        # env {
+        #   name  = "DATABASE_PASSWORD"
+        #   value = var.app_db_user_password
+        # }
       }
     }
   }
@@ -37,7 +65,7 @@ resource "google_cloud_run_service" "frontend" {
         image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}/frontend:latest"
         env {
           name  = "NEXT_PUBLIC_API_URL"
-          value = "https://backend-service-${var.region}.a.run.app"
+          value = google_cloud_run_service.backend.status[0].url
         }
         ports {
           container_port = 3000
