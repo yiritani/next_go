@@ -50,6 +50,11 @@ resource "google_service_account_iam_member" "cloudrun_service_account_user" {
     role               = "roles/iam.serviceAccountUser"
     member             = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
 }
+resource "google_service_account_iam_member" "job_service_account_user" {
+  service_account_id = google_service_account.job_service_account.id
+  role               = "roles/iam.serviceAccountUser"
+  member             = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
+}
 
 data "google_iam_policy" "frontend_invoker" {
   binding {
