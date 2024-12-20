@@ -4,6 +4,8 @@ resource "google_cloud_run_service" "backend" {
 
   template {
     spec {
+      service_account_name = google_service_account.cloudrun_service_account.email
+
       containers {
         image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}/backend:latest"
         ports {
