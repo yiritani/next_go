@@ -22,6 +22,12 @@ variable "dockerfile_frontend" {
   default     = "apps/frontend/Dockerfile"
 }
 
+variable "dockerfile_job" {
+  description = "jobのDockerfileパス"
+  type        = string
+  default     = "apps/job/Dockerfile"
+}
+
 variable "service_name" {
   description = "サービス名"
   type        = string
