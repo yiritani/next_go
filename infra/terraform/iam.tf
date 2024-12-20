@@ -3,6 +3,11 @@ resource "google_service_account" "cloudbuild_service_account" {
   display_name = "cloudbuild-sa"
   description  = "Cloud build service account"
 }
+resource "google_service_account" "cloudrun_service_account" {
+  account_id   = "cloudrun-sa"
+  display_name = "cloudrun-sa"
+  description  = "Cloud run service account"
+}
 
 resource "google_project_iam_member" "logs_logging_writer" {
   project = var.project_id
@@ -26,8 +31,8 @@ resource "google_project_iam_member" "cloud_run_developer" {
   role    = "roles/run.developer"
   member  = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
 }
-resource "google_service_account_iam_member" "compute_service_account_user" {
-    service_account_id = google_service_account.cloudbuild_service_account.id
+resource "google_service_account_iam_member" "cloudrun_service_account_user" {
+    service_account_id = google_service_account.cloudrun_service_account.id
     role               = "roles/iam.serviceAccountUser"
     member             = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
 }

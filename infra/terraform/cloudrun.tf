@@ -29,6 +29,8 @@ resource "google_cloud_run_service" "frontend" {
 
   template {
     spec {
+      service_account_name = google_service_account.cloudrun_service_account.email
+
       containers {
         image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}/frontend:latest"
         env {
