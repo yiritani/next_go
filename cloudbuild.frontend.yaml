@@ -4,13 +4,13 @@ steps:
       - 'build'
       - './apps/frontend'
       - '-t'
-      - 'us-central1-docker.pkg.dev/next-go-445113/next-go-frontend:${BUILD_ID}'
+      - 'us-central1-docker.pkg.dev/next-go-445113/next-go-frontend:latest'
       - '-f'
       - 'apps/frontend/Dockerfile'
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
-      - 'us-central1-docker.pkg.dev/next-go-445113/next-go-frontend:${BUILD_ID}'
+      - 'us-central1-docker.pkg.dev/next-go-445113/next-go-frontend:latest'
 #  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
 #    args:
 #      - 'run'
