@@ -12,6 +12,10 @@ resource "google_cloud_run_v2_job" "job" {
           name  = "NEXT_PUBLIC_API_URL"
           value = google_cloud_run_service.backend.status[0].url
         }
+        env {
+          name  = "PORT"
+          value = "8080"
+        }
       }
     }
   }
