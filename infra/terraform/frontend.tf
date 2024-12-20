@@ -29,7 +29,7 @@ resource "google_cloudbuild_trigger" "frontend" {
 }
 
 resource "google_cloud_run_service" "frontend" {
-  name     = "${var.service_name}-frontend"
+  name     = "${var.service_name}-cloudrun-frontend"
   location = var.region
 
   template {
