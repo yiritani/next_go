@@ -13,7 +13,7 @@ variable "region" {
 variable "dockerfile_backend" {
   description = "バックエンドのDockerfileパス"
   type        = string
-  default     = "../apps/backend/Dockerfile"
+  default     = "apps/backend/Dockerfile"
 }
 
 variable "dockerfile_frontend" {

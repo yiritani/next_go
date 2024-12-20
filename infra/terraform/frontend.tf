@@ -1,10 +1,3 @@
-resource "google_artifact_registry_repository" "frontend" {
-  description   = "frontend-repo"
-  format        = "DOCKER"
-  location      = var.region
-  repository_id = var.image_repo
-}
-
 resource "google_cloudbuild_trigger" "frontend" {
   name = "${var.service_name}-build-trigger-frontend"
 
@@ -52,17 +45,4 @@ resource "google_cloud_run_service" "frontend" {
       "run.googleapis.com/client-name" = "terraform"
     }
   }
-}
-
-data "google_iam_policy" "noauth" {
-  binding {
-    role    = "roles/run.invoker"
-    members = ["allUsers"]
-  }
-}
-resource "google_cloud_run_service_iam_policy" "noauth" {
-  location = var.region
-  project  = var.project_id
-  service  = google_cloud_run_service.frontend.name
-  policy_data = data.google_iam_policy.noauth.policy_data
 }

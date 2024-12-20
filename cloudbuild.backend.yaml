@@ -1,0 +1,15 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - './apps/frontend'
+      - '-t'
+      - '${_IMAGE}:latest'
+      - '-f'
+      - 'apps/frontend/Dockerfile'
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - '${_IMAGE}:latest'
+options:
+  logging: CLOUD_LOGGING_ONLY
