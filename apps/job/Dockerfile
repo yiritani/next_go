@@ -10,5 +10,6 @@ COPY . .
 COPY ./src/main.go .src/main.go
 COPY go.mod go.sum ./
 RUN go mod download
+ENV PORT 8080
 
 CMD ["go", "run", ".src/main.go"]
