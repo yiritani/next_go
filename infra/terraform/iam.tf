@@ -8,6 +8,10 @@ resource "google_service_account" "cloudrun_service_account" {
   display_name = "cloudrun-sa"
   description  = "Cloud run service account"
 }
+resource "google_service_account" "job_service_account" {
+  account_id   = "job-sa"
+  display_name = "Job Service Account"
+}
 
 resource "google_project_iam_member" "logs_logging_writer" {
   project = var.project_id
@@ -41,7 +45,8 @@ data "google_iam_policy" "frontend_invoker" {
   binding {
     role    = "roles/run.invoker"
     members = [
-      "serviceAccount:${google_service_account.cloudrun_service_account.email}"
+      "serviceAccount:${google_service_account.cloudrun_service_account.email}",
+      "serviceAccount:${google_service_account.job_service_account.email}"
     ]
   }
 }
@@ -50,4 +55,10 @@ resource "google_cloud_run_service_iam_policy" "restrict-backend" {
   project     = var.project_id
   service     = google_cloud_run_service.backend.name
   policy_data = data.google_iam_policy.frontend_invoker.policy_data
+}
+
+resource "google_project_iam_member" "job_cloud_run_invoker" {
+  role   = "roles/run.invoker"
+  member = "serviceAccount:${google_service_account.job_service_account.email}"
+  project     = var.project_id
 }
