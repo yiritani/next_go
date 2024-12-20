@@ -10,17 +10,6 @@ import (
 
 func main() {
 	godotenv.Load(".env.local")
-
-	// TODO: これをやらないとjobのコンテナが起動しない
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080" // デフォルト値
-		fmt.Println("Defaulting to port 8080")
-	}
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, "Hello, Cloud Run!")
-	})
-
 	callSampleFetch()
 }
 
