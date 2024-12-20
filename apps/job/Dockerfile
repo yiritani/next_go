@@ -1,14 +1,20 @@
 FROM golang:1.23-alpine
 
-RUN apk add --no-cache curl git
+# 必要なツールをインストール
+RUN apk add --no-cache git
 
-COPY ./scripts /scripts
-
+# 作業ディレクトリを作成
 WORKDIR /app
 
-COPY . .
-COPY ./src/main.go .src/main.go
+# 依存関係をインストール
 COPY go.mod go.sum ./
 RUN go mod download
 
-CMD ["go", "run", ".src/main.go"]
+# ソースコードをコピー
+COPY . .
+
+# バッチアプリケーションをビルド
+RUN go build -o job ./src/main.go
+
+# コンテナのエントリポイント
+CMD ["./job"]

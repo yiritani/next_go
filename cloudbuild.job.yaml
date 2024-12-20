@@ -20,11 +20,7 @@ steps:
       - '--image'
       - '${_IMAGE}:latest'
       - '--region'
-      - '${_REGION}'
-      - '--platform'
-      - 'managed'
-      - '--allow-unauthenticated'
-      - '--service-account'
-      - '${_CLOUD_RUN_SERVICE_ACCOUNT}'
+      - '${_CLOUD_RUN_REGION}'
+      - '--execute-now'
 options:
   logging: CLOUD_LOGGING_ONLY
