@@ -20,7 +20,7 @@ steps:
       - '--image'
       - '${_IMAGE}:latest'
       - '--region'
-      - '${_CLOUD_RUN_REGION}'
+      - '${_REGION}'
       - '--execute-now'
 options:
   logging: CLOUD_LOGGING_ONLY
