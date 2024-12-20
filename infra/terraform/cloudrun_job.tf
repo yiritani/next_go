@@ -4,6 +4,7 @@ resource "google_cloud_run_v2_job" "job" {
 
   template {
     template {
+      service_account = google_service_account.cloudrun_service_account.email
       containers {
         image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}/job:latest"
       }
