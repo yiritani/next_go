@@ -2,11 +2,11 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'build'
-      - './apps/frontend'
+      - './apps/backend'
       - '-t'
       - '${_IMAGE}:latest'
       - '-f'
-      - 'apps/frontend/Dockerfile'
+      - 'apps/backend/Dockerfile'
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'

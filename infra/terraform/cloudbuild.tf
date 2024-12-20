@@ -21,24 +21,25 @@ resource "google_cloudbuild_trigger" "backend" {
   filename = "cloudbuild.backend.yaml"
 }
 
-resource "google_cloud_run_service" "backend" {
-  name     = "${var.service_name}-cloudrun-backend"
-  location = var.region
+resource "google_cloudbuild_trigger" "frontend" {
+  name = "${var.service_name}-build-trigger-frontend"
 
-  template {
-    spec {
-      containers {
-        image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}/backend:latest"
-        ports {
-          container_port = 8080
-        }
-      }
+  substitutions = {
+    _IMAGE      = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}/frontend"
+    _REGION     = var.region
+    _SERVICE    = var.service_name
+    _DOCKERFILE = var.dockerfile_frontend
+    _REPO       = var.image_repo
+  }
+
+  github {
+    owner = "yiritani"
+    name  = "next_go"
+    push {
+      branch = "main"
     }
   }
 
-  metadata {
-    annotations = {
-      "run.googleapis.com/client-name" = "terraform"
-    }
-  }
+  service_account = google_service_account.cloudbuild_service_account.id
+  filename = "cloudbuild.frontend.yaml"
 }
