@@ -10,7 +10,7 @@ resource "google_cloud_run_v2_job" "job" {
         image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}/job:latest"
         env {
           name  = "NEXT_PUBLIC_API_URL"
-          value = google_cloud_run_service.backend.status[0].url
+          value = "https://next-go-cloudrun-backend-1063239685310.us-central1.run.app"
         }
       }
     }
