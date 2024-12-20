@@ -10,7 +10,7 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
-      - 'us-central1-docker.pkg.dev/next-go-445113/next-go-frontend'
+      - 'us-central1-docker.pkg.dev/next-go-445113/next-go-frontend:${BUILD_ID}'
 #  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
 #    args:
 #      - 'run'
