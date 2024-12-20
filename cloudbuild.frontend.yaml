@@ -4,13 +4,13 @@ steps:
       - 'build'
       - './apps/frontend'
       - '-t'
-      - '${_IMAGE}/frontend:${BUILD_ID}'
+      - '${_IMAGE}/frontend:latest'
       - '-f'
       - 'apps/frontend/Dockerfile'
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
-      - '${_IMAGE}/frontend:${BUILD_ID}'
+      - '${_IMAGE}/frontend:latest'
 #  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
 #    args:
 #      - 'run'
