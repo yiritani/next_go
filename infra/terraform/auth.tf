@@ -20,3 +20,9 @@ resource "google_project_iam_member" "artifact_registry_reader" {
   role    = "roles/artifactregistry.reader"
   member  = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
 }
+
+resource "google_project_iam_member" "cloud_run_admin" {
+  project = var.project_id
+  role    = "roles/run.admin"
+  member  = "serviceAccount:${google_service_account.cloudbuild_service_account.email}"
+}
