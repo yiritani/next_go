@@ -30,6 +30,8 @@ resource "google_cloudbuild_trigger" "frontend" {
     _SERVICE    = var.service_name
     _DOCKERFILE = var.dockerfile_frontend
     _REPO       = var.image_repo
+    _CLOUD_RUN_SERVICE = google_cloud_run_service.frontend.name
+    _CLOUD_RUN_SERVICE_ACCOUNT = google_service_account.cloudrun_service_account.email
   }
 
   github {
