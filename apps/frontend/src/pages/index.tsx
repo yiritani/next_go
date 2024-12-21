@@ -1,20 +1,15 @@
 import {useState} from "react";
-import {AnyAuthClient, GoogleAuth} from "google-auth-library";
 
-type Props = {
-  client: AnyAuthClient;
-}
-
-export default function Home({client}: Props) {
+export default function Home() {
 
   const [fetchedData, setFetchedData] = useState<string>('');
   const fetchPing = async () => {
-    console.log('%o', process.env.NEXT_PUBLIC_API_URL);
-    // const backendUrl = process.env.NEXT_PUBLIC_API_URL;
-    const backendUrl = `http://localhost:8080`;
-    const res = await client.request({method: "GET", url: `${backendUrl}/ping`});
-    console.log('resres', res);
-    setFetchedData('a');
+    // console.log('%o', process.env.NEXT_PUBLIC_API_URL);
+    // // const backendUrl = process.env.NEXT_PUBLIC_API_URL;
+    // const backendUrl = `http://localhost:8080`;
+    // const res = await client.request({method: "GET", url: `${backendUrl}/ping`});
+    // console.log('resres', res);
+    // setFetchedData('a');
   }
 
   return (
@@ -45,13 +40,13 @@ export default function Home({client}: Props) {
 }
 
 export const getServerSideProps = async () => {
-  const auth = new GoogleAuth({
-    scopes: 'https://www.googleapis.com/auth/cloud-platform'
-  });
-  const client = await auth.getClient();
-  const backendUrl = `https://next-go-cloudrun-backend-1063239685310.us-central1.run.app`;
-  const res = await client.request({method: "GET", url: `${backendUrl}/ping`});
-  console.log(res);
+  // const auth = new GoogleAuth({
+  //   scopes: 'https://www.googleapis.com/auth/cloud-platform'
+  // });
+  // const client = await auth.getClient();
+  // const backendUrl = `https://next-go-cloudrun-backend-1063239685310.us-central1.run.app`;
+  // const res = await client.request({method: "GET", url: `${backendUrl}/ping`});
+  // console.log(res);
   return {
     props: {
     }
