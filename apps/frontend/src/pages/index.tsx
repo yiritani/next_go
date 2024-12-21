@@ -7,7 +7,6 @@ export default function Home() {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ping`);
     // const res = await fetch(`https://next-go-backend-1063239685310.us-central1.run.app/ping`);
     const data = await res.json();
-    console.log(data);
     setFetchedData(data.message);
   }
 
