@@ -7,7 +7,7 @@ steps:
       - '${_IMAGE}:latest'
       - '-f'
       - 'apps/frontend/Dockerfile'
-      - '-build-arg'
+      - '--build-arg'
       - 'NEXT_PUBLIC_API_URL=${_NEXT_PUBLIC_API_URL}'
   - name: 'gcr.io/cloud-builders/docker'
     args:
