@@ -34,6 +34,7 @@ resource "google_cloudbuild_trigger" "frontend" {
     _REPO       = var.image_repo
     _CLOUD_RUN_SERVICE = google_cloud_run_service.frontend.name
     _CLOUD_RUN_SERVICE_ACCOUNT = google_service_account.cloudrun_service_account.email
+    _NEXT_PUBLIC_API_URL = google_cloud_run_service.backend.status[0].url
   }
 
   github {
