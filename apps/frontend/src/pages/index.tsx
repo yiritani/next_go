@@ -1,15 +1,14 @@
 import {useState} from "react";
 
 export default function Home() {
-
-  const [fetchedData, setFetchedData] = useState<string>('');
+  const [fetchedData, setFetchedData] = useState(null);
   const fetchPing = async () => {
-    // console.log('%o', process.env.NEXT_PUBLIC_API_URL);
-    // // const backendUrl = process.env.NEXT_PUBLIC_API_URL;
-    // const backendUrl = `http://localhost:8080`;
-    // const res = await client.request({method: "GET", url: `${backendUrl}/ping`});
-    // console.log('resres', res);
-    // setFetchedData('a');
+    console.log('%o', process.env.NEXT_PUBLIC_API_URL);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ping`);
+    // const res = await fetch(`https://next-go-backend-1063239685310.us-central1.run.app/ping`);
+    const data = await res.json();
+    console.log(data);
+    setFetchedData(data.message);
   }
 
   return (
@@ -24,11 +23,13 @@ export default function Home() {
           click
         </div>
       </button>
-      <div className={`font-sans text-xl`}>
+      <div
+        className={`font-sans text-xl`}
+      >
         {fetchedData ? fetchedData : "no data"}
       </div>
       <button
-        onClick={() => setFetchedData('')}
+        onClick={() => setFetchedData(null)}
         className={`bg-red-500 text-white px-4 py-2 rounded-md`}
       >
         <div>
@@ -37,18 +38,4 @@ export default function Home() {
       </button>
     </div>
   );
-}
-
-export const getServerSideProps = async () => {
-  // const auth = new GoogleAuth({
-  //   scopes: 'https://www.googleapis.com/auth/cloud-platform'
-  // });
-  // const client = await auth.getClient();
-  // const backendUrl = `https://next-go-cloudrun-backend-1063239685310.us-central1.run.app`;
-  // const res = await client.request({method: "GET", url: `${backendUrl}/ping`});
-  // console.log(res);
-  return {
-    props: {
-    }
-  }
 }
