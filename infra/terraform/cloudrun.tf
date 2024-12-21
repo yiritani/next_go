@@ -7,38 +7,11 @@ resource "google_cloud_run_service" "backend" {
       service_account_name = google_service_account.cloudrun_service_account.email
 
       containers {
-        image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}/backend:latest"
+        # image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}/backend:latest"
+        image = "gcr.io/cloudrun/hello"
         ports {
           container_port = 8080
         }
-        # env {
-        #   name  = "DATABASE_AUTO_MIGRATION"
-        #   value = "true"
-        # }
-        # env {
-        #   name  = "DATABASE_PROTOCOL"
-        #   value = "cloudsql"
-        # }
-        # env {
-        #   name  = "DATABASE_HOST"
-        #   value = google_sql_database_instance.db_instance.connection_name
-        # }
-        # env {
-        #   name  = "DATABASE_TIMEZONE"
-        #   value = "JST"
-        # }
-        # env {
-        #   name  = "DATABASE_NAME"
-        #   value = google_sql_database.main_database.name
-        # }
-        # env {
-        #   name  = "DATABASE_USER"
-        #   value = google_sql_user.db_user.name
-        # }
-        # env {
-        #   name  = "DATABASE_PASSWORD"
-        #   value = var.app_db_user_password
-        # }
       }
     }
   }
@@ -62,7 +35,8 @@ resource "google_cloud_run_service" "frontend" {
       service_account_name = google_service_account.cloudrun_service_account.email
 
       containers {
-        image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}/frontend:latest"
+        # image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}/frontend:latest"
+        image = "gcr.io/cloudrun/hello"
         env {
           name  = "NEXT_PUBLIC_API_URL"
           value = google_cloud_run_service.backend.status[0].url
@@ -84,6 +58,16 @@ output "frontend_url" {
   value = google_cloud_run_service.frontend.status[0].url
 }
 
+# フロントエンドのサービスアカウントに限定するIAMポリシー
+resource "google_cloud_run_service_iam_member" "allow-frontend-to-backend" {
+  location = var.region
+  project  = var.project_id
+  service  = google_cloud_run_service.backend.name
+  role     = "roles/run.invoker"
+  member   = "serviceAccount:${google_service_account.cloudrun_service_account.email}"
+}
+
+# フロントエンドは匿名ユーザーからのアクセスを許可 (公開)
 data "google_iam_policy" "noauth" {
   binding {
     role    = "roles/run.invoker"
@@ -91,14 +75,8 @@ data "google_iam_policy" "noauth" {
   }
 }
 resource "google_cloud_run_service_iam_policy" "noauth-frontend" {
-  location = var.region
-  project  = var.project_id
-  service  = google_cloud_run_service.frontend.name
-  policy_data = data.google_iam_policy.noauth.policy_data
-}
-resource "google_cloud_run_service_iam_policy" "noauth-backend" {
-  location = var.region
-  project  = var.project_id
-  service  = google_cloud_run_service.backend.name
+  location    = var.region
+  project     = var.project_id
+  service     = google_cloud_run_service.frontend.name
   policy_data = data.google_iam_policy.noauth.policy_data
 }
