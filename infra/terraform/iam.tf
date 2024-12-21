@@ -10,7 +10,7 @@ resource "google_service_account" "cloudrun_service_account" {
 }
 resource "google_service_account" "job_service_account" {
   account_id   = "job-sa"
-  display_name = "Job Service Account"
+  display_name = "job-sa"
 }
 
 resource "google_project_iam_member" "logs_logging_writer" {
