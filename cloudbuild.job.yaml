@@ -21,6 +21,5 @@ steps:
       - '${_IMAGE}:latest'
       - '--region'
       - '${_REGION}'
-      - '--execute-now'
 options:
   logging: CLOUD_LOGGING_ONLY

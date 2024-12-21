@@ -72,4 +72,3 @@ resource "google_cloudbuild_trigger" "job" {
   service_account = google_service_account.cloudbuild_service_account.id
   filename = "cloudbuild.job.yaml"
 }
-

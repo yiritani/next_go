@@ -7,7 +7,6 @@ resource "google_cloud_run_v2_job" "job" {
       service_account = google_service_account.job_service_account.email
 
       containers {
-        # image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}/job:latest"
         image = "gcr.io/cloudrun/hello"
         env {
           name  = "NEXT_PUBLIC_API_URL"
