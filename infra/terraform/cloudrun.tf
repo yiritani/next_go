@@ -7,7 +7,7 @@ resource "google_cloud_run_service" "backend" {
       service_account_name = google_service_account.cloudrun_service_account.email
 
       containers {
-        # image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}/backend:latest"
+        # TODO: こうすることで初回のterraform apply時にcloudbuildとの相互参照を回避できる
         image = "gcr.io/cloudrun/hello"
         ports {
           container_port = 8080
