@@ -79,20 +79,6 @@ jobs:
         if: steps.plan.outcome == 'failure'
         run: exit 1
 
-      - name: Create Pull Request
-        id: create-pr
-        if: steps.plan.outcome == 'success' && github.event.inputs.plan_or_apply == 'plan'
-        run: |
-          git config --global user.name "GitHub Actions Bot"
-          git config --global user.email "actions@github.com"
-          gh pr create \
-            --title "Terraform Plan Results" \
-            --body "Terraform plan was successfully executed. Please review the changes and merge if necessary." \
-            --head "${{ github.head_ref }}" \
-            --base "terraform_apply"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Terraform Apply
         id: apply
         if: github.event.inputs.plan_or_apply == 'apply'
