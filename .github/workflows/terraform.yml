@@ -89,7 +89,7 @@ jobs:
             --title "Terraform Plan Results" \
             --body "Terraform plan was successfully executed. Please review the changes and merge if necessary." \
             --head "${{ github.head_ref }}" \
-            --base "main"
+            --base "terraform_apply"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
