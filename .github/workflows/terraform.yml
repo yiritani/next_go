@@ -38,7 +38,7 @@ jobs:
         name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v2'
         with:
-          workload_identity_provider: 'projects/123/locations/global/workloadIdentityPools/gha-pool/providers/gha-provider'
+          workload_identity_provider: 'projects/1063239685310/locations/global/workloadIdentityPools/gha-pool/providers/gha-provider'
           service_account: 'gha-sa@next-go-445113.iam.gserviceaccount.com'
 
       # https://github.com/marketplace/actions/setup-tfcmt
