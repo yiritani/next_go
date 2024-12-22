@@ -4,16 +4,17 @@
 ## コンセプト
 - Next.jsとgolang/ginを使ったフルスタック開発のテンプレート
 - Next.jsでは特段何もしておらず、主にgolangのスタートアップ
-- production Dockerfileはまだ未着手
-- Turborepoでモノリポ化
+- terraformでGoogle Cloudに環境構築
 
 ### Frontend: Next.js
-App Routerで謎のlintエラー出ている
+- ただbackendにgetリクエストするだけ
 ### Backend: golang/gin/sqlc
 - Framework: Gin
 - SQL Builder: sqlc
+- ローカルでは`air`でホットリロード。
+### job: golang
+- ただbackendにgetリクエストするだけ
 
-ローカルでは`air`でホットリロード。
 
 ### Database: PostgreSQL
 
@@ -22,5 +23,6 @@ App Routerで謎のlintエラー出ている
 ├── apps
 │ ├── backend     # golang/gin
 │ └── frontend         # nextjs/App router
+├── infra
 
 ```
