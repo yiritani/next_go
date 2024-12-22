@@ -23,7 +23,7 @@ jobs:
     strategy:
       matrix:
         tf_working_dir:
-          - ./infra/terraform
+          - ./infra/terraform/development
 
     steps:
       - uses: actions/checkout@v4
