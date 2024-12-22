@@ -80,11 +80,10 @@ jobs:
       # main ブランチへ pull request した際に terraform plan を実行
       - name: Terraform Plan
         id: plan
+        if: github.event.inputs.plan_or_apply == 'plan'
         run: |
           cd ${{ matrix.tf_working_dir }}
-          export GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
-          TF_LOG=DEBUG terraform plan --parallelism=50
-          tfcmt -var target:${{ matrix.tf_working_dir }} plan -- terraform plan --parallelism=50
+          terraform plan
         continue-on-error: true
 
       # terraform status で失敗した際に workflow を停止
