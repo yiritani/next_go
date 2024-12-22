@@ -84,6 +84,7 @@ jobs:
         run: |
           cd ${{ matrix.tf_working_dir }}
           export GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+          TF_LOG=DEBUG terraform plan --parallelism=50
           tfcmt -var target:${{ matrix.tf_working_dir }} plan -- terraform plan --parallelism=50
           github-comment hide -condition 'Comment.Body contains "No changes."'
         continue-on-error: true
