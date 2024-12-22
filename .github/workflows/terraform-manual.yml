@@ -4,12 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'AWS Environment'
+        description: 'GCP Environment'
         required: true
         type: choice
         default: '-'
         options:
           - '-'
+          - development
           - staging
           - production
       plan_or_apply:
@@ -75,9 +76,8 @@ jobs:
     needs: setup
     env:
       TERRAFORM_VERSION: {TERRAFORM_VERSION}
-      AWS_ROLE_ARN: {AWS_ROLE_ARN}
-      AWS_DEFAULT_REGION: {AWS_DEFAULT_REGION}
-      TFSATTE_BUCKET_NAME: {TFSATTE_BUCKET_NAME}
+      GOOGLE_PROJECT_ID: {GOOGLE_PROJECT_ID}
+      GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
       GITHUB_OWNER: metaps
       GITHUB_USER: {GITHUB_USER}
       GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
@@ -98,27 +98,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Env check
-        if: ${{ github.event.inputs.environment == '-' && contains(matrix.target, 'providers/aws/application') }}
+      - name: Set GCP credentials
         run: |
-          echo "Error: You are modifying an AWS resource with an Environment, but Environment is not specified"
-          exit 1
-
-      - name: Set env to staging
-        if: ${{ github.event.inputs.environment == 'staging' }}
-        run: |
-          echo "ENV=staging" >> $GITHUB_ENV
-
-      - name: Set env to production
-        if: ${{ github.event.inputs.environment == 'production' }}
-        run: |
-          echo "ENV=produciton" >> $GITHUB_ENV
-
-      - name: Set AWS credentials
-        uses: aws-actions/configure-aws-credentials@master
-        with:
-          role-to-assume: ${{ env.AWS_ROLE_ARN }}
-          aws-region: ${{ env.AWS_REGION }}
+          echo "${{ secrets.GOOGLE_CREDENTIALS }}" > gcloud-key.json
+          gcloud auth activate-service-account --key-file=gcloud-key.json
+          gcloud config set project ${{ env.GOOGLE_PROJECT_ID }}
 
       - name: Setup tfnotify
         run: |
@@ -130,6 +114,11 @@ jobs:
         with:
           terraform_version: ${{ env.TERRAFORM_VERSION }}
 
+      - name: Set env to development
+        if: ${{ github.event.inputs.environment == 'development' }}
+        run: |
+          echo "ENV=development" >> $GITHUB_ENV
+
       - name: Set env to staging
         if: ${{ github.event.inputs.environment == 'staging' }}
         run: |
@@ -140,26 +129,8 @@ jobs:
         run: |
           echo "ENV=production" >> $GITHUB_ENV
 
-      - name: Terraform Applcation Init
-        if: contains(matrix.target, 'providers/aws/application')
-        run: |
-          export MATRIX_TARGET=$(echo "${{ matrix.target }}" | sed "s/providers\/aws\/application/providers\/aws\/application\/${{ env.ENV }}/g")
-          terraform init -reconfigure -backend-config="key=${MATRIX_TARGET}".tfstate
-        env:
-          GIT_SSH_COMMAND: "echo '${{ secrets.SSH_KEY }}' > id_rsa
-            && ssh-keyscan github.com > known_hosts
-            && chmod 600 id_rsa known_hosts
-            && ssh -i ./id_rsa -o UserKnownHostsFile=./known_hosts"
-
       - name: Terraform Init
-        if: "!contains(matrix.target, 'providers/aws/application')"
-        run: |
-          terraform init -reconfigure -backend-config="key=${{ matrix.target }}".tfstate
-        env:
-          GIT_SSH_COMMAND: "echo '${{ secrets.SSH_KEY }}' > id_rsa
-            && ssh-keyscan github.com > known_hosts
-            && chmod 600 id_rsa known_hosts
-            && ssh -i ./id_rsa -o UserKnownHostsFile=./known_hosts"
+        run: terraform init -reconfigure -backend-config="key=${{ matrix.target }}.tfstate"
 
       - name: Terraform Validate
         run: terraform validate -no-color
@@ -172,28 +143,14 @@ jobs:
         continue-on-error: true
 
       - name: Terraform Plan
-        if: ${{  github.event.inputs.plan_or_apply == 'plan' && contains(matrix.target, 'providers/aws/application') }}
-        run: |
-          terraform plan -lock=false -no-color -var="env=${{ env.ENV }}" >> apply_result.temp
-          cat apply_result.temp | tfnotify --config ${{ env.TFNOTIFY_CONFIG }} plan --message "$(date)"
-        continue-on-error: true
-
-      - name: Terraform Plan
-        if: ${{  github.event.inputs.plan_or_apply == 'plan' && !contains(matrix.target, 'providers/aws/application') }}
+        if: ${{ github.event.inputs.plan_or_apply == 'plan' }}
         run: |
           terraform plan -lock=false -no-color >> apply_result.temp
           cat apply_result.temp | tfnotify --config ${{ env.TFNOTIFY_CONFIG }} plan --message "$(date)"
         continue-on-error: true
 
-      - name: Terraform Applcation Apply
-        if: ${{  github.event.inputs.plan_or_apply == 'apply' && contains(matrix.target, 'providers/aws/application') }}
-        run: |
-          terraform apply -auto-approve -var="env=${{ env.ENV }}" >> apply_result.temp
-          cat apply_result.temp | tfnotify --config ${{ env.TFNOTIFY_CONFIG }} apply --message "$(date)"
-
       - name: Terraform Apply
-        if: ${{  github.event.inputs.plan_or_apply == 'apply' && !contains(matrix.target, 'providers/aws/application') }}
+        if: ${{ github.event.inputs.plan_or_apply == 'apply' }}
         run: |
           terraform apply -auto-approve >> apply_result.temp
           cat apply_result.temp | tfnotify --config ${{ env.TFNOTIFY_CONFIG }} apply --message "$(date)"
-
