@@ -1,5 +1,6 @@
 name: "Workflow for Terraform Plan"
 on:
+  workflow_dispatch:
   workflow_call:
     inputs:
       TF_VERSION:
