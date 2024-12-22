@@ -2,12 +2,15 @@ name: terraform
 
 # main ブランチへの Pull request と Merge
 on:
-  pull_request:
-    branches:
-      - main
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      plan_or_apply:
+        description: 'Terraform plan or apply'
+        required: true
+        type: choice
+        options:
+          - plan
+          - apply
 
 # ジョブ (GitHUb runners で実行)
 jobs:
