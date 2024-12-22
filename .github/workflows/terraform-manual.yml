@@ -1,10 +1,10 @@
-name: TerraformManualRelease
+name: Terraform Manual Release
 run-name: TerraformManualRelease [${{ inputs.environment }}] [${{ inputs.plan_or_apply }}] From [${{ github.ref_name }}]
 on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'GCP Environment'
+        description: 'GoogleCloud Environment'
         required: true
         type: choice
         default: '-'
@@ -75,15 +75,15 @@ jobs:
       pull-requests: write
     needs: setup
     env:
-      TERRAFORM_VERSION: {TERRAFORM_VERSION}
-      GOOGLE_PROJECT_ID: {GOOGLE_PROJECT_ID}
+      TERRAFORM_VERSION: v1.10.3
+      GOOGLE_PROJECT_ID: next-go-445113
       GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
       GITHUB_OWNER: metaps
-      GITHUB_USER: {GITHUB_USER}
+      GITHUB_USER: yiritani
       GITHUB_TOKEN: ${{ secrets.PERSONAL_GITHUB_TOKEN }}
       SSH_KEY: ${{ secrets.SSH_KEY }}
       SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-      TF_VAR_app_domain: {TF_VAR_app_domain}
+      TF_VAR_app_domain: ${{ secrets.TF_VAR_app_domain }}
       SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
       SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
       SLACK_BOT_NAME: tfnotify
