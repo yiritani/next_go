@@ -6,10 +6,10 @@ set -e
 # 変数の設定
 PROJECT_ID="next-go-445113"
 PROJECT_NUMBER="123"
-WORKLOAD_IDENTITY_POOL="gha-pool"
-WORKLOAD_IDENTITY_PROVIDER="gha-provider"
-SERVICE_ACCOUNT_NAME="gha-sa"
-GITHUB_REPO="next_go"
+WORKLOAD_IDENTITY_POOL="gha-terraform-pool"
+WORKLOAD_IDENTITY_PROVIDER="gha-terraform-provider"
+SERVICE_ACCOUNT_NAME="gha-terraform-sa"
+GITHUB_REPO="yiritani/next_go"
 
 # ログ出力関数
 log() {
