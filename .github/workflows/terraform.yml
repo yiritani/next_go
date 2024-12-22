@@ -80,7 +80,7 @@ jobs:
       # main ブランチへ pull request した際に terraform plan を実行
       - name: Terraform Plan
         id: plan
-        if: github.event_name == 'pull_request'
+        if: github.event.inputs.plan_or_apply == 'plan'
         run: |
           cd ${{ matrix.tf_working_dir }}
           export GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
