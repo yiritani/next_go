@@ -34,8 +34,8 @@ jobs:
         name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v2'
         with:
-          workload_identity_provider: 'projects/${{ secrets.GCP_PROJECT_ID_NUM }}/locations/global/workloadIdentityPools/gha-terraform-pool/providers/gha-terraform-provider'
-          service_account: 'gha-terraform-sa@${{ secrets.GHA_GCP_PROJECT_ID }}.iam.gserviceaccount.com'
+          workload_identity_provider: 'projects/1063239685310/locations/global/workloadIdentityPools/gha-terraform-pool/providers/gha-terraform-provider'
+          service_account: 'gha-terraform-sa@next-go-445113.iam.gserviceaccount.com'
 
       - uses: shmokmt/actions-setup-tfcmt@v2
         name: Setup tfcmt
