@@ -63,10 +63,14 @@ fi
 # プロジェクトレベルでのロール付与
 log "プロジェクトレベルでのロール付与の確認"
 for role in "roles/owner" "roles/iam.workloadIdentityUser"; do
+    if ! gcloud projects get-iam-policy $PROJECT_ID --flatten="bindings[].members" --filter="bindings.members:serviceAccount:$SERVICE_ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com AND bindings.role:$role" --format="value(bindings.role)" | grep "$role" >/dev/null 2>&1; then
         log "$role をサービスアカウントに付与中: $SERVICE_ACCOUNT_NAME"
         gcloud projects add-iam-policy-binding $PROJECT_ID \
             --member="serviceAccount:$SERVICE_ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com" \
             --role="$role"
+    else
+        log "$role は既にサービスアカウントに付与されています: $SERVICE_ACCOUNT_NAME"
+    fi
 done
 
 log "Workload Identity 設定が完了しました。"

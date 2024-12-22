@@ -4,7 +4,7 @@ resource "google_cloud_run_v2_job" "job" {
 
   template {
     template {
-      service_account = "serviceAccount:job-sa@${var.project_id}.iam.gserviceaccount.com"
+      service_account = google_service_account.job_service_account.email
 
       containers {
         image = "gcr.io/cloudrun/hello"

@@ -4,7 +4,7 @@ resource "google_cloud_run_service" "backend" {
 
   template {
     spec {
-      service_account_name = "serviceAccount:cloudrun-sa@${var.project_id}.iam.gserviceaccount.com"
+      service_account_name = google_service_account.cloudrun_service_account.email
 
       containers {
         # TODO: こうすることで初回のterraform apply時にcloudbuildとの相互参照を回避できる
@@ -32,7 +32,7 @@ resource "google_cloud_run_service" "frontend" {
 
   template {
     spec {
-      service_account_name = "serviceAccount:cloudrun-sa@${var.project_id}.iam.gserviceaccount.com"
+      service_account_name = google_service_account.cloudrun_service_account.email
 
       containers {
         image = "gcr.io/cloudrun/hello"
@@ -63,7 +63,7 @@ resource "google_cloud_run_service_iam_member" "allow-frontend-to-backend" {
   project  = var.project_id
   service  = google_cloud_run_service.backend.name
   role     = "roles/run.invoker"
-  member   = "serviceAccount:cloudrun-sa@${var.project_id}.iam.gserviceaccount.com"
+  member   = "serviceAccount:${google_service_account.cloudrun_service_account.email}"
 }
 
 # フロントエンドは匿名ユーザーからのアクセスを許可 (公開)
