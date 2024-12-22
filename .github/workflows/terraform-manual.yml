@@ -9,7 +9,6 @@ on:
         type: choice
         default: '-'
         options:
-          - '-'
           - development
           - staging
           - production
