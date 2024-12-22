@@ -17,12 +17,12 @@ resource "google_cloud_run_v2_job" "job" {
   }
 }
 
-resource "google_project_service" "enable_cloud_scheduler" {
-  project = var.project_id
-  service = "cloudscheduler.googleapis.com"
-}
+# resource "google_project_service" "enable_cloud_scheduler" {
+#   project = var.project_id
+#   service = "cloudscheduler.googleapis.com"
+# }
 resource "google_cloud_scheduler_job" "cloud_run_job_trigger" {
-  depends_on = [google_project_service.enable_cloud_scheduler]
+  # depends_on = [google_project_service.enable_cloud_scheduler]
 
   name             = "${var.service_name}-cloud-run-job-trigger"
   description      = "Trigger Cloud Run Job on a schedule"
