@@ -35,7 +35,7 @@ jobs:
         uses: 'google-github-actions/auth@v2'
         with:
           workload_identity_provider: 'projects/1063239685310/locations/global/workloadIdentityPools/gha-terraform-pool/providers/gha-terraform-provider'
-          service_account: 'gha-terraform-sa@next-go-445113.iam.gserviceaccount.com'
+          service_account: 'terraform-sa@next-go-445113.iam.gserviceaccount.com'
 
       - uses: shmokmt/actions-setup-tfcmt@v2
         name: Setup tfcmt
