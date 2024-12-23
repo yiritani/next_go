@@ -26,11 +26,18 @@ resource "google_cloud_run_service" "backend" {
   metadata {
     annotations = {
       "run.googleapis.com/client-name" = "terraform"
+      "run.googleapis.com/ingress"     = "internal"
     }
   }
 }
 output "backend_url" {
   value = google_cloud_run_service.backend.status[0].url
+}
+resource "google_cloud_run_service_iam_policy" "noauth-backend" {
+  location    = var.region
+  project     = var.project_id
+  service     = google_cloud_run_service.backend.name
+  policy_data = data.google_iam_policy.noauth.policy_data
 }
 
 resource "google_cloud_run_service" "frontend" {
@@ -57,6 +64,7 @@ resource "google_cloud_run_service" "frontend" {
   metadata {
     annotations = {
       "run.googleapis.com/client-name" = "terraform"
+      "run.googleapis.com/ingress"     = "internal-and-cloud-load-balancing"
     }
   }
 
