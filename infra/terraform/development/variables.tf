@@ -40,6 +40,20 @@ variable "image_repo" {
   default     = "next-go"
 }
 
-# variable "app_db_user_password" {
-#   type = string
-# }
+variable "vpc_network" {
+  description = "The VPC network name"
+  type        = string
+  default     = "next-go-vpc"
+}
+
+variable "domain_name" {
+  description = "The domain name for Cloud DNS"
+  type        = string
+  default     = "next-go.com"
+}
+
+variable "managed_zone" {
+  description = "The name of the Cloud DNS managed zone"
+  type        = string
+  default     = "next-go-zone"
+}

@@ -1,4 +1,11 @@
+resource "google_project_service" "cloud_run_api" {
+  service = "run.googleapis.com"
+  project = var.project_id
+}
+
 resource "google_cloud_run_service" "backend" {
+  depends_on = [google_project_service.cloud_run_api]
+
   name     = "${var.service_name}-cloudrun-backend"
   location = var.region
 
@@ -52,20 +59,12 @@ resource "google_cloud_run_service" "frontend" {
       "run.googleapis.com/client-name" = "terraform"
     }
   }
+
+  depends_on = [google_project_service.cloud_run_api]
 }
 output "frontend_url" {
   value = google_cloud_run_service.frontend.status[0].url
 }
-
-# フロントエンドのサービスアカウントに限定するIAMポリシー
-resource "google_cloud_run_service_iam_member" "allow-frontend-to-backend" {
-  location = var.region
-  project  = var.project_id
-  service  = google_cloud_run_service.backend.name
-  role     = "roles/run.invoker"
-  member   = "serviceAccount:${google_service_account.cloudrun_service_account.email}"
-}
-
 # フロントエンドは匿名ユーザーからのアクセスを許可 (公開)
 data "google_iam_policy" "noauth" {
   binding {
@@ -78,4 +77,42 @@ resource "google_cloud_run_service_iam_policy" "noauth-frontend" {
   project     = var.project_id
   service     = google_cloud_run_service.frontend.name
   policy_data = data.google_iam_policy.noauth.policy_data
+}
+
+# HTTPS Load Balancer (External)
+resource "google_compute_region_network_endpoint_group" "app" {
+  name                  = "neg-frontend"
+  network_endpoint_type = "SERVERLESS"
+  region                = var.region
+  cloud_run {
+    service = google_cloud_run_service.frontend.name
+  }
+}
+# Not classic load balancer
+resource "google_compute_url_map" "frontend_url_map" {
+  name = "${var.service_name}-url-map"
+  default_service = google_compute_backend_service.frontend_backend.self_link
+
+
+}
+resource "google_compute_target_http_proxy" "frontend_http_proxy" {
+  name   = "${var.service_name}-http-proxy"
+  url_map = google_compute_url_map.frontend_url_map.self_link
+}
+resource "google_compute_global_forwarding_rule" "frontend_http_forwarding_rule" {
+  name                  = "${var.service_name}-http-forwarding-rule"
+  target                = google_compute_target_http_proxy.frontend_http_proxy.self_link
+  port_range            = "80"
+  load_balancing_scheme = "EXTERNAL"
+  ip_protocol           = "TCP"
+}
+resource "google_compute_backend_service" "frontend_backend" {
+  name        = "backend-test-app"
+  protocol    = "HTTP"
+  port_name   = "http"
+  timeout_sec = 30
+
+  backend {
+    group = google_compute_region_network_endpoint_group.app.id
+  }
 }

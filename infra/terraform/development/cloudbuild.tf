@@ -1,4 +1,13 @@
+# TODO: github リポとの接続は画面からやらないとダメなのかもしれない
+
+resource "google_project_service" "cloud_build_api" {
+  service = "cloudbuild.googleapis.com"
+  project = var.project_id
+}
+
 resource "google_cloudbuild_trigger" "backend" {
+  depends_on = [google_project_service.cloud_build_api]
+
   name = "${var.service_name}-build-trigger-backend"
 
   substitutions = {
@@ -24,6 +33,8 @@ resource "google_cloudbuild_trigger" "backend" {
 }
 
 resource "google_cloudbuild_trigger" "frontend" {
+  depends_on = [google_project_service.cloud_build_api]
+
   name = "${var.service_name}-build-trigger-frontend"
 
   substitutions = {
@@ -50,6 +61,8 @@ resource "google_cloudbuild_trigger" "frontend" {
 }
 
 resource "google_cloudbuild_trigger" "job" {
+  depends_on = [google_project_service.cloud_build_api]
+
   name = "${var.service_name}-build-trigger-job"
 
   substitutions = {
