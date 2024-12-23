@@ -3,6 +3,37 @@ resource "google_project_service" "cloud_run_api" {
   project = var.project_id
 }
 
+
+resource "google_project_service" "vpc_api" {
+    service = "vpcaccess.googleapis.com"
+    project = var.project_id
+}
+
+# VPCネットワーク作成
+resource "google_compute_network" "vpc_network" {
+  name                    = "${var.service_name}-vpc-network"
+  auto_create_subnetworks = false
+}
+
+# サブネット作成
+resource "google_compute_subnetwork" "vpc_subnet" {
+  name          = "${var.service_name}-vpc-subnet"
+  ip_cidr_range = "10.0.0.0/24"
+  region        = var.region
+  network       = google_compute_network.vpc_network.id
+}
+
+# VPCアクセスコネクタ作成
+resource "google_vpc_access_connector" "vpc_connector" {
+  depends_on = [google_project_service.vpc_api]
+
+  name   = "${var.service_name}-vpc-connector"
+  region = var.region
+  network = google_compute_network.vpc_network.id
+
+  ip_cidr_range = "10.8.0.0/28"
+}
+
 resource "google_cloud_run_service" "backend" {
   depends_on = [google_project_service.cloud_run_api]
 
@@ -27,9 +58,11 @@ resource "google_cloud_run_service" "backend" {
     annotations = {
       "run.googleapis.com/client-name" = "terraform"
       "run.googleapis.com/ingress"     = "internal"
+      "run.googleapis.com/vpc-access-connector" = google_vpc_access_connector.vpc_connector.name
     }
   }
 }
+
 output "backend_url" {
   value = google_cloud_run_service.backend.status[0].url
 }
