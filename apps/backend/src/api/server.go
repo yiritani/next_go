@@ -32,9 +32,9 @@ func NewServer() *Server {
 			"Accept-Encoding",
 			"Authorization",
 		},
-		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: true,
-		MaxAge:           12 * time.Hour,
+		ExposeHeaders: []string{"Content-Length"},
+		//AllowCredentials: true,
+		MaxAge: 12 * time.Hour,
 	}))
 
 	//set CORS header
