@@ -3,6 +3,7 @@
 resource "google_project_service" "cloud_build_api" {
   service = "cloudbuild.googleapis.com"
   project = var.project_id
+  disable_on_destroy = false
 }
 
 resource "google_cloudbuild_trigger" "backend" {
