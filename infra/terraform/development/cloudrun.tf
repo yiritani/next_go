@@ -62,6 +62,8 @@ resource "google_cloud_run_service" "backend" {
     annotations = {
       "run.googleapis.com/client-name" = "terraform"
       "run.googleapis.com/ingress"     = "internal"
+      "run.googleapis.com/vpc-access-egress" = "all-traffic"
+      "run.googleapis.com/vpc-access-connector" = google_vpc_access_connector.vpc_connector.name
     }
   }
 }
@@ -101,6 +103,8 @@ resource "google_cloud_run_service" "frontend" {
     annotations = {
       "run.googleapis.com/client-name" = "terraform"
       "run.googleapis.com/ingress"     = "internal-and-cloud-load-balancing"
+      "run.googleapis.com/vpc-access-egress" = "all-traffic"
+      "run.googleapis.com/vpc-access-connector" = google_vpc_access_connector.vpc_connector.name
     }
   }
 
