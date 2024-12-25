@@ -11,12 +11,16 @@ resource "google_project_service" "vpc_api" {
 
 # VPCネットワーク作成
 resource "google_compute_network" "vpc_network" {
+  depends_on = [google_project_service.vpc_api]
+
   name                    = "${var.service_name}-vpc-network"
   auto_create_subnetworks = false
 }
 
 # サブネット作成
 resource "google_compute_subnetwork" "vpc_subnet" {
+  depends_on = [google_project_service.vpc_api]
+
   name          = "${var.service_name}-vpc-subnet"
   ip_cidr_range = "10.0.0.0/24"
   region        = var.region
@@ -58,7 +62,6 @@ resource "google_cloud_run_service" "backend" {
     annotations = {
       "run.googleapis.com/client-name" = "terraform"
       "run.googleapis.com/ingress"     = "internal"
-      "run.googleapis.com/vpc-access-connector" = google_vpc_access_connector.vpc_connector.name
     }
   }
 }
@@ -120,7 +123,7 @@ resource "google_cloud_run_service_iam_policy" "noauth-frontend" {
   policy_data = data.google_iam_policy.noauth.policy_data
 }
 
-# HTTPS Load Balancer (External)
+# Network Endpoint Group for Cloud Run (Serverless NEG)
 resource "google_compute_region_network_endpoint_group" "app" {
   name                  = "neg-frontend"
   network_endpoint_type = "SERVERLESS"
@@ -129,31 +132,36 @@ resource "google_compute_region_network_endpoint_group" "app" {
     service = google_cloud_run_service.frontend.name
   }
 }
-# Not classic load balancer
-resource "google_compute_url_map" "frontend_url_map" {
-  name = "${var.service_name}-url-map"
-  default_service = google_compute_backend_service.frontend_backend.self_link
 
+# Backend Service for Application Load Balancer
+resource "google_compute_backend_service" "frontend_backend" {
+  name                  = "frontend-backend-service"
+  protocol              = "HTTP"
+  timeout_sec           = 30
+  load_balancing_scheme = "EXTERNAL"
 
+  backend {
+    group = google_compute_region_network_endpoint_group.app.id
+  }
 }
+
+# URL Map for Application Load Balancer
+resource "google_compute_url_map" "frontend_url_map" {
+  name            = "${var.service_name}-url-map"
+  default_service = google_compute_backend_service.frontend_backend.self_link
+}
+
+# Target HTTP Proxy
 resource "google_compute_target_http_proxy" "frontend_http_proxy" {
-  name   = "${var.service_name}-http-proxy"
+  name    = "${var.service_name}-http-proxy"
   url_map = google_compute_url_map.frontend_url_map.self_link
 }
+
+# Global Forwarding Rule
 resource "google_compute_global_forwarding_rule" "frontend_http_forwarding_rule" {
   name                  = "${var.service_name}-http-forwarding-rule"
   target                = google_compute_target_http_proxy.frontend_http_proxy.self_link
   port_range            = "80"
   load_balancing_scheme = "EXTERNAL"
   ip_protocol           = "TCP"
-}
-resource "google_compute_backend_service" "frontend_backend" {
-  name        = "backend-test-app"
-  protocol    = "HTTP"
-  port_name   = "http"
-  timeout_sec = 30
-
-  backend {
-    group = google_compute_region_network_endpoint_group.app.id
-  }
 }
