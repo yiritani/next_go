@@ -24,5 +24,4 @@
 │ ├── backend     # golang/gin
 │ └── frontend         # nextjs/App router
 ├── infra
-
 ```
