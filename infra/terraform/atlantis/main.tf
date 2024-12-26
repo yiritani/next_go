@@ -5,42 +5,6 @@ locals {
   domain                     = "yiritani.atlantis.com"
   managed_zone               = "yiritani-atlantis-com"
 
-  github_repo_allow_list     = "github.com/yiritani/next_go"
-  github_app_id              = "1096658"
-  github_app_installation_id = "Iv23liLGsHqVWQHTYRfb"
-  github_webhook_secret      = "Zn2XLZdJ96WgDzuBz4gPRgxm"
-  github_app_key             = <<-EOT
-    -----BEGIN RSA PRIVATE KEY-----
-    MIIEogIBAAKCAQEAss8mFnNM0wJ8t9qklI8mt/RxiQ59dTB9akEnWWm8iAcIRcpl
-    hyoLbTvauKAiNY86Mwr073k1Z4MHDA+jHyiDfnsNQMpWEanQDVce61tkOXDS6sT3
-    KZYTBionYm9LZVBkkCRHBHOUnv0EfN9VYDB9QMbnts6cpXtb+CwTSF2dEOg1lql+
-    /spuvLuKYAUqywsqow7mLQDI5BiEsxR5bM1jXWuWMhEKdnYgOX0Q6lH0qJrEX5Cc
-    pNVfPwzT8txWWh5exMalfwbT3fQVN678INDEgDuCf5l3vw338Es+SEDsPww/28LB
-    fXKUg8xT5ew3BHxF4wZmXyWw3NUoIqWiVW9QbQIDAQABAoIBAA2RdHVtqF22qZoV
-    6Dkxp6F71gWtaM20sT+X1BGP2XOE/Ra2pf+crCNM0GsEE7R2utbWtQFa9Dd3lNhQ
-    c3NQ0rGNStMox2EtvpDUlI8Nb0yAiDCyY4LvVWA5YKWyhkkY0ZiyeAUZdCSgVG/Z
-    TpQu+cIplbmkcfSIqNDrH0d1ew6mP40enlB7o2774XIARV5RQ2/yCVZaDdR771lw
-    64dLguFRxNFDi/rs/cC+RoXyNQN65C2Kqn5TU8+Zx5sDoZXi9+8Skng6bUIMCq4u
-    ONqXNJW9rw35Ya5oXvlcTU5g+bNeufQYUWr/MRxDbCnJjUcnfZkeQznbJGDrCbuo
-    HTQMDSECgYEA7XtA7NbNR/QYBx7q8o9Up1y8+g+5RWsk2UlcOtoDDL6ZoO+32i2W
-    f7fhFAjOeCKQKgSj7uDMXGeUvTXU/7On2OZtX2jr+NF3ogeuUvo8cT/RlufiMl2+
-    e5KaX1aJWas0ieVntCKLVEx/tq2SAwmtwDU4porZMIQat3c20MRmfykCgYEAwMCk
-    4XqCsI7qbWHbZcLPY6gNY/ySGIZmUdJpfBQZ3OI5D7eYsys5REV7SRu/xOrxcqSz
-    VJs47hmJUsW3XL/dVWz32XpjrAZldA0bBATbt1PbzNOP9abNllMfqyx9jYPPnLIi
-    JIEEYcGX2l17jrL0k8Cm3aECACnPdgoBfJFu46UCgYAGqfG9c52ZCkluUbjIC6uV
-    cq2+2pgZUZNcIYncAOgbAHIxKOjgz2ysss03EbQxfM7MzwqGlnpFkYaD9LHAZxsr
-    o/OnvLr6ZW5U9qA2pdzyVJceA+29+hFxSEDasgPypzI3OF+7l0iPmgHvb1lsimX8
-    wcGQMs87ZEmXolnAa/JwWQKBgBG0oHCl1ENrnVUW3BRo5Kv+z9wTY0glcFirv0zK
-    e+WyUhODhd9PZR9EUqLQjbkE69DgGCj5aS1V4ytbRhCa/zXNoKa1e1pd7AvQ+F5S
-    I+yfI12ZQWwLOm9Ii2wp1g6dwQBfzIsV3tUr90rzs1nUTmsUEz/gflKNhKUPHjvX
-    EByRAoGABG+6Uf/SUlg5se8SrVspp276KDPRogMWzT/bGXMVSfR6vMK6I4mkkIRp
-    dp5JqmT5lVrjBl0fOwt2yeQuNwflyly3dSGEFMY7Roxev98KyYLsU2fNoVMbPIEH
-    1/LkLqsqP4Az0Q7tvtcrAM6dz0ffj7aPa/kJhr3/i2Bww4W36Ug=
-    -----END RSA PRIVATE KEY-----
-  EOT
-  services = toset([
-    "compute.googleapis.com",
-  ])
 }
 
 # Enable APIs
@@ -140,7 +104,13 @@ module "atlantis" {
   project = local.project_id
 }
 
+resource "google_project_service" "enable_dns" {
+  project = local.project_id
+  service = "dns.googleapis.com"
+}
 resource "google_dns_managed_zone" "default" {
+  depends_on = [google_project_service.enable_dns]
+
   name        = local.managed_zone
   dns_name    = "${local.domain}."
   description = "Managed zone for ${local.domain}"
@@ -149,10 +119,6 @@ resource "google_dns_managed_zone" "default" {
 
 # As your DNS records might be managed at another registrar's site, we create the DNS record outside of the module.
 # This record is mandatory in order to provision the managed SSL certificate successfully.
-resource "google_project_service" "enable_dns" {
-  project = local.project_id
-  service = "dns.googleapis.com"
-}
 resource "google_dns_record_set" "default" {
   depends_on = [google_project_service.enable_dns]
 

@@ -1,0 +1,4 @@
+repos:
+  - id: github.com/yiritani/next_go
+    branch: /.*/
+    workflow: default
