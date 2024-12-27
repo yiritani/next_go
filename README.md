@@ -14,7 +14,9 @@
 - ローカルでは`air`でホットリロード。
 ### job: golang
 - ただbackendにgetリクエストするだけ
-
+### Infra: Terraform
+- Google Cloud Platform
+- [Atlantis](./infra/terraform/atlantis/README.md)
 
 ### Database: PostgreSQL
 
@@ -24,12 +26,6 @@
 │ ├── backend     # golang/gin
 │ └── frontend         # nextjs/App router
 ├── infra
+│ ├── development     # main resources
+│ └── atlantis         # atlantis resources
 ```
-
-
-
-
-
-
-
-
