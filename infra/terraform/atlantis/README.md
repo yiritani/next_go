@@ -24,13 +24,12 @@ brew install ngrok
 ```
 ngrok http --url=[何かしらの使えるドメイン] 4141
 ```
-ngrokなら無料で使えるのでそれを使うと良い
+ngrokなら無料で使えるのでそれを使うと良い<br>
+https://dashboard.ngrok.com/get-started/setup/macos
 
 ```
 sh run_atlantis.sh
 ```
-
-
 
 
 
