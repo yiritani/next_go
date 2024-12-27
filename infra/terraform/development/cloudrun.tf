@@ -3,7 +3,6 @@ resource "google_project_service" "cloud_run_api" {
   project = var.project_id
 }
 
-
 resource "google_project_service" "vpc_api" {
     service = "vpcaccess.googleapis.com"
     project = var.project_id
