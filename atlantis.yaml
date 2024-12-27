@@ -1,7 +1,7 @@
 version: 3
 automerge: true
 projects:
-  - name: next_go
+  - name: atlantis
     dir: infra/terraform/atlantis
     autoplan:
       when_modified:
