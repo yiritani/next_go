@@ -11,7 +11,6 @@ export default function Home() {
         "Access-Control-Allow-Origin": "*",
       },
     });
-    // const res = await fetch(`https://next-go-backend-1063239685310.us-central1.run.app/ping`);
     const data = await res.json();
     setFetchedData(data.message);
   }
