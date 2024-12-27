@@ -11,13 +11,13 @@ projects:
           "../modules/*/*.tf",
         ]
       enabled: true
-#  - name: development
-#    dir: infra/terraform/development
-#    autoplan:
-#      when_modified:
-#        [
-#          "*.tf",
-#          "*.tfvars",
-#          "../modules/*/*.tf",
-#        ]
-#      enabled: true
+  - name: development
+    dir: infra/terraform/development
+    autoplan:
+      when_modified:
+        [
+          "*.tf",
+          "*.tfvars",
+          "../modules/*/*.tf",
+        ]
+      enabled: true
