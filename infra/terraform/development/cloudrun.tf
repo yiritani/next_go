@@ -77,7 +77,7 @@ resource "google_cloud_run_service_iam_policy" "noauth-backend" {
 }
 
 resource "google_cloud_run_service" "frontend" {
-  name     = "${var.service_name}-cloudrun-frontend"
+  name     = "${var.service_name}-cloudrun-frontend2"
   location = var.region
 
   template {
