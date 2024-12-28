@@ -1,11 +1,31 @@
+# フォルダ構成
+```
+├── api            # 実質エントリーポイント。 struct関数にしたいのでcontrollerも入ってる。
+├── config
+├── db
+│ ├── fixture
+│ ├── migration
+│ └── query
+├── lib
+├── services
+├── sqlc
+├── token
+└── util
+```
+
 # 技術スタック
 
 - Framework: Gin
-- Database: Postgres
+- Database: sqlite
 - SQL Builder: sqlc
 
 とりあえずローカルでは'air'でホットリロードできるようにしています。
 
+# sqlliteセットアップ
+```
+sqlite3 db.sqlite
+sqlite> .databases
+```
 
 # sqlcについて
 ## 感想

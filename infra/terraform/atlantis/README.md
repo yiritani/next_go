@@ -22,7 +22,7 @@ brew install ngrok
 3. run atlantis server<br>
 ウィンドウを2つ開いて
 ```
-ngrok http --url=[何かしらの使えるドメイン] 4141
+run_proxy.sh
 ```
 ngrokなら無料で使えるのでそれを使うと良い<br>
 https://dashboard.ngrok.com/get-started/setup/macos

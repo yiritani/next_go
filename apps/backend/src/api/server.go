@@ -10,7 +10,6 @@ import (
 type Server struct {
 	Router  *gin.Engine
 	Queries *sqlc.Queries
-	context *gin.Context
 }
 
 func NewServer(queries *sqlc.Queries) *Server {

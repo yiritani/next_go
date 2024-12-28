@@ -3,7 +3,6 @@ package api
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"tutorial.sqlc.dev/app/src/controllers"
 )
 
 func (server *Server) Routes() {
@@ -16,12 +15,17 @@ func (server *Server) Routes() {
 
 	apiRouteV1 := route.Group("/api/v1")
 	server.userRoutes(apiRouteV1)
+	server.orderRoutes(apiRouteV1)
 }
 
 func (server *Server) userRoutes(route *gin.RouterGroup) {
 	userRoute := route.Group("/user")
 
-	userRoute.GET("/list", func(c *gin.Context) {
-		controllers.ControllerListUsers(*server.Queries, c)
-	})
+	userRoute.GET("/list", server.ControllerListUsers)
+}
+
+func (server *Server) orderRoutes(route *gin.RouterGroup) {
+	orderRoute := route.Group("/order")
+
+	orderRoute.GET("/user/:userId", server.ControllerGetOrdersByUserId)
 }
