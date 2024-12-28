@@ -2,7 +2,6 @@ package services
 
 import (
 	"context"
-	"fmt"
 	"tutorial.sqlc.dev/app/src/sqlc"
 )
 
@@ -11,6 +10,5 @@ func ServiceGetOrdersByUserId(queries sqlc.Queries, ctx context.Context, userId 
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("Orders: ", orders)
 	return orders, nil
 }
