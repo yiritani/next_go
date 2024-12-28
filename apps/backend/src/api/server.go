@@ -3,20 +3,17 @@ package api
 import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/jackc/pgx/v5"
-	"net/http"
 	"time"
 	"tutorial.sqlc.dev/app/src/sqlc"
 )
 
 type Server struct {
-	router  *gin.Engine
+	Router  *gin.Engine
 	Queries *sqlc.Queries
-	conn    *pgx.Conn
+	context *gin.Context
 }
 
-// func NewServer(pool *pgxpool.Pool, conn *pgx.Conn) *Server {
-func NewServer() *Server {
+func NewServer(queries *sqlc.Queries) *Server {
 	server := &Server{}
 
 	r := gin.Default()
@@ -37,22 +34,14 @@ func NewServer() *Server {
 		MaxAge:           12 * time.Hour,
 	}))
 
-	//set CORS header
+	server.Router = r
+	server.Queries = queries
 
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
-		})
-	})
-	//r.GET("/list-systems", server.listSystems)
-	//r.POST("/create-system", server.createSystem)
-
-	server.router = r
 	return server
 }
 
-func (server *Server) Run() error {
-	return server.router.Run()
+func (server *Server) Run(port string) error {
+	return server.Router.Run(port)
 }
 
 func errorResponse(c *gin.Context, code int, message string) {

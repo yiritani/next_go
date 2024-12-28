@@ -1,31 +1,21 @@
+// TODO: なぜかrootに置かないとroutesが読まれない
 package main
 
 import (
 	"tutorial.sqlc.dev/app/src/api"
+	"tutorial.sqlc.dev/app/src/sqlc"
 )
 
 func main() {
-	//postgresUser := os.Getenv("POSTGRES_USER")
-	//postgresPassword := os.Getenv("POSTGRES_PASSWORD")
-	//postgresHost := os.Getenv("POSTGRES_HOST")
-	//postgresPort := os.Getenv("POSTGRES_PORT")
-	//postgresDb := os.Getenv("POSTGRES_DB")
-	//connString := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=disable", postgresUser, postgresPassword, postgresHost, postgresPort, postgresDb)
-	//
-	//var err error
-	//pool, err := pgxpool.New(context.Background(), connString)
-	//if err != nil {
-	//	panic(err)
-	//	os.Exit(1)
-	//}
-	//
-	//conn, err := pgx.Connect(context.Background(), connString)
-	//if err != nil {
-	//	panic(err)
-	//	os.Exit(1)
-	//}
-	//
-	//defer pool.Close()
-	//api.NewServer(pool, conn).Run()
-	api.NewServer().Run()
+	databasePath := "./db.sqlite"
+
+	conn := sqlc.Connect(databasePath)
+	defer conn.Close()
+
+	queries := sqlc.New(conn)
+	server := api.NewServer(queries)
+
+	server.Routes()
+
+	server.Run(":8080")
 }
