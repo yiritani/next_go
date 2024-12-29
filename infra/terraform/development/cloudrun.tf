@@ -26,7 +26,7 @@ resource "google_cloud_run_service" "backend" {
   metadata {
     annotations = {
       "run.googleapis.com/client-name" = "terraform"
-      "run.googleapis.com/vpc-access-connector" = google_vpc_access_connector.vpc_connector.id
+      # "run.googleapis.com/vpc-access-connector" = google_vpc_access_connector.vpc_connector.id
     }
   }
 }
