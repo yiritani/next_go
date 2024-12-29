@@ -4,7 +4,7 @@ type Props = {
   users: User[];
 };
 
-export const Users = (props: Props) => {
+const Users = (props: Props) => {
   return (
     <div>
       <div className="flex space-x-3">
@@ -25,3 +25,5 @@ export const Users = (props: Props) => {
     </div>
   );
 };
+
+export default Users;

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export const Ping = () => {
+const Ping = () => {
   const [fetchedData, setFetchedData] = useState(null);
   const fetchPing = async () => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ping`);
@@ -28,3 +28,5 @@ export const Ping = () => {
     </div>
   );
 };
+
+export default Ping;

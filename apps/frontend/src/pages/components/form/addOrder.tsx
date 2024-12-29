@@ -15,7 +15,7 @@ type Props = {
   userId: number;
 };
 
-export const AddOrder = (props: Props) => {
+const AddOrder = (props: Props) => {
   const {
     register,
     handleSubmit,
@@ -66,3 +66,5 @@ export const AddOrder = (props: Props) => {
     </div>
   );
 };
+
+export default AddOrder;

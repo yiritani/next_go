@@ -17,7 +17,7 @@ const schema = z.object({
 });
 type FormValues = z.infer<typeof schema>;
 
-export const Orders = (props: Props) => {
+const Orders = (props: Props) => {
   const { control, watch } = useForm<FormValues>({
     mode: 'onBlur',
     resolver: zodResolver(schema),
@@ -111,3 +111,5 @@ export const Orders = (props: Props) => {
     </>
   );
 };
+
+export default Orders;
