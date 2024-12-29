@@ -38,7 +38,6 @@ export const Orders = (props: Props) => {
       : null,
     orderFetcher
   );
-  console.log('data',data)
 
   useEffect(() => {
     if (data) {
