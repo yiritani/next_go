@@ -24,3 +24,4 @@ server:
 
 protoc_go:
 	protoc -I. --go_out=./apps/job/src/ --go-grpc_out=./apps/job/src/ proto/*.proto && protoc -I. --go_out=./apps/backend/src/ --go-grpc_out=./apps/backend/src/ proto/*.proto
+
