@@ -1,6 +1,6 @@
-import { Ping } from '@/pages/components/ping';
-import { Users } from '@/pages/components/users';
-import { Orders } from '@/pages/components/orders';
+import Ping from '@/pages/components/ping';
+import Users from '@/pages/components/users';
+import Orders from '@/pages/components/orders';
 import { useState } from 'react';
 import { User } from '@/types/user';
 import useSWR from 'swr';

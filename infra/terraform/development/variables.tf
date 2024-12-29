@@ -56,3 +56,15 @@ variable "managed_zone" {
   type        = string
   default     = "next-go-zone"
 }
+
+variable "support_email" {
+  description = "The support email for IAP"
+  type        = string
+  default     = "yusuke.iritani0909@gmail.com"
+}
+
+variable "access_user_email" {
+  description = "The email address of the user to grant access to"
+  type        = string
+  default     = "yusuke.iritani0909@gmail.com"
+}
