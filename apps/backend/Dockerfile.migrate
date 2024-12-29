@@ -1,0 +1,28 @@
+# ===== Stage 1: Build 'migrate' CLI =====
+FROM golang:1.22-alpine AS migrate_builder
+RUN apk add --no-cache gcc libc-dev
+RUN apk add --no-cache bash
+
+ENV CGO_ENABLED=1
+ENV GOPATH=/root/go
+RUN go install -tags 'sqlite3' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+
+# ===== Stage 2: Final Minimal Image =====
+FROM alpine:3.17
+
+RUN apk add --no-cache sqlite ca-certificates dos2unix
+
+WORKDIR /app
+
+# ビルド済みの 'migrate' CLI をコピー
+COPY --from=migrate_builder /root/go/bin/migrate /usr/local/bin/migrate
+
+# シェル側でローカルのパスとして動かしたいのでわざわざディレクトリを掘る
+COPY src/db/migration/ ./src/db/migration/
+COPY migrate.sh .
+COPY db.sqlite .
+
+# 実行権限を付与
+RUN chmod +x migrate.sh
+
+CMD ["./migrate.sh"]

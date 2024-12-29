@@ -3,7 +3,6 @@ package main
 
 import (
 	"tutorial.sqlc.dev/app/src/api"
-	"tutorial.sqlc.dev/app/src/lib"
 	"tutorial.sqlc.dev/app/src/sqlc"
 )
 
@@ -12,8 +11,6 @@ func main() {
 
 	conn := sqlc.Connect(databasePath)
 	defer conn.Close()
-
-	lib.DbInit(conn)
 
 	queries := sqlc.New(conn)
 	server := api.NewServer(queries)
