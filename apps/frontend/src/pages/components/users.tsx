@@ -1,8 +1,8 @@
-import {User} from "@/types/user";
+import { User } from '@/types/user';
 
 type Props = {
   users: User[];
-}
+};
 
 export const Users = (props: Props) => {
   return (

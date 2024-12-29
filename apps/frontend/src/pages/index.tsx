@@ -1,16 +1,16 @@
-import {Ping} from "@/pages/components/ping";
-import {Users} from "@/pages/components/users";
-import {Orders} from "@/pages/components/orders";
-import {useState} from "react";
-import {User} from "@/types/user";
-import useSWR from "swr";
-import {userFetcher} from "@/hooks/user-hook";
+import { Ping } from '@/pages/components/ping';
+import { Users } from '@/pages/components/users';
+import { Orders } from '@/pages/components/orders';
+import { useState } from 'react';
+import { User } from '@/types/user';
+import useSWR from 'swr';
+import { userFetcher } from '@/hooks/user-hook';
 
 export default function Home() {
   const [users, setUsers] = useState<User[]>([]);
   const { data, error } = useSWR<User[]>(
     `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/list`,
-    userFetcher
+    userFetcher,
   );
   if (data && users.length === 0) {
     setUsers(data);

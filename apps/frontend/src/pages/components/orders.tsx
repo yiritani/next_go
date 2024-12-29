@@ -1,42 +1,38 @@
-import useSWR from "swr";
-import {useEffect, useState} from "react";
-import {orderFetcher} from "@/hooks/order-hook";
-import {Order} from "@/types/order";
-import {User} from "@/types/user";
-import {z} from "zod";
-import {Controller,  useForm} from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {AddOrder} from "@/pages/components/form/addOrder";
+import useSWR from 'swr';
+import { useEffect, useState } from 'react';
+import { orderFetcher } from '@/hooks/order-hook';
+import { Order } from '@/types/order';
+import { User } from '@/types/user';
+import { z } from 'zod';
+import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { AddOrder } from '@/pages/components/form/addOrder';
 
 type Props = {
   users: User[];
-}
+};
 
 const schema = z.object({
   userId: z.number(),
 });
 type FormValues = z.infer<typeof schema>;
 
-
 export const Orders = (props: Props) => {
-  const {
-    control,
-    watch,
-  } = useForm<FormValues>({
-    mode: "onBlur",
+  const { control, watch } = useForm<FormValues>({
+    mode: 'onBlur',
     resolver: zodResolver(schema),
     defaultValues: {
       userId: 1,
-    }
+    },
   });
-  const selectedUserId = watch("userId");
+  const selectedUserId = watch('userId');
 
   const [fetchedData, setFetchedData] = useState<Order[]>([]);
   const { data, error } = useSWR<Order[]>(
     selectedUserId
       ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/order/user/${selectedUserId}`
       : null,
-    orderFetcher
+    orderFetcher,
   );
 
   useEffect(() => {
@@ -50,7 +46,7 @@ export const Orders = (props: Props) => {
       <div className="container mx-auto px-4">
         <Controller
           control={control}
-          name={"userId"}
+          name={'userId'}
           render={({ field }) => (
             <select
               {...field}
@@ -70,34 +66,38 @@ export const Orders = (props: Props) => {
           <div className="max-w-screen-md ml-0">
             <table className="table-auto w-full border-collapse border border-gray-300">
               <thead>
-              <tr className="bg-gray-200">
-                <th className="border border-gray-300 px-4 py-2">User ID</th>
-                <th className="border border-gray-300 px-4 py-2">Username</th>
-                <th className="border border-gray-300 px-4 py-2">Product ID</th>
-                <th className="border border-gray-300 px-4 py-2">Quantity</th>
-                <th className="border border-gray-300 px-4 py-2">Order Date</th>
-              </tr>
+                <tr className="bg-gray-200">
+                  <th className="border border-gray-300 px-4 py-2">User ID</th>
+                  <th className="border border-gray-300 px-4 py-2">Username</th>
+                  <th className="border border-gray-300 px-4 py-2">
+                    Product ID
+                  </th>
+                  <th className="border border-gray-300 px-4 py-2">Quantity</th>
+                  <th className="border border-gray-300 px-4 py-2">
+                    Order Date
+                  </th>
+                </tr>
               </thead>
               <tbody>
-              {fetchedData.map((user) => (
-                <tr key={user.order_id} className="hover:bg-gray-100">
-                  <td className="border border-gray-300 px-4 py-2 text-center">
-                    {user.user_id}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2 text-center">
-                    {user.username}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2 text-center">
-                    {user.product_id}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2 text-center">
-                    {user.quantity}
-                  </td>
-                  <td className="border border-gray-300 px-4 py-2 text-center">
-                    {user.order_date}
-                  </td>
-                </tr>
-              ))}
+                {fetchedData.map((user) => (
+                  <tr key={user.order_id} className="hover:bg-gray-100">
+                    <td className="border border-gray-300 px-4 py-2 text-center">
+                      {user.user_id}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2 text-center">
+                      {user.username}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2 text-center">
+                      {user.product_id}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2 text-center">
+                      {user.quantity}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2 text-center">
+                      {user.order_date}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

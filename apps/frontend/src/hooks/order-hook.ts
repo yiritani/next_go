@@ -1,4 +1,4 @@
-import {Order} from "@/types/order";
+import { Order } from '@/types/order';
 
 export const orderFetcher = (url: string): Promise<Order[]> =>
   fetch(url)
