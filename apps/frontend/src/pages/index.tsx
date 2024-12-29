@@ -1,38 +1,33 @@
+import {Ping} from "@/pages/components/ping";
+import {Users} from "@/pages/components/users";
+import {Orders} from "@/pages/components/orders";
 import {useState} from "react";
+import {User} from "@/types/user";
+import useSWR from "swr";
+import {userFetcher} from "@/hooks/user-hook";
 
 export default function Home() {
-  const [fetchedData, setFetchedData] = useState(null);
-  const fetchPing = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/ping`);
-    const data = await res.json();
-    setFetchedData(data.message);
+  const [users, setUsers] = useState<User[]>([]);
+  const { data, error } = useSWR<User[]>(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/list`,
+    userFetcher
+  );
+  if (data && users.length === 0) {
+    setUsers(data);
   }
 
   return (
-    <div
-      className={`flex flex-col items-center justify-center min-h-screen`}
-    >
-      <button
-        onClick={fetchPing}
-        className={`bg-blue-500 text-white px-4 py-2 rounded-md`}
-      >
-        <div>
-          click
-        </div>
-      </button>
-      <div
-        className={`font-sans text-xl`}
-      >
-        {fetchedData ? fetchedData : "no data"}
+    <div className="flex flex-col h-screen">
+      {error && <p className="text-red-500 text-center">Error loading data</p>}
+      <div className="flex-1 bg-red-200 flex items-start justify-start pl-10 pt-10">
+        <Ping />
       </div>
-      <button
-        onClick={() => setFetchedData(null)}
-        className={`bg-red-500 text-white px-4 py-2 rounded-md`}
-      >
-        <div>
-          reset
-        </div>
-      </button>
+      <div className="flex-1 bg-green-200 flex items-start justify-start pl-10 pt-10">
+        <Users users={users} />
+      </div>
+      <div className="flex-1 bg-blue-200 flex items-start justify-start pl-10 pt-10">
+        <Orders users={users} />
+      </div>
     </div>
   );
 }

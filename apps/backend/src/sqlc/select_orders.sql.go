@@ -10,7 +10,7 @@ import (
 )
 
 const getOrderByUserID = `-- name: GetOrderByUserID :many
-SELECT users.user_id, order_id, product_id , quantity, order_date
+SELECT users.user_id, users.username, order_id, product_id , quantity, order_date
 FROM orders
 INNER JOIN users ON orders.user_id = users.user_id
 WHERE orders.user_id = ?
@@ -18,6 +18,7 @@ WHERE orders.user_id = ?
 
 type GetOrderByUserIDRow struct {
 	UserID    int64
+	Username  string
 	OrderID   int64
 	ProductID int64
 	Quantity  int64
@@ -35,6 +36,7 @@ func (q *Queries) GetOrderByUserID(ctx context.Context, userID int64) ([]GetOrde
 		var i GetOrderByUserIDRow
 		if err := rows.Scan(
 			&i.UserID,
+			&i.Username,
 			&i.OrderID,
 			&i.ProductID,
 			&i.Quantity,
