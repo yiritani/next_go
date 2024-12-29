@@ -28,12 +28,11 @@ export const AddOrder = (props: Props) => {
   const onSubmit: SubmitHandler<IFormValues> = async (data) => {
     const postData = {
       ...data,
-      UserID: props.userId,
+      UserID: Number(props.userId),
       Quantity: 1,
       ProductID: data.ProductID,
       OrderDate: new Date().toISOString().split('T')[0],
     };
-    console.log('postData', postData);
 
     try {
       const res = await axios.post(
