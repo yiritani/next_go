@@ -52,11 +52,12 @@ const Orders = (props: Props) => {
               {...field}
               className="border border-gray-300 rounded-md p-2"
             >
-              {props.users.map((user) => (
-                <option key={user.user_id} value={user.user_id}>
-                  {user.username}
-                </option>
-              ))}
+              {props.users &&
+                props.users.map((user) => (
+                  <option key={user.user_id} value={user.user_id}>
+                    {user.username}
+                  </option>
+                ))}
             </select>
           )}
         />
@@ -79,25 +80,26 @@ const Orders = (props: Props) => {
                 </tr>
               </thead>
               <tbody>
-                {fetchedData.map((user) => (
-                  <tr key={user.order_id} className="hover:bg-gray-100">
-                    <td className="border border-gray-300 px-4 py-2 text-center">
-                      {user.user_id}
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2 text-center">
-                      {user.username}
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2 text-center">
-                      {user.product_id}
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2 text-center">
-                      {user.quantity}
-                    </td>
-                    <td className="border border-gray-300 px-4 py-2 text-center">
-                      {user.order_date}
-                    </td>
-                  </tr>
-                ))}
+                {fetchedData &&
+                  fetchedData.map((user) => (
+                    <tr key={user.order_id} className="hover:bg-gray-100">
+                      <td className="border border-gray-300 px-4 py-2 text-center">
+                        {user.user_id}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2 text-center">
+                        {user.username}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2 text-center">
+                        {user.product_id}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2 text-center">
+                        {user.quantity}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2 text-center">
+                        {user.order_date}
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>

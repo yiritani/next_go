@@ -11,7 +11,8 @@ const Users = (props: Props) => {
         <h1>Use SWR</h1>
       </div>
       <div>
-        {props.users.length > 0 &&
+        {props.users &&
+          props.users.length > 0 &&
           props.users.map((user) => {
             return (
               <div key={user.user_id} className="flex space-x-3">
