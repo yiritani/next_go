@@ -4,8 +4,9 @@ import {orderFetcher} from "@/hooks/order-hook";
 import {Order} from "@/types/order";
 import {User} from "@/types/user";
 import {z} from "zod";
-import {Controller, useForm} from "react-hook-form";
+import {Controller,  useForm} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import {AddOrder} from "@/pages/components/form/addOrder";
 
 type Props = {
   users: User[];
@@ -15,6 +16,7 @@ const schema = z.object({
   userId: z.number(),
 });
 type FormValues = z.infer<typeof schema>;
+
 
 export const Orders = (props: Props) => {
   const {
@@ -27,7 +29,6 @@ export const Orders = (props: Props) => {
       userId: 1,
     }
   });
-
   const selectedUserId = watch("userId");
 
   const [fetchedData, setFetchedData] = useState<Order[]>([]);
@@ -37,20 +38,7 @@ export const Orders = (props: Props) => {
       : null,
     orderFetcher
   );
-
-  const register = async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/order`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        user_id: selectedUserId,
-        product_id: 1,
-        quantity: 1,
-      }),
-    })
-  }
+  console.log('data',data)
 
   useEffect(() => {
     if (data) {
@@ -93,7 +81,7 @@ export const Orders = (props: Props) => {
               </thead>
               <tbody>
               {fetchedData.map((user) => (
-                <tr key={user.product_id} className="hover:bg-gray-100">
+                <tr key={user.order_id} className="hover:bg-gray-100">
                   <td className="border border-gray-300 px-4 py-2 text-center">
                     {user.user_id}
                   </td>
@@ -118,12 +106,9 @@ export const Orders = (props: Props) => {
           <p className="text-gray-500 text-center">No data available</p>
         )}
       </div>
-      <form>
-        <div>
-          <input name={"userId"} />
-          <button onClick={register}>Register</button>
-        </div>
-      </form>
+      <div className={'pr-6'}>
+        <AddOrder userId={selectedUserId} />
+      </div>
     </>
   );
 };
