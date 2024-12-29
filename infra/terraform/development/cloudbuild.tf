@@ -9,7 +9,7 @@ resource "google_project_service" "cloud_build_api" {
 resource "google_cloudbuild_trigger" "backend" {
   depends_on = [google_project_service.cloud_build_api]
 
-  name = "${var.service_name}-build-trigger-backend"
+  name = "${var.service_name}-cloudbuild-trigger-backend"
 
   substitutions = {
     _IMAGE      = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}/backend"
@@ -36,7 +36,7 @@ resource "google_cloudbuild_trigger" "backend" {
 resource "google_cloudbuild_trigger" "frontend" {
   depends_on = [google_project_service.cloud_build_api]
 
-  name = "${var.service_name}-build-trigger-frontend"
+  name = "${var.service_name}-cloudbuild-trigger-frontend"
 
   substitutions = {
     _IMAGE      = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}/frontend"
@@ -64,7 +64,7 @@ resource "google_cloudbuild_trigger" "frontend" {
 resource "google_cloudbuild_trigger" "job" {
   depends_on = [google_project_service.cloud_build_api]
 
-  name = "${var.service_name}-build-trigger-job"
+  name = "${var.service_name}-cloudbuild-trigger-job"
 
   substitutions = {
       _IMAGE      = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}/job"
