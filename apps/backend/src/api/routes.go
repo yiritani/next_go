@@ -28,4 +28,5 @@ func (server *Server) orderRoutes(route *gin.RouterGroup) {
 	orderRoute := route.Group("/order")
 
 	orderRoute.GET("/user/:userId", server.ControllerGetOrdersByUserId)
+	orderRoute.POST("/create", server.ControllerCreateOrder)
 }

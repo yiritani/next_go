@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"fmt"
 	"tutorial.sqlc.dev/app/src/sqlc"
 )
 
@@ -33,4 +34,26 @@ func ServiceGetOrdersByUserId(queries sqlc.Queries, ctx context.Context, userId 
 	}
 
 	return orderResponses, nil
+}
+
+func ServiceCreateOrder(queries sqlc.Queries, ctx context.Context, order sqlc.InsertOrderParams) (OrderResponse, error) {
+	fmt.Println("ServiceCreateOrder")
+	newOrder, err := queries.InsertOrder(ctx, sqlc.InsertOrderParams{
+		UserID:    order.UserID,
+		ProductID: order.ProductID,
+		Quantity:  order.Quantity,
+		OrderDate: order.OrderDate,
+	})
+	fmt.Println("newOrder", newOrder)
+	if err != nil {
+		return OrderResponse{}, err
+	}
+
+	return OrderResponse{
+		OrderID:   newOrder.OrderID,
+		UserID:    newOrder.UserID,
+		ProductID: newOrder.ProductID,
+		Quantity:  newOrder.Quantity,
+		OrderDate: newOrder.OrderDate,
+	}, nil
 }
