@@ -1,6 +1,4 @@
-import useSWR from 'swr';
 import { useEffect, useState } from 'react';
-import { orderFetcher } from '@/hooks/order-hook';
 import { Order } from '@/types/order';
 import { User } from '@/types/user';
 import { z } from 'zod';
@@ -25,25 +23,21 @@ const Orders = (props: Props) => {
     },
   });
   const selectedUserId = watch('userId');
+  console.log('selectedUserId', selectedUserId);
 
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const [fetchedData, setFetchedData] = useState<Order[]>([]);
-  const { data, error } = useSWR<Order[]>(
-    selectedUserId
-      ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/order/user/${selectedUserId}`
-      : null,
-    orderFetcher,
-  );
-
   useEffect(() => {
+    // TODO: 1行ずつ表示されるのが理想だけどならない。しかもStream errorになる。
     console.log('call from useEffect in Orders');
-    const eventSource = new EventSource('/api/orders?userId=1'); // API エンドポイントを指定
+    setOrders([]);
+    const eventSource = new EventSource(`/api/orders?userId=${selectedUserId}`);
 
     eventSource.onmessage = (event) => {
       const newOrder = JSON.parse(event.data);
-      setOrders((prevOrders) => [...prevOrders, ...newOrder.ordersList]); // 新しいデータを追加
+      setOrders((prevOrders) => [...prevOrders, ...newOrder.ordersList]);
+      console.log('orders', orders);
     };
 
     eventSource.onerror = (err) => {
@@ -58,9 +52,9 @@ const Orders = (props: Props) => {
     };
 
     return () => {
-      eventSource.close(); // クリーンアップ
+      eventSource.close();
     };
-  }, []);
+  }, [selectedUserId]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -87,50 +81,49 @@ const Orders = (props: Props) => {
           )}
         />
         <h1 className="text-2xl font-bold mb-4 text-left">User Data</h1>
-        {/*{error && <p className="text-red-500 text-left">Error loading data</p>}*/}
-        {/*{fetchedData.length > 0 ? (*/}
-        {/*  <div className="max-w-screen-md ml-0">*/}
-        {/*    <table className="table-auto w-full border-collapse border border-gray-300">*/}
-        {/*      <thead>*/}
-        {/*        <tr className="bg-gray-200">*/}
-        {/*          <th className="border border-gray-300 px-4 py-2">User ID</th>*/}
-        {/*          <th className="border border-gray-300 px-4 py-2">Username</th>*/}
-        {/*          <th className="border border-gray-300 px-4 py-2">*/}
-        {/*            Product ID*/}
-        {/*          </th>*/}
-        {/*          <th className="border border-gray-300 px-4 py-2">Quantity</th>*/}
-        {/*          <th className="border border-gray-300 px-4 py-2">*/}
-        {/*            Order Date*/}
-        {/*          </th>*/}
-        {/*        </tr>*/}
-        {/*      </thead>*/}
-        {/*      <tbody>*/}
-        {/*        {fetchedData &&*/}
-        {/*          fetchedData.map((user) => (*/}
-        {/*            <tr key={user.order_id} className="hover:bg-gray-100">*/}
-        {/*              <td className="border border-gray-300 px-4 py-2 text-center">*/}
-        {/*                {user.user_id}*/}
-        {/*              </td>*/}
-        {/*              <td className="border border-gray-300 px-4 py-2 text-center">*/}
-        {/*                {user.username}*/}
-        {/*              </td>*/}
-        {/*              <td className="border border-gray-300 px-4 py-2 text-center">*/}
-        {/*                {user.product_id}*/}
-        {/*              </td>*/}
-        {/*              <td className="border border-gray-300 px-4 py-2 text-center">*/}
-        {/*                {user.quantity}*/}
-        {/*              </td>*/}
-        {/*              <td className="border border-gray-300 px-4 py-2 text-center">*/}
-        {/*                {user.order_date}*/}
-        {/*              </td>*/}
-        {/*            </tr>*/}
-        {/*          ))}*/}
-        {/*      </tbody>*/}
-        {/*    </table>*/}
-        {/*  </div>*/}
-        {/*) : (*/}
-        {/*  <p className="text-gray-500 text-center">No data available</p>*/}
-        {/*)}*/}
+        {orders.length > 0 ? (
+          <div className="max-w-screen-md ml-0">
+            <table className="table-auto w-full border-collapse border border-gray-300">
+              <thead>
+                <tr className="bg-gray-200">
+                  <th className="border border-gray-300 px-4 py-2">User ID</th>
+                  <th className="border border-gray-300 px-4 py-2">Username</th>
+                  <th className="border border-gray-300 px-4 py-2">
+                    Product ID
+                  </th>
+                  <th className="border border-gray-300 px-4 py-2">Quantity</th>
+                  <th className="border border-gray-300 px-4 py-2">
+                    Order Date
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {orders &&
+                  orders.map((order) => (
+                    <tr key={order.orderId} className="hover:bg-gray-100">
+                      <td className="border border-gray-300 px-4 py-2 text-center">
+                        {order.userId}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2 text-center">
+                        {order.username}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2 text-center">
+                        {order.productId}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2 text-center">
+                        {order.quantity}
+                      </td>
+                      <td className="border border-gray-300 px-4 py-2 text-center">
+                        {order.orderDate}
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p className="text-gray-500 text-center">No data available</p>
+        )}
       </div>
       {/*<div className={'pr-6'}>*/}
       {/*  <AddOrder userId={selectedUserId} />*/}
