@@ -26,7 +26,8 @@ function deserialize_file_PingResponse(buffer_arg) {
   return ping_pb.PingResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
-var PingServiceService = (exports.PingServiceService = {
+
+var PingServiceService = exports.PingServiceService = {
   ping: {
     path: '/file.PingService/Ping',
     requestStream: false,
@@ -38,7 +39,6 @@ var PingServiceService = (exports.PingServiceService = {
     responseSerialize: serialize_file_PingResponse,
     responseDeserialize: deserialize_file_PingResponse,
   },
-});
+};
 
-exports.PingServiceClient =
-  grpc.makeGenericClientConstructor(PingServiceService);
+exports.PingServiceClient = grpc.makeGenericClientConstructor(PingServiceService);

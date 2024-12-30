@@ -12,9 +12,7 @@ function serialize_file_ListOrdersRequest(arg) {
 }
 
 function deserialize_file_ListOrdersRequest(buffer_arg) {
-  return order_pb.ListOrdersRequest.deserializeBinary(
-    new Uint8Array(buffer_arg),
-  );
+  return order_pb.ListOrdersRequest.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
 function serialize_file_ListOrdersResponse(arg) {
@@ -25,12 +23,11 @@ function serialize_file_ListOrdersResponse(arg) {
 }
 
 function deserialize_file_ListOrdersResponse(buffer_arg) {
-  return order_pb.ListOrdersResponse.deserializeBinary(
-    new Uint8Array(buffer_arg),
-  );
+  return order_pb.ListOrdersResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
-var OrdersServiceService = (exports.OrdersServiceService = {
+
+var OrdersServiceService = exports.OrdersServiceService = {
   listOrders: {
     path: '/file.OrdersService/ListOrders',
     requestStream: false,
@@ -42,7 +39,6 @@ var OrdersServiceService = (exports.OrdersServiceService = {
     responseSerialize: serialize_file_ListOrdersResponse,
     responseDeserialize: deserialize_file_ListOrdersResponse,
   },
-});
+};
 
-exports.OrdersServiceClient =
-  grpc.makeGenericClientConstructor(OrdersServiceService);
+exports.OrdersServiceClient = grpc.makeGenericClientConstructor(OrdersServiceService);

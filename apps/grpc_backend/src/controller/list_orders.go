@@ -26,7 +26,7 @@ func (s *OrdersServer) ListOrders(req *pb.ListOrdersRequest, stream pb.OrdersSer
 
 	for _, order := range orders {
 		response := &pb.ListOrdersResponse{
-			Orders: []*pb.Order{order},
+			Order: order,
 		}
 		if err := stream.Send(response); err != nil {
 			log.Printf("Failed to send order: %v", err)

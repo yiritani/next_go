@@ -17,7 +17,7 @@ message ListOrdersRequest {
   int64 user_id = 1;
 };
 message ListOrdersResponse {
-  repeated Order Orders = 1;
+  Order Order = 1;
 }
 
 message CreateOrderRequest {

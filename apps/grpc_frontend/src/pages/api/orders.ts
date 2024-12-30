@@ -17,11 +17,12 @@ export default async function handler(
   const request = new ListOrdersRequest();
   request.setUserId(Number(userId));
 
-  // HTTP レスポンスを SSE 用に設定
+  // SSE 用のヘッダーを設定
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
   res.setHeader('Connection', 'keep-alive');
 
+  // ストリーミングレスポンス
   const stream = client.listOrders(request);
 
   stream.on('data', (response) => {
@@ -32,17 +33,18 @@ export default async function handler(
 
   stream.on('error', (err) => {
     console.error('Stream error:', err);
-    res.write(
-      `event: error\ndata: ${JSON.stringify({ error: err.message })}\n\n`,
-    );
+    const errorChunk = `event: error\ndata: ${JSON.stringify({
+      error: err.message,
+    })}\n\n`;
+    res.write(errorChunk);
     res.end();
   });
 
   stream.on('end', () => {
+    console.log('Stream ended');
     res.end(); // ストリーム終了
   });
 
-  // 接続が切れた場合の処理
   req.on('close', () => {
     console.log('Connection closed by client');
     res.end();

@@ -26,7 +26,7 @@ const Orders = (props: Props) => {
   console.log('selectedUserId', selectedUserId);
 
   const [orders, setOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     // TODO: 1行ずつ表示されるのが理想だけどならない。しかもStream errorになる。
@@ -37,7 +37,7 @@ const Orders = (props: Props) => {
     eventSource.onmessage = (event) => {
       console.log('called onmessage');
       const newOrder = JSON.parse(event.data);
-      setOrders((prevOrders) => [...prevOrders, ...newOrder.ordersList]);
+      setOrders((prevOrders) => [...prevOrders, newOrder.order]);
     };
 
     eventSource.onerror = (err) => {
@@ -52,13 +52,10 @@ const Orders = (props: Props) => {
     };
 
     return () => {
+      console.log('EventSource closed');
       eventSource.close();
     };
   }, [selectedUserId]);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <>
@@ -81,6 +78,7 @@ const Orders = (props: Props) => {
           )}
         />
         <h1 className="text-2xl font-bold mb-4 text-left">User Data</h1>
+        {loading && <p className="text-gray-500 text-center">Loading...</p>}
         {orders.length > 0 ? (
           <div className="max-w-screen-md ml-0">
             <table className="table-auto w-full border-collapse border border-gray-300">
