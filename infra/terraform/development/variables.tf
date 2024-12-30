@@ -1,6 +1,6 @@
 variable "project_id" {
   type        = string
-  default     = "next-go-446214"
+  default     = "next-go-446303"
 }
 
 variable "region" {
@@ -25,6 +25,12 @@ variable "dockerfile_job" {
   description = "jobのDockerfileパス"
   type        = string
   default     = "apps/job/Dockerfile"
+}
+
+variable "dockerfile_migration" {
+  description = "migrationのDockerfileパス"
+  type        = string
+  default     = "apps/backend/Dockerfile.migration"
 }
 
 variable "service_name" {
