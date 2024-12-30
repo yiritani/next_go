@@ -1,16 +1,7 @@
-# terraform
+# 構成
 
-init
-```
-terraform init
-```
+### terraform
 
-plan
-```
-terraform plan
-```
+### atlantis
 
-apply
-```
-terraform apply
-```
+![infra.png](../assets/infra.png)

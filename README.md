@@ -18,7 +18,8 @@
 - Google Cloud Platform
 - [Atlantis](./infra/terraform/atlantis/README.md)
 
-### Database: PostgreSQL
+### Database: PostgreSQL, sqlite
+- お金をかけたくない時期はsqliteを使用
 
 ## ディレクトリ
 ```

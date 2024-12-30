@@ -74,3 +74,9 @@ variable "access_user_email" {
   type        = string
   default     = "yusuke.iritani0909@gmail.com"
 }
+
+variable "bucket_name" {
+    description = "The name of the GCS bucket"
+    type        = string
+    default     = "next-go-bucket"
+}

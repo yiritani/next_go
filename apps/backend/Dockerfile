@@ -1,3 +1,8 @@
+FROM google/cloud-sdk:slim AS fetch-db
+
+WORKDIR /app
+RUN gsutil cp gs://next-go-bucket/db.sqlite /app/db.sqlite
+
 # Stage 1: Build the Go application
 FROM golang:1.22 AS build
 
@@ -22,6 +27,7 @@ WORKDIR /app
 
 # Copy the built binary
 COPY --from=build /app/main .
+COPY --from=fetch-db /app/db.sqlite .
 
 # Expose port for Cloud Run
 EXPOSE 8080
