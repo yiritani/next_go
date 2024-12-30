@@ -35,9 +35,9 @@ const Orders = (props: Props) => {
     const eventSource = new EventSource(`/api/orders?userId=${selectedUserId}`);
 
     eventSource.onmessage = (event) => {
+      console.log('called onmessage');
       const newOrder = JSON.parse(event.data);
       setOrders((prevOrders) => [...prevOrders, ...newOrder.ordersList]);
-      console.log('orders', orders);
     };
 
     eventSource.onerror = (err) => {

@@ -25,8 +25,9 @@ export default async function handler(
   const stream = client.listOrders(request);
 
   stream.on('data', (response) => {
+    console.log('response orders', response.toObject());
     const chunk = `data: ${JSON.stringify(response.toObject())}\n\n`;
-    res.write(chunk); // SSE の形式でデータを送信
+    res.write(chunk);
   });
 
   stream.on('error', (err) => {
