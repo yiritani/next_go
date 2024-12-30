@@ -82,3 +82,52 @@ export namespace ListOrdersResponse {
         ordersList: Array<Order.AsObject>,
     }
 }
+
+export class CreateOrderRequest extends jspb.Message { 
+    getUserId(): number;
+    setUserId(value: number): CreateOrderRequest;
+    getProductId(): number;
+    setProductId(value: number): CreateOrderRequest;
+    getQuantity(): number;
+    setQuantity(value: number): CreateOrderRequest;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): CreateOrderRequest.AsObject;
+    static toObject(includeInstance: boolean, msg: CreateOrderRequest): CreateOrderRequest.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: CreateOrderRequest, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): CreateOrderRequest;
+    static deserializeBinaryFromReader(message: CreateOrderRequest, reader: jspb.BinaryReader): CreateOrderRequest;
+}
+
+export namespace CreateOrderRequest {
+    export type AsObject = {
+        userId: number,
+        productId: number,
+        quantity: number,
+    }
+}
+
+export class CreateOrderResponse extends jspb.Message { 
+
+    hasOrder(): boolean;
+    clearOrder(): void;
+    getOrder(): Order | undefined;
+    setOrder(value?: Order): CreateOrderResponse;
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): CreateOrderResponse.AsObject;
+    static toObject(includeInstance: boolean, msg: CreateOrderResponse): CreateOrderResponse.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: CreateOrderResponse, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): CreateOrderResponse;
+    static deserializeBinaryFromReader(message: CreateOrderResponse, reader: jspb.BinaryReader): CreateOrderResponse;
+}
+
+export namespace CreateOrderResponse {
+    export type AsObject = {
+        order?: Order.AsObject,
+    }
+}

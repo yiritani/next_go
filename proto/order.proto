@@ -20,6 +20,15 @@ message ListOrdersResponse {
   repeated Order Orders = 1;
 }
 
+message CreateOrderRequest {
+  int64 user_id = 1;
+  int64 product_id = 2;
+  int64 quantity = 3;
+};
+message CreateOrderResponse {
+  Order Order = 1;
+}
+
 service OrdersService {
   rpc ListOrders(ListOrdersRequest) returns (stream ListOrdersResponse);
 }

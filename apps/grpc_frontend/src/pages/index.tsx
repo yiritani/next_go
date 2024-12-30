@@ -4,6 +4,7 @@ import {User} from "@/types/user";
 import {userFetcher} from "@/hooks/user-hook";
 import useSWR from 'swr';
 import Users from "@/components/users";
+import Orders from "@/components/orders";
 
 export default function Home() {
   const [users, setUsers] = useState<User[]>([]);
@@ -11,7 +12,6 @@ export default function Home() {
     `/api/user`,
     userFetcher,
   );
-  console.log('data',data)
   if (data && users.length === 0) {
     setUsers(data);
   }
@@ -36,9 +36,9 @@ export default function Home() {
         <div className="flex-2 bg-green-200 flex items-start justify-start pl-10 pt-10">
           <Users users={users}/>
         </div>
-        {/*<div className="flex-1 bg-blue-200 flex items-start justify-start pl-10 pt-10">*/}
-        {/*  <Orders users={users}/>*/}
-        {/*</div>*/}
+        <div className="flex-1 bg-blue-200 flex items-start justify-start pl-10 pt-10">
+          <Orders users={users}/>
+        </div>
       </div>
     </>
   );
