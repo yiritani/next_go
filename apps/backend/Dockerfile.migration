@@ -20,7 +20,6 @@ COPY --from=migrate_builder /root/go/bin/migrate /usr/local/bin/migrate
 # シェル側でローカルのパスとして動かしたいのでわざわざディレクトリを掘る
 COPY src/db/migration/ ./src/db/migration/
 COPY migrate.sh .
-COPY db.sqlite .
 
 # 実行権限を付与
 RUN chmod +x migrate.sh

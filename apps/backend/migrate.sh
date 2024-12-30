@@ -1,6 +1,10 @@
 #!/bin/sh
 set -e
 
+echo "Creating database..."
+sqlite3 db.sqlite ".ta"
+echo "Database created."
+
 echo "Running migrations..."
 migrate -path ./src/db/migration \
   -database "sqlite3://./db.sqlite" \
