@@ -22,6 +22,7 @@ func (s *UsersServer) ListUsers(ctx context.Context, req *pb.ListUsersRequest) (
 		return nil, err
 	}
 
+	fmt.Println("Users fetched", users)
 	return &pb.ListUsersResponse{
 		Users: users,
 	}, nil

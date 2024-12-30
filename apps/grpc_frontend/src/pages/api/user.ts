@@ -14,6 +14,7 @@ export default function handler(
   const metadata = new grpc.Metadata();
 
   client.listUsers(request, metadata, (err, response) => {
+    console.log('response',response.toObject())
     if (err) {
       res.status(500).json({ error: err.message });
     } else {
