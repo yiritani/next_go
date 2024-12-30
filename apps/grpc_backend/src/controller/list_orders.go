@@ -19,8 +19,7 @@ func (s *OrdersServer) ListOrders(req *pb.ListOrdersRequest, stream pb.OrdersSer
 	ctx := stream.Context()
 
 	userId := req.GetUserId()
-	fmt.Println("User ID: ", userId)
-	orders, err := services.ServiceGetOrders(s.Queries, ctx, 1)
+	orders, err := services.ServiceGetOrders(s.Queries, ctx, userId)
 	if err != nil {
 		log.Printf("Error fetching orders: %v", err)
 	}
