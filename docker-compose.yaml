@@ -44,6 +44,26 @@ services:
     depends_on:
       - db
 
+  grpc_backend:
+    networks:
+      - next_go
+    build:
+      context: ./apps/grpc_backend
+      dockerfile: Dockerfile.dev
+    ports:
+      - 50051:50051
+    develop:
+      watch:
+        - action: sync
+          path: ./apps/grpc_backend
+          target: ./app/apps/grpc_backend
+    volumes:
+      - ./apps/grpc_backend:/app
+    env_file:
+      - .env.local
+    depends_on:
+      - db
+
   job:
     networks:
       - next_go

@@ -16,6 +16,9 @@ migrate_down:
 sqlc:
 	cd apps/backend && sqlc generate
 
+sqlc_grpc:
+	cd apps/grpc_backend && sqlc generate
+
 test:
 	go test -v -cover ./...
 
@@ -23,5 +26,5 @@ server:
 	cd apps/backend && air -c .air.toml
 
 protoc_go:
-	protoc -I. --go_out=./apps/job/src/ --go-grpc_out=./apps/job/src/ proto/*.proto && protoc -I. --go_out=./apps/backend/src/ --go-grpc_out=./apps/backend/src/ proto/*.proto
+	protoc -I. --go_out=./apps/grpc_backend/src/ --go-grpc_out=./apps/grpc_backend/src/ proto/*.proto
 
