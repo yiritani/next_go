@@ -20,6 +20,10 @@ func NewServer(queries *sqlc.Queries) *Server {
 
 	server.Server = s
 	server.Queries = queries
+
+	pb.RegisterPingServiceServer(server.Server, &PingServer{})
+
+	// TODO: ファイル分け
 	userSrv := &UsersServer{
 		Queries: queries,
 	}
