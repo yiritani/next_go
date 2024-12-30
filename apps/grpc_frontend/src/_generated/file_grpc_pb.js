@@ -23,11 +23,12 @@ function serialize_file_ListFilesResponse(arg) {
 }
 
 function deserialize_file_ListFilesResponse(buffer_arg) {
-  return file_pb.ListFilesResponse.deserializeBinary(new Uint8Array(buffer_arg));
+  return file_pb.ListFilesResponse.deserializeBinary(
+    new Uint8Array(buffer_arg),
+  );
 }
 
-
-var FileServiceService = exports.FileServiceService = {
+var FileServiceService = (exports.FileServiceService = {
   listFiles: {
     path: '/file.FileService/ListFiles',
     requestStream: false,
@@ -39,6 +40,7 @@ var FileServiceService = exports.FileServiceService = {
     responseSerialize: serialize_file_ListFilesResponse,
     responseDeserialize: deserialize_file_ListFilesResponse,
   },
-};
+});
 
-exports.FileServiceClient = grpc.makeGenericClientConstructor(FileServiceService);
+exports.FileServiceClient =
+  grpc.makeGenericClientConstructor(FileServiceService);

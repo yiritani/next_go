@@ -3,10 +3,10 @@ import { useState } from 'react';
 const Ping = () => {
   const [fetchedData, setFetchedData] = useState(null);
   const fetchUsers = async () => {
-    const response = await fetch("/api/ping");
+    const response = await fetch('/api/ping');
     const data = await response.json();
     setFetchedData(data.message);
-  }
+  };
 
   return (
     <div>
