@@ -24,6 +24,10 @@ func NewServer(queries *sqlc.Queries) *Server {
 		Queries: queries,
 	}
 	pb.RegisterUsersServiceServer(server.Server, userSrv)
+	orderSrv := &OrdersServer{
+		Queries: queries,
+	}
+	pb.RegisterOrdersServiceServer(server.Server, orderSrv)
 
 	return server
 }

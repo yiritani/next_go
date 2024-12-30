@@ -2,7 +2,7 @@
 // file: user.proto
 
 /* tslint:disable */
- 
+/* eslint-disable */
 
 import * as grpc from "@grpc/grpc-js";
 import * as user_pb from "./user_pb";

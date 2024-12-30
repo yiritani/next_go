@@ -11,7 +11,7 @@ export default function Home() {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const response = await fetch("/api/grpc");
+      const response = await fetch("/api/user");
       const data = await response.json();
       setUsers(data.usersList);
     }

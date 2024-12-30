@@ -2,6 +2,7 @@ package controller
 
 import (
 	"context"
+	"fmt"
 	pb "grpc_backend/src/pb"
 	"grpc_backend/src/services"
 	"grpc_backend/src/sqlc"
@@ -14,6 +15,7 @@ type UsersServer struct {
 }
 
 func (s *UsersServer) ListUsers(ctx context.Context, req *pb.ListUsersRequest) (*pb.ListUsersResponse, error) {
+	fmt.Println("ListUsers called")
 	users, err := services.ServiceGetAllUsers(s.Queries, ctx)
 	if err != nil {
 		log.Printf("Error fetching users: %v", err)
