@@ -45,6 +45,7 @@ RUN npm install -g pnpm@${PNPM_VERSION}
 COPY package.json pnpm-lock.yaml ./
 
 # 依存関係をインストール
+RUN pnpm config set @buf:registry https://buf.build/gen/npm/v1/
 RUN pnpm install
 
 # ソースコードをコピー

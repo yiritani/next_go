@@ -1,8 +1,7 @@
 syntax = "proto3";
 
-package ping;
-
-option go_package = "example/gen/proto";
+package grpc_backend.v1;
+option go_package = "grpc_backend/src/gen/proto";
 
 message PingRequest {};
 message PingResponse {

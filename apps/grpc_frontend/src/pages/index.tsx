@@ -1,25 +1,13 @@
-import Ping from '@/components/ping';
-import { useState } from 'react';
-import { User } from '@/types/user';
-import { userFetcher } from '@/hooks/user-hook';
-import useSWR from 'swr';
-import Users from '@/components/users';
-import Orders from '@/components/orders';
 import { createClient } from '@connectrpc/connect';
 import { createConnectTransport } from '@connectrpc/connect-web';
-import { PingService } from '@/gen/ping_pb';
+import { PingService } from '@/_generated/ping_pb';
+
 const transport = createConnectTransport({
-  baseUrl: 'http://localhost:8080',
+  baseUrl: 'http://localhost:8082',
 });
 const client = createClient(PingService, transport);
 
 export default function Home() {
-  const [users, setUsers] = useState<User[]>([]);
-  // const { data, error } = useSWR<User[]>(`/api/user`, userFetcher);
-  // if (data && users.length === 0) {
-  //   setUsers(data);
-  // }
-
   const userFetcher = async () => {
     const data = await client.ping({}).then((res) => {
       console.log(res);

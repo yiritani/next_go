@@ -81,7 +81,7 @@ services:
       context: ./apps/grpc_backend
       dockerfile: Dockerfile.dev
     ports:
-      - 50051:50051
+      - 8082:8080
     develop:
       watch:
         - action: sync
@@ -141,3 +141,5 @@ volumes:
     name: db-store
   test-db-store:
     name: test-db-store
+  grpc_backend:
+    name: grpc_backend

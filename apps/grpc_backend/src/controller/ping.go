@@ -1,18 +1,22 @@
 package controller
 
 import (
+	"connectrpc.com/connect"
 	"context"
-	"fmt"
-	pb "grpc_backend/src/pb"
+	"grpc_backend/src/gen/proto"
+	"log"
 )
 
-type PingServer struct {
-	pb.UnimplementedPingServiceServer
-}
+type PingServer struct{}
 
-func (s *PingServer) Ping(ctx context.Context, req *pb.PingRequest) (*pb.PingResponse, error) {
-	fmt.Println("Ping called")
-	return &pb.PingResponse{
-		Message: "Pong from gRPC server",
-	}, nil
+func (p *PingServer) Ping(
+	ctx context.Context,
+	req *connect.Request[proto.PingRequest],
+) (*connect.Response[proto.PingResponse], error) {
+	log.Println("Ping")
+	res := connect.NewResponse(&proto.PingResponse{
+		Message: "Pong",
+	})
+	res.Header().Set("Content-Type", "application/json")
+	return res, nil
 }

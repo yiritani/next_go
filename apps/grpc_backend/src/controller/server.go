@@ -1,52 +1,47 @@
 package controller
 
 import (
-	"google.golang.org/grpc"
-	"grpc_backend/src/pb"
+	connectcors "connectrpc.com/cors"
+	"github.com/rs/cors"
+	"golang.org/x/net/http2"
+	"golang.org/x/net/http2/h2c"
+	"grpc_backend/src/gen/proto/protoconnect"
 	"grpc_backend/src/sqlc"
 	"log"
-	"net"
+	"net/http"
 )
 
 type Server struct {
-	Server  *grpc.Server
+	Mux     *http.ServeMux
 	Queries *sqlc.Queries
 }
 
 func NewServer(queries *sqlc.Queries) *Server {
 	server := &Server{}
 
-	s := grpc.NewServer()
+	mux := http.NewServeMux()
 
-	server.Server = s
+	server.Mux = mux
 	server.Queries = queries
 
-	pb.RegisterPingServiceServer(server.Server, &PingServer{})
+	ping := &PingServer{}
+	path, handler := protoconnect.NewPingServiceHandler(ping)
+	mux.Handle(path, handler)
 
-	// TODO: ファイル分け
-	userSrv := &UsersServer{
-		Queries: queries,
-	}
-	pb.RegisterUsersServiceServer(server.Server, userSrv)
-	orderSrv := &OrdersServer{
-		Queries: queries,
-	}
-	pb.RegisterOrdersServiceServer(server.Server, orderSrv)
+	corsHandler := withCORS(h2c.NewHandler(mux, &http2.Server{}))
 
+	if err := http.ListenAndServe(":8080", corsHandler); err != nil {
+		log.Fatalf("Failed to start server: %v", err)
+	}
 	return server
 }
 
-func (server *Server) Run(port string) error {
-	lis, err := net.Listen("tcp", port)
-	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
-	}
-
-	log.Println("Listening on " + port + "...")
-
-	if err := server.Server.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
-	}
-
-	return nil
+func withCORS(h http.Handler) http.Handler {
+	middleware := cors.New(cors.Options{
+		AllowedOrigins: []string{"*"},
+		AllowedMethods: connectcors.AllowedMethods(),
+		AllowedHeaders: connectcors.AllowedHeaders(),
+		ExposedHeaders: connectcors.ExposedHeaders(),
+	})
+	return middleware.Handler(h)
 }
