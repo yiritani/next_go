@@ -46,14 +46,6 @@ services:
       - backend
       - grpc_backend
 
-  envoy:
-    build:
-      context: ./infra/envoy
-      dockerfile: Dockerfile.dev
-    container_name: envoy-grpc-proxy
-    ports:
-      - "9000:9000"
-
   backend:
     networks:
       - next_go

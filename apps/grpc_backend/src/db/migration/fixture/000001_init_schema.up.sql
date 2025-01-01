@@ -17,7 +17,8 @@ INSERT INTO orders (order_id, user_id, product_id, order_date, quantity) VALUES
  (1001, 1, 101, '2023-05-01', 1),
  (1002, 2, 102, '2023-05-03', 2),
  (1003, 1, 104, '2023-05-05', 1),
- (1004, 3, 103, '2023-05-07', 3);
+ (1004, 3, 103, '2023-05-07', 3),
+ (1005, 1, 101, '2023-05-07', 3);
 
 -- 支払いテーブルにデータを挿入
 INSERT INTO payments (payment_id, order_id, payment_date, amount) VALUES

@@ -30,6 +30,7 @@ const Orders = (props: Props) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setOrders([]);
     const fetchOrders = async () => {
       try {
         const fetchedOrders: Order[] = [];
@@ -71,6 +72,7 @@ const Orders = (props: Props) => {
           )}
         />
         <h1 className="text-2xl font-bold mb-4 text-left">User Data</h1>
+        <p>Server streamで1秒ごとに取得</p>
         {loading && <p className="text-gray-500 text-center">Loading...</p>}
         {orders.length > 0 ? (
           <div className="max-w-screen-md ml-0">
