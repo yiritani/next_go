@@ -10,6 +10,10 @@
     "gen": "grpc_tools_node_protoc --js_out=import_style=commonjs,binary:./src/_generated --grpc_out=grpc_js:./src/_generated --plugin=protoc-gen-grpc=./node_modules/.bin/grpc_tools_node_protoc_plugin --ts_out=grpc_js:./src/_generated -I ../../proto ../../proto/*.proto"
   },
   "dependencies": {
+    "@buf/connectrpc_eliza.bufbuild_es": "2.2.3-20230913231627-233fca715f49.1",
+    "@bufbuild/protobuf": "^2.2.3",
+    "@connectrpc/connect": "^2.0.0",
+    "@connectrpc/connect-web": "^2.0.0",
     "@grpc/grpc-js": "^1.12.5",
     "@hookform/resolvers": "^3.9.1",
     "@improbable-eng/grpc-web": "^0.15.0",
@@ -25,6 +29,8 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@bufbuild/buf": "^1.48.0",
+    "@bufbuild/protoc-gen-es": "^2.2.3",
     "@eslint/eslintrc": "^3",
     "@types/node": "^20",
     "@types/react": "^19",
