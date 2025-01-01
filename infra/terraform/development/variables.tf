@@ -1,6 +1,6 @@
 variable "project_id" {
   type        = string
-  default     = "next-go-446303"
+  default     = "next-go-446515"
 }
 
 variable "region" {
@@ -25,6 +25,18 @@ variable "dockerfile_job" {
   description = "jobのDockerfileパス"
   type        = string
   default     = "apps/job/Dockerfile"
+}
+
+variable "dockerfile_backend_grpc" {
+  description = "バックエンド_grpcのDockerfileパス"
+  type        = string
+  default     = "apps/backend_grpc/Dockerfile"
+}
+
+variable "dockerfile_frontend_grpc" {
+  description = "フロントエンド_grpcのDockerfileパス"
+  type        = string
+  default     = "apps/frontend_grpc/Dockerfile"
 }
 
 variable "dockerfile_migration" {

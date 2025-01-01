@@ -20,6 +20,22 @@ resource "google_service_account" "job_service_account" {
   account_id   = "job-sa"
   display_name = "job-sa"
 }
+resource "google_project_iam_binding" "cloud_run_admin" {
+  project = var.project_id
+  role    = "roles/run.admin"
+
+  members = [
+    "serviceAccount:${google_service_account.cloudrun_service_account.email}"
+  ]
+}
+resource "google_project_iam_binding" "service_account_user" {
+  project = var.project_id
+  role    = "roles/iam.serviceAccountUser"
+
+  members = [
+    "serviceAccount:${google_service_account.cloudrun_service_account.email}"
+  ]
+}
 
 resource "google_project_iam_member" "logs_logging_writer" {
   project = var.project_id

@@ -1,7 +1,6 @@
 import { z } from 'zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { createOrder } from '@/hooks/order-hook';
 
