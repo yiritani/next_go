@@ -9,3 +9,16 @@ export async function* orderFetcher(userId: bigint) {
     yield response.Order;
   }
 }
+
+export const createOrder = async (
+  userId: number,
+  productId: number,
+  quantity: number,
+) => {
+  const response = await client.createOrder({
+    userId: BigInt(userId),
+    productId: BigInt(productId),
+    quantity: BigInt(quantity),
+  });
+  return response.Order;
+};

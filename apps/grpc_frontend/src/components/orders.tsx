@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { User } from '@/_generated/user_pb';
 import { orderFetcher } from '@/hooks/order-hook';
 import { Order } from '@/_generated/order_pb';
+import AddOrder from '@/components/form/addOrder';
 
 type Props = {
   users: User[];
@@ -118,9 +119,9 @@ const Orders = (props: Props) => {
           <p className="text-gray-500 text-center">No data available</p>
         )}
       </div>
-      {/*<div className={'pr-6'}>*/}
-      {/*  <AddOrder userId={selectedUserId} />*/}
-      {/*</div>*/}
+      <div className={'pr-6'}>
+        <AddOrder userId={selectedUserId} />
+      </div>
     </>
   );
 };
