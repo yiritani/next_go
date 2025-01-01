@@ -1,8 +1,7 @@
 syntax = "proto3";
 
-package file;
-
-option go_package = "./pb";
+package grpc_backend.v1;
+option go_package = "grpc_backend/src/_generated/proto";
 
 message Order {
   int64 user_id = 1;
@@ -31,4 +30,5 @@ message CreateOrderResponse {
 
 service OrdersService {
   rpc ListOrders(ListOrdersRequest) returns (stream ListOrdersResponse);
+  rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse);
 }

@@ -3,6 +3,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import { createOrder } from '@/hooks/order-hook';
 
 const postSchema = z.object({
   ProductID: z.preprocess(
@@ -17,7 +18,6 @@ type Props = {
 };
 
 const AddOrder = (props: Props) => {
-  // 成功メッセージの表示状態を管理
   const [showSuccess, setShowSuccess] = useState(false);
 
   const {
@@ -49,14 +49,13 @@ const AddOrder = (props: Props) => {
     };
 
     try {
-      const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/order/create`,
-        postData,
+      const res = await createOrder(
+        postData.UserID,
+        postData.ProductID,
+        postData.Quantity,
       );
-      if (res.status === 201) {
-        setShowSuccess(true);
-      }
-      console.log('Order created successfully:', res.data);
+      console.log('Order created:', res);
+      setShowSuccess(true);
     } catch (err) {
       console.error('Error creating order:', err);
     }

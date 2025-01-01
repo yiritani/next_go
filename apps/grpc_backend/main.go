@@ -13,6 +13,5 @@ func main() {
 
 	queries := sqlc.New(conn)
 
-	s := controller.NewServer(queries)
-	s.Run(":50051")
+	controller.NewServer(queries)
 }

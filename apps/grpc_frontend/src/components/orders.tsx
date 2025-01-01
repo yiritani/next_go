@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Order } from '@/types/order';
-import { User } from '@/types/user';
 import { z } from 'zod';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { User } from '@/_generated/user_pb';
+import { orderFetcher } from '@/hooks/order-hook';
+import { Order } from '@/_generated/order_pb';
+import AddOrder from '@/components/form/addOrder';
 
 type Props = {
   users: User[];
@@ -29,32 +31,25 @@ const Orders = (props: Props) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // TODO: 1行ずつ表示されるのが理想だけどならない。しかもStream errorになる。
-    console.log('call from useEffect in Orders');
     setOrders([]);
-    const eventSource = new EventSource(`/api/orders?userId=${selectedUserId}`);
-
-    eventSource.onmessage = (event) => {
-      console.log('called onmessage');
-      const newOrder = JSON.parse(event.data);
-      setOrders((prevOrders) => [...prevOrders, newOrder.order]);
+    const fetchOrders = async () => {
+      try {
+        const fetchedOrders: Order[] = [];
+        for await (const order of orderFetcher(BigInt(selectedUserId))) {
+          if (!order) {
+            break;
+          }
+          fetchedOrders.push(order);
+          setOrders([...fetchedOrders]);
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    eventSource.onerror = (err) => {
-      console.error('Stream error:', err);
-      eventSource.close();
-      setLoading(false);
-    };
-
-    eventSource.onopen = () => {
-      console.log('Stream started');
-      setLoading(false);
-    };
-
-    return () => {
-      console.log('EventSource closed');
-      eventSource.close();
-    };
+    fetchOrders();
   }, [selectedUserId]);
 
   return (
@@ -70,7 +65,7 @@ const Orders = (props: Props) => {
             >
               {props.users &&
                 props.users.map((user) => (
-                  <option key={user.userId} value={user.userId}>
+                  <option key={user.userId} value={Number(user.userId)}>
                     {user.username}
                   </option>
                 ))}
@@ -78,6 +73,7 @@ const Orders = (props: Props) => {
           )}
         />
         <h1 className="text-2xl font-bold mb-4 text-left">User Data</h1>
+        <p>Server streamで1秒ごとに取得</p>
         {loading && <p className="text-gray-500 text-center">Loading...</p>}
         {orders.length > 0 ? (
           <div className="max-w-screen-md ml-0">
@@ -123,9 +119,9 @@ const Orders = (props: Props) => {
           <p className="text-gray-500 text-center">No data available</p>
         )}
       </div>
-      {/*<div className={'pr-6'}>*/}
-      {/*  <AddOrder userId={selectedUserId} />*/}
-      {/*</div>*/}
+      <div className={'pr-6'}>
+        <AddOrder userId={selectedUserId} />
+      </div>
     </>
   );
 };

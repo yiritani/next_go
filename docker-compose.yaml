@@ -39,20 +39,12 @@ services:
           target: ./app/apps/grpc_frontend
     restart: always
     environment:
-      - NEXT_PUBLIC_BACKEND_URL=host.docker.internal:50051
+      - NEXT_PUBLIC_BACKEND_URL=http://localhost:8082
     volumes:
       - ./apps/grpc_frontend:/app
     depends_on:
       - backend
       - grpc_backend
-
-  envoy:
-    build:
-      context: ./infra/envoy
-      dockerfile: Dockerfile.dev
-    container_name: envoy-grpc-proxy
-    ports:
-      - "9000:9000"
 
   backend:
     networks:
@@ -81,7 +73,7 @@ services:
       context: ./apps/grpc_backend
       dockerfile: Dockerfile.dev
     ports:
-      - 50051:50051
+      - 8082:8080
     develop:
       watch:
         - action: sync

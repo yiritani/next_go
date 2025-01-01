@@ -1,14 +1,14 @@
-import Ping from '@/components/ping';
-import { useState } from 'react';
-import { User } from '@/types/user';
-import { userFetcher } from '@/hooks/user-hook';
 import useSWR from 'swr';
+import { User } from '@/_generated/user_pb';
+import { userFetcher } from '@/hooks/user-hook';
+import { useState } from 'react';
+import Ping from '@/components/ping';
 import Users from '@/components/users';
 import Orders from '@/components/orders';
 
 export default function Home() {
   const [users, setUsers] = useState<User[]>([]);
-  const { data, error } = useSWR<User[]>(`/api/user`, userFetcher);
+  const { data, error } = useSWR('users', userFetcher);
   if (data && users.length === 0) {
     setUsers(data);
   }
