@@ -94,7 +94,7 @@ resource "google_compute_backend_service" "frontend_backend_grpc" {
   load_balancing_scheme = "EXTERNAL"
 
   backend {
-    group = google_compute_region_network_endpoint_group.app.id
+    group = google_compute_region_network_endpoint_group.app_grpc.id
   }
 }
 
