@@ -23,8 +23,6 @@ WORKDIR /app
 # Copy the built binary
 COPY --from=build /app/main .
 COPY --from=build /app/migrate.sh .
-CMD ["./down_migrate.sh"]
-CMD ["./migrate.sh"]
 
 # Expose port for Cloud Run
 EXPOSE 8080
