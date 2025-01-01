@@ -1,6 +1,10 @@
-import { User } from '@/types/user';
+import { createClient } from '@connectrpc/connect';
+import { UserService } from '@/_generated/user_pb';
+import { transport } from '@/lib/connect_client';
 
-export const userFetcher = (url: string): Promise<User[]> =>
-  fetch(url)
-    .then((res) => res.json())
-    .then((data) => data.usersList);
+const client = createClient(UserService, transport);
+
+export const userFetcher = async () => {
+  const response = await client.listUsers({});
+  return response.users;
+};

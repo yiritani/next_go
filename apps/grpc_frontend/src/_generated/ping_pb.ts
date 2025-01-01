@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file ping.proto.
  */
 export const file_ping: GenFile = /*@__PURE__*/
-  fileDesc("CgpwaW5nLnByb3RvEg9ncnBjX2JhY2tlbmQudjEiDQoLUGluZ1JlcXVlc3QiHwoMUGluZ1Jlc3BvbnNlEg8KB21lc3NhZ2UYASABKAkyUgoLUGluZ1NlcnZpY2USQwoEUGluZxIcLmdycGNfYmFja2VuZC52MS5QaW5nUmVxdWVzdBodLmdycGNfYmFja2VuZC52MS5QaW5nUmVzcG9uc2VCHFoaZ3JwY19iYWNrZW5kL3NyYy9nZW4vcHJvdG9iBnByb3RvMw");
+  fileDesc("CgpwaW5nLnByb3RvEg9ncnBjX2JhY2tlbmQudjEiDQoLUGluZ1JlcXVlc3QiHwoMUGluZ1Jlc3BvbnNlEg8KB21lc3NhZ2UYASABKAkyUgoLUGluZ1NlcnZpY2USQwoEUGluZxIcLmdycGNfYmFja2VuZC52MS5QaW5nUmVxdWVzdBodLmdycGNfYmFja2VuZC52MS5QaW5nUmVzcG9uc2VCI1ohZ3JwY19iYWNrZW5kL3NyYy9fZ2VuZXJhdGVkL3Byb3RvYgZwcm90bzM");
 
 /**
  * @generated from message grpc_backend.v1.PingRequest

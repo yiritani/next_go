@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file user.proto.
  */
 export const file_user: GenFile = /*@__PURE__*/
-  fileDesc("Cgp1c2VyLnByb3RvEg9ncnBjX2JhY2tlbmQudjEiOAoEVXNlchIPCgd1c2VyX2lkGAEgASgDEhAKCHVzZXJuYW1lGAIgASgJEg0KBWVtYWlsGAMgASgJIhIKEExpc3RVc2Vyc1JlcXVlc3QiOQoRTGlzdFVzZXJzUmVzcG9uc2USJAoFdXNlcnMYASADKAsyFS5ncnBjX2JhY2tlbmQudjEuVXNlcjJiCgxVc2Vyc1NlcnZpY2USUgoJTGlzdFVzZXJzEiEuZ3JwY19iYWNrZW5kLnYxLkxpc3RVc2Vyc1JlcXVlc3QaIi5ncnBjX2JhY2tlbmQudjEuTGlzdFVzZXJzUmVzcG9uc2VCHFoaZ3JwY19iYWNrZW5kL3NyYy9nZW4vcHJvdG9iBnByb3RvMw");
+  fileDesc("Cgp1c2VyLnByb3RvEg9ncnBjX2JhY2tlbmQudjEiOAoEVXNlchIPCgd1c2VyX2lkGAEgASgDEhAKCHVzZXJuYW1lGAIgASgJEg0KBWVtYWlsGAMgASgJIhEKD0xpc3RVc2VyUmVxdWVzdCI4ChBMaXN0VXNlclJlc3BvbnNlEiQKBXVzZXJzGAEgAygLMhUuZ3JwY19iYWNrZW5kLnYxLlVzZXIyXwoLVXNlclNlcnZpY2USUAoJTGlzdFVzZXJzEiAuZ3JwY19iYWNrZW5kLnYxLkxpc3RVc2VyUmVxdWVzdBohLmdycGNfYmFja2VuZC52MS5MaXN0VXNlclJlc3BvbnNlQiNaIWdycGNfYmFja2VuZC9zcmMvX2dlbmVyYXRlZC9wcm90b2IGcHJvdG8z");
 
 /**
  * @generated from message grpc_backend.v1.User
@@ -40,22 +40,22 @@ export const UserSchema: GenMessage<User> = /*@__PURE__*/
   messageDesc(file_user, 0);
 
 /**
- * @generated from message grpc_backend.v1.ListUsersRequest
+ * @generated from message grpc_backend.v1.ListUserRequest
  */
-export type ListUsersRequest = Message<"grpc_backend.v1.ListUsersRequest"> & {
+export type ListUserRequest = Message<"grpc_backend.v1.ListUserRequest"> & {
 };
 
 /**
- * Describes the message grpc_backend.v1.ListUsersRequest.
- * Use `create(ListUsersRequestSchema)` to create a new message.
+ * Describes the message grpc_backend.v1.ListUserRequest.
+ * Use `create(ListUserRequestSchema)` to create a new message.
  */
-export const ListUsersRequestSchema: GenMessage<ListUsersRequest> = /*@__PURE__*/
+export const ListUserRequestSchema: GenMessage<ListUserRequest> = /*@__PURE__*/
   messageDesc(file_user, 1);
 
 /**
- * @generated from message grpc_backend.v1.ListUsersResponse
+ * @generated from message grpc_backend.v1.ListUserResponse
  */
-export type ListUsersResponse = Message<"grpc_backend.v1.ListUsersResponse"> & {
+export type ListUserResponse = Message<"grpc_backend.v1.ListUserResponse"> & {
   /**
    * @generated from field: repeated grpc_backend.v1.User users = 1;
    */
@@ -63,23 +63,23 @@ export type ListUsersResponse = Message<"grpc_backend.v1.ListUsersResponse"> & {
 };
 
 /**
- * Describes the message grpc_backend.v1.ListUsersResponse.
- * Use `create(ListUsersResponseSchema)` to create a new message.
+ * Describes the message grpc_backend.v1.ListUserResponse.
+ * Use `create(ListUserResponseSchema)` to create a new message.
  */
-export const ListUsersResponseSchema: GenMessage<ListUsersResponse> = /*@__PURE__*/
+export const ListUserResponseSchema: GenMessage<ListUserResponse> = /*@__PURE__*/
   messageDesc(file_user, 2);
 
 /**
- * @generated from service grpc_backend.v1.UsersService
+ * @generated from service grpc_backend.v1.UserService
  */
-export const UsersService: GenService<{
+export const UserService: GenService<{
   /**
-   * @generated from rpc grpc_backend.v1.UsersService.ListUsers
+   * @generated from rpc grpc_backend.v1.UserService.ListUsers
    */
   listUsers: {
     methodKind: "unary";
-    input: typeof ListUsersRequestSchema;
-    output: typeof ListUsersResponseSchema;
+    input: typeof ListUserRequestSchema;
+    output: typeof ListUserResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_user, 0);

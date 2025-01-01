@@ -3,7 +3,7 @@ package controller
 import (
 	"connectrpc.com/connect"
 	"context"
-	"grpc_backend/src/gen/proto"
+	"grpc_backend/src/_generated/proto"
 	"log"
 )
 

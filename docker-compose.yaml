@@ -39,7 +39,7 @@ services:
           target: ./app/apps/grpc_frontend
     restart: always
     environment:
-      - NEXT_PUBLIC_BACKEND_URL=host.docker.internal:50051
+      - NEXT_PUBLIC_BACKEND_URL=http://localhost:8082
     volumes:
       - ./apps/grpc_frontend:/app
     depends_on:
@@ -141,5 +141,3 @@ volumes:
     name: db-store
   test-db-store:
     name: test-db-store
-  grpc_backend:
-    name: grpc_backend

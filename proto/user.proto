@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package grpc_backend.v1;
-option go_package = "grpc_backend/src/gen/proto";
+option go_package = "grpc_backend/src/_generated/proto";
 
 message User {
   int64 user_id = 1;
@@ -9,11 +9,11 @@ message User {
   string email = 3;
 }
 
-message ListUsersRequest {};
-message ListUsersResponse {
+message ListUserRequest {};
+message ListUserResponse {
   repeated User users = 1;
 }
 
-service UsersService {
-  rpc ListUsers(ListUsersRequest) returns (ListUsersResponse);
+service UserService {
+  rpc ListUsers(ListUserRequest) returns (ListUserResponse);
 }

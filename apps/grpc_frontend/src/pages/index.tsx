@@ -1,19 +1,17 @@
-import { createClient } from '@connectrpc/connect';
-import { createConnectTransport } from '@connectrpc/connect-web';
-import { PingService } from '@/_generated/ping_pb';
-
-const transport = createConnectTransport({
-  baseUrl: 'http://localhost:8082',
-});
-const client = createClient(PingService, transport);
+import useSWR from 'swr';
+import { User } from '@/_generated/user_pb';
+import { userFetcher } from '@/hooks/user-hook';
+import { useState } from 'react';
+import Ping from '@/components/ping';
+import Users from '@/components/users';
+import Orders from '@/components/orders';
 
 export default function Home() {
-  const userFetcher = async () => {
-    const data = await client.ping({}).then((res) => {
-      console.log(res);
-    });
-    console.log(data);
-  };
+  const [users, setUsers] = useState<User[]>([]);
+  const { data, error } = useSWR('users', userFetcher);
+  if (data && users.length === 0) {
+    setUsers(data);
+  }
 
   return (
     <>
@@ -26,19 +24,18 @@ export default function Home() {
         </h1>
       </div>
       <div className="flex flex-col h-screen">
-        {/*{error && (*/}
-        {/*  <p className="text-red-500 text-center">Error loading data</p>*/}
-        {/*)}*/}
+        {error && (
+          <p className="text-red-500 text-center">Error loading data</p>
+        )}
         <div className="flex-2 bg-red-200 flex items-start justify-start pl-10 pt-10">
-          {/*<Ping />*/}
-          <button onClick={userFetcher}>Fetch</button>
+          <Ping />
         </div>
-        {/*<div className="flex-2 bg-green-200 flex items-start justify-start pl-10 pt-10">*/}
-        {/*  <Users users={users} />*/}
-        {/*</div>*/}
-        {/*<div className="flex-1 bg-blue-200 flex items-start justify-start pl-10 pt-10">*/}
-        {/*  <Orders users={users} />*/}
-        {/*</div>*/}
+        <div className="flex-2 bg-green-200 flex items-start justify-start pl-10 pt-10">
+          <Users users={users} />
+        </div>
+        <div className="flex-1 bg-blue-200 flex items-start justify-start pl-10 pt-10">
+          <Orders users={users} />
+        </div>
       </div>
     </>
   );
