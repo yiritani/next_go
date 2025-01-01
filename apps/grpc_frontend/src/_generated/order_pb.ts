@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file order.proto.
  */
 export const file_order: GenFile = /*@__PURE__*/
-  fileDesc("CgtvcmRlci5wcm90bxIPZ3JwY19iYWNrZW5kLnYxInYKBU9yZGVyEg8KB3VzZXJfaWQYASABKAMSEAoIb3JkZXJfaWQYAiABKAMSEAoIdXNlcm5hbWUYAyABKAkSEgoKcHJvZHVjdF9pZBgEIAEoAxIQCghxdWFudGl0eRgFIAEoAxISCgpvcmRlcl9kYXRlGAYgASgJIiQKEUxpc3RPcmRlcnNSZXF1ZXN0Eg8KB3VzZXJfaWQYASABKAMiOwoSTGlzdE9yZGVyc1Jlc3BvbnNlEiUKBU9yZGVyGAEgASgLMhYuZ3JwY19iYWNrZW5kLnYxLk9yZGVyIksKEkNyZWF0ZU9yZGVyUmVxdWVzdBIPCgd1c2VyX2lkGAEgASgDEhIKCnByb2R1Y3RfaWQYAiABKAMSEAoIcXVhbnRpdHkYAyABKAMiPAoTQ3JlYXRlT3JkZXJSZXNwb25zZRIlCgVPcmRlchgBIAEoCzIWLmdycGNfYmFja2VuZC52MS5PcmRlcjJoCg1PcmRlcnNTZXJ2aWNlElcKCkxpc3RPcmRlcnMSIi5ncnBjX2JhY2tlbmQudjEuTGlzdE9yZGVyc1JlcXVlc3QaIy5ncnBjX2JhY2tlbmQudjEuTGlzdE9yZGVyc1Jlc3BvbnNlMAFCI1ohZ3JwY19iYWNrZW5kL3NyYy9fZ2VuZXJhdGVkL3Byb3RvYgZwcm90bzM");
+  fileDesc("CgtvcmRlci5wcm90bxIPZ3JwY19iYWNrZW5kLnYxInYKBU9yZGVyEg8KB3VzZXJfaWQYASABKAMSEAoIb3JkZXJfaWQYAiABKAMSEAoIdXNlcm5hbWUYAyABKAkSEgoKcHJvZHVjdF9pZBgEIAEoAxIQCghxdWFudGl0eRgFIAEoAxISCgpvcmRlcl9kYXRlGAYgASgJIiQKEUxpc3RPcmRlcnNSZXF1ZXN0Eg8KB3VzZXJfaWQYASABKAMiOwoSTGlzdE9yZGVyc1Jlc3BvbnNlEiUKBU9yZGVyGAEgASgLMhYuZ3JwY19iYWNrZW5kLnYxLk9yZGVyIksKEkNyZWF0ZU9yZGVyUmVxdWVzdBIPCgd1c2VyX2lkGAEgASgDEhIKCnByb2R1Y3RfaWQYAiABKAMSEAoIcXVhbnRpdHkYAyABKAMiPAoTQ3JlYXRlT3JkZXJSZXNwb25zZRIlCgVPcmRlchgBIAEoCzIWLmdycGNfYmFja2VuZC52MS5PcmRlcjLCAQoNT3JkZXJzU2VydmljZRJXCgpMaXN0T3JkZXJzEiIuZ3JwY19iYWNrZW5kLnYxLkxpc3RPcmRlcnNSZXF1ZXN0GiMuZ3JwY19iYWNrZW5kLnYxLkxpc3RPcmRlcnNSZXNwb25zZTABElgKC0NyZWF0ZU9yZGVyEiMuZ3JwY19iYWNrZW5kLnYxLkNyZWF0ZU9yZGVyUmVxdWVzdBokLmdycGNfYmFja2VuZC52MS5DcmVhdGVPcmRlclJlc3BvbnNlQiNaIWdycGNfYmFja2VuZC9zcmMvX2dlbmVyYXRlZC9wcm90b2IGcHJvdG8z");
 
 /**
  * @generated from message grpc_backend.v1.Order
@@ -143,6 +143,14 @@ export const OrdersService: GenService<{
     methodKind: "server_streaming";
     input: typeof ListOrdersRequestSchema;
     output: typeof ListOrdersResponseSchema;
+  },
+  /**
+   * @generated from rpc grpc_backend.v1.OrdersService.CreateOrder
+   */
+  createOrder: {
+    methodKind: "unary";
+    input: typeof CreateOrderRequestSchema;
+    output: typeof CreateOrderResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_order, 0);

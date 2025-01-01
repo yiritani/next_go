@@ -15,6 +15,9 @@ type OrderServer struct {
 	Queries *sqlc.Queries
 }
 
+// ListOrders TODO: ちょっとよく分からないが、
+// 関数はpublicにしないとコンスタラクタが作れないのと、多分.protoファイルの関数名と一致させた方が管理が楽
+// あと、多分connect.Request内の型でどのprotoのserviceと紐づくか決めているっぽい。
 func (p *OrderServer) ListOrders(
 	ctx context.Context,
 	req *connect.Request[proto.ListOrdersRequest],
@@ -49,4 +52,34 @@ func (p *OrderServer) ListOrders(
 	}
 
 	return nil
+}
+
+func (p *OrderServer) CreateOrder(
+	ctx context.Context,
+	req *connect.Request[proto.CreateOrderRequest]) (*connect.Response[proto.CreateOrderResponse], error) {
+	log.Println("Called Create Order")
+
+	var order sqlc.InsertOrderParams
+	order.UserID = req.Msg.UserId
+	order.ProductID = req.Msg.ProductId
+	order.Quantity = req.Msg.Quantity
+	order.OrderDate = time.Now().Format("2006-01-02")
+
+	newOrder, err := services.ServiceCreateOrder(*p.Queries, ctx, order)
+	if err != nil {
+		log.Printf("Failed to create order: %v", err)
+		return nil, err
+	}
+
+	res := connect.NewResponse(&proto.CreateOrderResponse{
+		Order: &proto.Order{
+			UserId:    newOrder.UserId,
+			OrderId:   newOrder.OrderId,
+			ProductId: newOrder.ProductId,
+			Quantity:  newOrder.Quantity,
+			OrderDate: newOrder.OrderDate,
+		},
+	})
+	res.Header().Set("Content-Type", "application/json")
+	return res, nil
 }

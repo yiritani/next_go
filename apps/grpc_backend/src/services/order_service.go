@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"fmt"
 	"grpc_backend/src/_generated/proto"
 	"grpc_backend/src/sqlc"
 )
@@ -25,4 +26,26 @@ func ServiceGetOrders(queries *sqlc.Queries, ctx context.Context, userId int64) 
 	}
 
 	return orderResponses, nil
+}
+
+func ServiceCreateOrder(queries sqlc.Queries, ctx context.Context, order sqlc.InsertOrderParams) (*proto.Order, error) {
+	fmt.Println("ServiceCreateOrder")
+	newOrder, err := queries.InsertOrder(ctx, sqlc.InsertOrderParams{
+		UserID:    order.UserID,
+		ProductID: order.ProductID,
+		Quantity:  order.Quantity,
+		OrderDate: order.OrderDate,
+	})
+	fmt.Println("newOrder", newOrder)
+	if err != nil {
+		return nil, err
+	}
+
+	return &proto.Order{
+		UserId:    newOrder.UserID,
+		OrderId:   newOrder.OrderID,
+		ProductId: newOrder.ProductID,
+		Quantity:  newOrder.Quantity,
+		OrderDate: newOrder.OrderDate,
+	}, nil
 }

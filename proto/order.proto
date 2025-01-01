@@ -30,4 +30,5 @@ message CreateOrderResponse {
 
 service OrdersService {
   rpc ListOrders(ListOrdersRequest) returns (stream ListOrdersResponse);
+  rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse);
 }
