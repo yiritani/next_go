@@ -43,9 +43,13 @@ unaryとserver streamingの2つを実装<br>
 ## ディレクトリ
 ```
 ├── apps
-│ ├── backend     # golang/gin
-│ └── frontend         # nextjs/App router
+│ ├── backend        # golang/gin
+│ ├── frontend       # nextjs/Page router
+│ ├── grpc_backend   # golang/gRPC(connect)
+│ ├── grpc_frontend  # nextjs/Page router/gRPC(connect)
+│ └── job            # golang/REST/gRPC
 ├── infra
-│ ├── development     # main resources
-│ └── atlantis         # atlantis resources
+│ ├── atlantis       # atlantis resources
+│ ├── terraform      
+│ │ ├── development
 ```
