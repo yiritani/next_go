@@ -1,7 +1,7 @@
 # Fullstack Template
 
 ## 構成
-
+![infra.png](assets/infra.png)
 ---
 
 ## コンセプト
