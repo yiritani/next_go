@@ -1,14 +1,15 @@
 # Fullstack Template
 
-## 構成
-![infra.png](assets/infra.png)
----
-
 ## コンセプト
 - Next.jsとgolang/ginを使ったフルスタック開発のテンプレート
 - RESTとgRPCのAPI両方を作成
 - terraformでGoogle Cloudに環境構築
 
+---
+## 構成
+![infra.png](assets/infra.png)
+
+---
 ## REST API
 ### Frontend: Next.js
 - ただbackendにgetリクエストするだけ
