@@ -1,11 +1,15 @@
 # Fullstack Template
 
+## 構成
+
+---
 
 ## コンセプト
 - Next.jsとgolang/ginを使ったフルスタック開発のテンプレート
-- Next.jsでは特段何もしておらず、主にgolangのスタートアップ
+- RESTとgRPCのAPI両方を作成
 - terraformでGoogle Cloudに環境構築
 
+## REST API
 ### Frontend: Next.js
 - ただbackendにgetリクエストするだけ
 ### Backend: golang/gin/sqlc
@@ -14,6 +18,21 @@
 - ローカルでは`air`でホットリロード。
 ### job: golang
 - ただbackendにgetリクエストするだけ
+
+---
+## gRPC
+unaryとserver streamingの2つを実装<br>
+### Frontend: Next.js
+- connectでリクエスト
+### Backend: golang/sqlc
+- connectのバックエンドを実装
+- それ以外はREST APIと同じ
+### protoフォルダの管理方法
+- root直下に配置して各app内にシンボリックリンクを張る
+- それぞれのappの言語で.pb生成コマンドを使用するのと、上位ディレクトリを参照するのが良くなさそうで。
+- .pbはローカルで生成してgit管理する
+
+---
 ### Infra: Terraform
 - Google Cloud Platform
 - [Atlantis](./infra/terraform/atlantis/README.md)
