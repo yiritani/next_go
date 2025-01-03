@@ -24,7 +24,7 @@
 ## gRPC
 unaryとserver streamingの2つを実装<br>
 ### Frontend: Next.js
-- connectでリクエスト
+- [Connect](./apps/grpc_frontend/README.md) でリクエスト
 ### Backend: golang/sqlc
 - connectのバックエンドを実装
 - それ以外はREST APIと同じ
