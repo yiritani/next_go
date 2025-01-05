@@ -21,12 +21,10 @@ func (server *Server) ControllerStreamOrdersByUserId(ctx *gin.Context) {
 		return
 	}
 
-	// 必要なヘッダーを設定
 	ctx.Writer.Header().Set("Content-Type", "text/event-stream")
 	ctx.Writer.Header().Set("Cache-Control", "no-cache")
 	ctx.Writer.Header().Set("Connection", "keep-alive")
 
-	// サービス層でデータ取得
 	orders, err := services.ServiceStreamOrdersByUserId(*server.Queries, ctx, userId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
@@ -36,16 +34,13 @@ func (server *Server) ControllerStreamOrdersByUserId(ctx *gin.Context) {
 		return
 	}
 
-	// クライアントにストリーミング
-	for order := range orders {
+	for _ = range orders {
 		select {
 		case <-ctx.Request.Context().Done():
 			log.Println("Client disconnected")
 			return
 		default:
-			// データをストリーム送信
-			fmt.Fprintf(ctx.Writer, "data: %s\n\n", order)
-			ctx.Writer.Flush() // 即時送信
+			ctx.Writer.Flush()
 		}
 	}
 }

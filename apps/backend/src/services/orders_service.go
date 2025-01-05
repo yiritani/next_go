@@ -24,10 +24,8 @@ func ServiceStreamOrdersByUserId(queries sqlc.Queries, ctx context.Context, user
 		return nil, err
 	}
 
-	// チャネル作成
 	orderStream := make(chan string)
 
-	// ゴルーチンで非同期ストリーミング
 	go func() {
 		defer close(orderStream)
 
@@ -41,16 +39,14 @@ func ServiceStreamOrdersByUserId(queries sqlc.Queries, ctx context.Context, user
 				OrderDate: order.OrderDate,
 			}
 
-			// JSON形式にエンコード
 			orderJSON, err := json.Marshal(orderResponse)
 			if err != nil {
 				log.Println("Error marshaling order:", err)
 				continue
 			}
 
-			// チャネルに送信
 			orderStream <- string(orderJSON)
-			time.Sleep(1 * time.Second) // 模擬的なストリーム間隔（不要なら削除）
+			time.Sleep(1 * time.Second)
 		}
 	}()
 
