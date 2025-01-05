@@ -34,12 +34,13 @@ func (server *Server) ControllerStreamOrdersByUserId(ctx *gin.Context) {
 		return
 	}
 
-	for _ = range orders {
+	for order := range orders {
 		select {
 		case <-ctx.Request.Context().Done():
 			log.Println("Client disconnected")
 			return
 		default:
+			fmt.Fprintf(ctx.Writer, "data: %s\n\n", order)
 			ctx.Writer.Flush()
 		}
 	}
