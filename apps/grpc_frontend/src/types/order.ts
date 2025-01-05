@@ -1,8 +1,8 @@
 export type Order = {
-  orderId: number;
-  userId: number;
+  order_id: number;
+  user_id: number;
   username: string;
-  productId: number;
+  product_id: number;
   quantity: number;
-  orderDate: string;
+  order_date: string;
 };

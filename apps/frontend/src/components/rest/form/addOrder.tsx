@@ -50,7 +50,7 @@ const AddOrder = (props: Props) => {
 
     try {
       const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/order/create`,
+        `${process.env.NEXT_PUBLIC_API_URL_REST}/api/v1/order/create`,
         postData,
       );
       if (res.status === 201) {

@@ -18,7 +18,8 @@ services:
           target: ./app/apps/frontend
     restart: always
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:8080
+      - NEXT_PUBLIC_API_URL_REST=http://localhost:8080
+      - NEXT_PUBLIC_API_URL_GRPC=http://localhost:8082
     volumes:
       - ./apps/frontend:/app
     depends_on:
@@ -39,7 +40,8 @@ services:
           target: ./app/apps/grpc_frontend
     restart: always
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:8082
+      - NEXT_PUBLIC_API_URL_REST=http://localhost:8080
+      - NEXT_PUBLIC_API_URL_GRPC=http://localhost:8082
     volumes:
       - ./apps/grpc_frontend:/app
     depends_on:

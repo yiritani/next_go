@@ -1,12 +1,11 @@
-import useSWR from 'swr';
 import { useEffect, useState } from 'react';
-import { orderFetcher } from '@/hooks/order-hook';
-import { Order } from '@/types/order';
-import { User } from '@/types/user';
 import { z } from 'zod';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import AddOrder from '@/pages/components/form/addOrder';
+import { User } from '@/_generated/user_pb';
+import { orderFetcher } from '@/hooks/grpc/order-hook';
+import { Order } from '@/_generated/order_pb';
+import AddOrder from '@/components/grpc/form/addOrder';
 
 type Props = {
   users: User[];
@@ -26,20 +25,32 @@ const Orders = (props: Props) => {
     },
   });
   const selectedUserId = watch('userId');
+  console.log('selectedUserId', selectedUserId);
 
-  const [fetchedData, setFetchedData] = useState<Order[]>([]);
-  const { data, error } = useSWR<Order[]>(
-    selectedUserId
-      ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/order/user/${selectedUserId}`
-      : null,
-    orderFetcher,
-  );
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (data) {
-      setFetchedData(data);
-    }
-  }, [data]);
+    setOrders([]);
+    const fetchOrders = async () => {
+      try {
+        const fetchedOrders: Order[] = [];
+        for await (const order of orderFetcher(BigInt(selectedUserId))) {
+          if (!order) {
+            break;
+          }
+          fetchedOrders.push(order);
+          setOrders([...fetchedOrders]);
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, [selectedUserId]);
 
   return (
     <>
@@ -54,7 +65,7 @@ const Orders = (props: Props) => {
             >
               {props.users &&
                 props.users.map((user) => (
-                  <option key={user.user_id} value={user.user_id}>
+                  <option key={user.userId} value={Number(user.userId)}>
                     {user.username}
                   </option>
                 ))}
@@ -62,8 +73,9 @@ const Orders = (props: Props) => {
           )}
         />
         <h1 className="text-2xl font-bold mb-4 text-left">User Data</h1>
-        {error && <p className="text-red-500 text-left">Error loading data</p>}
-        {fetchedData.length > 0 ? (
+        <p>Server streamで1秒ごとに取得</p>
+        {loading && <p className="text-gray-500 text-center">Loading...</p>}
+        {orders.length > 0 ? (
           <div className="max-w-screen-md ml-0">
             <table className="table-auto w-full border-collapse border border-gray-300">
               <thead>
@@ -80,23 +92,23 @@ const Orders = (props: Props) => {
                 </tr>
               </thead>
               <tbody>
-                {fetchedData &&
-                  fetchedData.map((user) => (
-                    <tr key={user.order_id} className="hover:bg-gray-100">
+                {orders &&
+                  orders.map((order) => (
+                    <tr key={order.orderId} className="hover:bg-gray-100">
                       <td className="border border-gray-300 px-4 py-2 text-center">
-                        {user.user_id}
+                        {order.userId}
                       </td>
                       <td className="border border-gray-300 px-4 py-2 text-center">
-                        {user.username}
+                        {order.username}
                       </td>
                       <td className="border border-gray-300 px-4 py-2 text-center">
-                        {user.product_id}
+                        {order.productId}
                       </td>
                       <td className="border border-gray-300 px-4 py-2 text-center">
-                        {user.quantity}
+                        {order.quantity}
                       </td>
                       <td className="border border-gray-300 px-4 py-2 text-center">
-                        {user.order_date}
+                        {order.orderDate}
                       </td>
                     </tr>
                   ))}
