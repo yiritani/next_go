@@ -1,6 +1,4 @@
-import useSWR from 'swr';
 import { useEffect, useState } from 'react';
-import { orderFetcher } from '@/hooks/rest/order-hook';
 import { Order } from '@/types/order';
 import { User } from '@/types/user';
 import { z } from 'zod';
@@ -30,11 +28,10 @@ const Orders = (props: Props) => {
   const [streamedOrders, setStreamedOrders] = useState<Order[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
 
-  useEffect(() => {
+  const reconnectStream = () => {
     if (!selectedUserId) return;
 
     setStreamedOrders([]);
-
     const eventSource = new EventSource(
       `${process.env.NEXT_PUBLIC_API_URL_REST}/api/v1/order/user/${selectedUserId}`,
     );
@@ -56,6 +53,10 @@ const Orders = (props: Props) => {
       eventSource.close();
       setIsStreaming(false);
     };
+  };
+
+  useEffect(() => {
+    reconnectStream();
   }, [selectedUserId]);
 
   return (
@@ -80,7 +81,10 @@ const Orders = (props: Props) => {
             )}
           />
           <div className={'pr-6'}>
-            <AddOrder userId={selectedUserId} />
+            <AddOrder
+              userId={selectedUserId}
+              onOrderCreated={reconnectStream}
+            />
           </div>
         </div>
         <h1 className="text-2xl font-bold mb-4 text-left">User Data</h1>

@@ -14,10 +14,10 @@ type IFormValues = z.infer<typeof postSchema>;
 
 type Props = {
   userId: number;
+  onOrderCreated: () => void;
 };
 
 const AddOrder = (props: Props) => {
-  // 成功メッセージの表示状態を管理
   const [showSuccess, setShowSuccess] = useState(false);
 
   const {
@@ -55,13 +55,13 @@ const AddOrder = (props: Props) => {
       );
       if (res.status === 201) {
         setShowSuccess(true);
+        props.onOrderCreated();
       }
       console.log('Order created successfully:', res.data);
     } catch (err) {
       console.error('Error creating order:', err);
     }
   };
-
   return (
     <div className="relative">
       <div
