@@ -2,7 +2,10 @@ package services
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"log"
+	"time"
 	"tutorial.sqlc.dev/app/src/sqlc"
 )
 
@@ -15,25 +18,43 @@ type OrderResponse struct {
 	OrderDate string `json:"order_date"`
 }
 
-func ServiceGetOrdersByUserId(queries sqlc.Queries, ctx context.Context, userId int64) ([]OrderResponse, error) {
+func ServiceStreamOrdersByUserId(queries sqlc.Queries, ctx context.Context, userId int64) (<-chan string, error) {
 	orders, err := queries.GetOrderByUserID(ctx, userId)
 	if err != nil {
 		return nil, err
 	}
 
-	var orderResponses []OrderResponse
-	for _, order := range orders {
-		orderResponses = append(orderResponses, OrderResponse{
-			UserID:    order.UserID,
-			Username:  order.Username,
-			OrderID:   order.OrderID,
-			ProductID: order.ProductID,
-			Quantity:  order.Quantity,
-			OrderDate: order.OrderDate,
-		})
-	}
+	// チャネル作成
+	orderStream := make(chan string)
 
-	return orderResponses, nil
+	// ゴルーチンで非同期ストリーミング
+	go func() {
+		defer close(orderStream)
+
+		for _, order := range orders {
+			orderResponse := OrderResponse{
+				UserID:    order.UserID,
+				Username:  order.Username,
+				OrderID:   order.OrderID,
+				ProductID: order.ProductID,
+				Quantity:  order.Quantity,
+				OrderDate: order.OrderDate,
+			}
+
+			// JSON形式にエンコード
+			orderJSON, err := json.Marshal(orderResponse)
+			if err != nil {
+				log.Println("Error marshaling order:", err)
+				continue
+			}
+
+			// チャネルに送信
+			orderStream <- string(orderJSON)
+			time.Sleep(1 * time.Second) // 模擬的なストリーム間隔（不要なら削除）
+		}
+	}()
+
+	return orderStream, nil
 }
 
 func ServiceCreateOrder(queries sqlc.Queries, ctx context.Context, order sqlc.InsertOrderParams) (OrderResponse, error) {

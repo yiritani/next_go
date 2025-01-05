@@ -15,7 +15,7 @@ func (p *PingServer) Ping(
 ) (*connect.Response[proto.PingResponse], error) {
 	log.Println("Ping")
 	res := connect.NewResponse(&proto.PingResponse{
-		Message: "Pong",
+		Message: "Pong from gRPC backend",
 	})
 	res.Header().Set("Content-Type", "application/json")
 	return res, nil

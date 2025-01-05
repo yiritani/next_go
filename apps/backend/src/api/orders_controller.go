@@ -10,27 +10,44 @@ import (
 	"tutorial.sqlc.dev/app/src/sqlc"
 )
 
-func (server *Server) ControllerGetOrdersByUserId(ctx *gin.Context) {
+func (server *Server) ControllerStreamOrdersByUserId(ctx *gin.Context) {
 	userIdParam := ctx.Param("userId")
 	userId, err := strconv.ParseInt(userIdParam, 10, 64)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": "Invalid user id",
 		})
-		log.Fatalln(err)
+		log.Println(err)
+		return
 	}
 
-	orders, err := services.ServiceGetOrdersByUserId(*server.Queries, ctx, userId)
+	// 必要なヘッダーを設定
+	ctx.Writer.Header().Set("Content-Type", "text/event-stream")
+	ctx.Writer.Header().Set("Cache-Control", "no-cache")
+	ctx.Writer.Header().Set("Connection", "keep-alive")
+
+	// サービス層でデータ取得
+	orders, err := services.ServiceStreamOrdersByUserId(*server.Queries, ctx, userId)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
-		log.Fatalln(err)
+		log.Println(err)
+		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"orders": orders,
-	})
+	// クライアントにストリーミング
+	for order := range orders {
+		select {
+		case <-ctx.Request.Context().Done():
+			log.Println("Client disconnected")
+			return
+		default:
+			// データをストリーム送信
+			fmt.Fprintf(ctx.Writer, "data: %s\n\n", order)
+			ctx.Writer.Flush() // 即時送信
+		}
+	}
 }
 
 func (server *Server) ControllerCreateOrder(ctx *gin.Context) {

@@ -9,7 +9,7 @@ func (server *Server) Routes() {
 	route := server.Router
 	route.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
+			"message": "Pong from REST backend",
 		})
 	})
 
@@ -27,6 +27,6 @@ func (server *Server) userRoutes(route *gin.RouterGroup) {
 func (server *Server) orderRoutes(route *gin.RouterGroup) {
 	orderRoute := route.Group("/order")
 
-	orderRoute.GET("/user/:userId", server.ControllerGetOrdersByUserId)
+	orderRoute.GET("/user/:userId", server.ControllerStreamOrdersByUserId)
 	orderRoute.POST("/create", server.ControllerCreateOrder)
 }

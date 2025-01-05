@@ -27,43 +27,65 @@ const Orders = (props: Props) => {
   });
   const selectedUserId = watch('userId');
 
-  const [fetchedData, setFetchedData] = useState<Order[]>([]);
-  const { data, error } = useSWR<Order[]>(
-    selectedUserId
-      ? `${process.env.NEXT_PUBLIC_API_URL_REST}/api/v1/order/user/${selectedUserId}`
-      : null,
-    orderFetcher,
-  );
+  const [streamedOrders, setStreamedOrders] = useState<Order[]>([]);
+  const [isStreaming, setIsStreaming] = useState(false);
 
   useEffect(() => {
-    if (data) {
-      setFetchedData(data);
-    }
-  }, [data]);
+    if (!selectedUserId) return;
+
+    setStreamedOrders([]);
+
+    const eventSource = new EventSource(
+      `${process.env.NEXT_PUBLIC_API_URL_REST}/api/v1/order/user/${selectedUserId}`,
+    );
+
+    setIsStreaming(true);
+
+    eventSource.onmessage = (event) => {
+      const newOrder: Order = JSON.parse(event.data);
+      setStreamedOrders((prevOrders) => [...prevOrders, newOrder]);
+    };
+
+    eventSource.onerror = () => {
+      console.error('Error connecting to SSE');
+      eventSource.close();
+      setIsStreaming(false);
+    };
+
+    return () => {
+      eventSource.close();
+      setIsStreaming(false);
+    };
+  }, [selectedUserId]);
 
   return (
     <>
       <div className="container mx-auto px-4">
-        <Controller
-          control={control}
-          name={'userId'}
-          render={({ field }) => (
-            <select
-              {...field}
-              className="border border-gray-300 rounded-md p-2"
-            >
-              {props.users &&
-                props.users.map((user) => (
-                  <option key={user.user_id} value={user.user_id}>
-                    {user.username}
-                  </option>
-                ))}
-            </select>
-          )}
-        />
+        <div className={'flex justify-between'}>
+          <Controller
+            control={control}
+            name={'userId'}
+            render={({ field }) => (
+              <select
+                {...field}
+                className="border border-gray-300 rounded-md p-2"
+              >
+                {props.users &&
+                  props.users.map((user) => (
+                    <option key={user.user_id} value={user.user_id}>
+                      {user.username}
+                    </option>
+                  ))}
+              </select>
+            )}
+          />
+          <div className={'pr-6'}>
+            <AddOrder userId={selectedUserId} />
+          </div>
+        </div>
         <h1 className="text-2xl font-bold mb-4 text-left">User Data</h1>
-        {error && <p className="text-red-500 text-left">Error loading data</p>}
-        {fetchedData.length > 0 ? (
+        <p>streamで1秒ごとに取得{isStreaming ?? ' 取得中'}</p>
+        {streamedOrders.length > 0 ? (
           <div className="max-w-screen-md ml-0">
             <table className="table-auto w-full border-collapse border border-gray-300">
               <thead>
@@ -80,23 +102,23 @@ const Orders = (props: Props) => {
                 </tr>
               </thead>
               <tbody>
-                {fetchedData &&
-                  fetchedData.map((user) => (
-                    <tr key={user.order_id} className="hover:bg-gray-100">
+                {streamedOrders &&
+                  streamedOrders.map((order) => (
+                    <tr key={order.order_id} className="hover:bg-gray-100">
                       <td className="border border-gray-300 px-4 py-2 text-center">
-                        {user.user_id}
+                        {order.user_id}
                       </td>
                       <td className="border border-gray-300 px-4 py-2 text-center">
-                        {user.username}
+                        {order.username}
                       </td>
                       <td className="border border-gray-300 px-4 py-2 text-center">
-                        {user.product_id}
+                        {order.product_id}
                       </td>
                       <td className="border border-gray-300 px-4 py-2 text-center">
-                        {user.quantity}
+                        {order.quantity}
                       </td>
                       <td className="border border-gray-300 px-4 py-2 text-center">
-                        {user.order_date}
+                        {order.order_date}
                       </td>
                     </tr>
                   ))}
@@ -106,9 +128,6 @@ const Orders = (props: Props) => {
         ) : (
           <p className="text-gray-500 text-center">No data available</p>
         )}
-      </div>
-      <div className={'pr-6'}>
-        <AddOrder userId={selectedUserId} />
       </div>
     </>
   );

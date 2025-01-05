@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { User } from '@/_generated/user_pb';
-import { orderFetcher } from '@/hooks/grpc/order-hook';
+import { orderFetcher } from '@/hooks/order-hook';
 import { Order } from '@/_generated/order_pb';
 import AddOrder from '@/components/grpc/form/addOrder';
 
@@ -25,7 +25,6 @@ const Orders = (props: Props) => {
     },
   });
   const selectedUserId = watch('userId');
-  console.log('selectedUserId', selectedUserId);
 
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(false);
@@ -55,23 +54,28 @@ const Orders = (props: Props) => {
   return (
     <>
       <div className="container mx-auto px-4">
-        <Controller
-          control={control}
-          name={'userId'}
-          render={({ field }) => (
-            <select
-              {...field}
-              className="border border-gray-300 rounded-md p-2"
-            >
-              {props.users &&
-                props.users.map((user) => (
-                  <option key={user.userId} value={Number(user.userId)}>
-                    {user.username}
-                  </option>
-                ))}
-            </select>
-          )}
-        />
+        <div className={'flex justify-between'}>
+          <Controller
+            control={control}
+            name={'userId'}
+            render={({ field }) => (
+              <select
+                {...field}
+                className="border border-gray-300 rounded-md p-2"
+              >
+                {props.users &&
+                  props.users.map((user) => (
+                    <option key={user.userId} value={Number(user.userId)}>
+                      {user.username}
+                    </option>
+                  ))}
+              </select>
+            )}
+          />
+          <div className={'pr-6'}>
+            <AddOrder userId={selectedUserId} />
+          </div>
+        </div>
         <h1 className="text-2xl font-bold mb-4 text-left">User Data</h1>
         <p>Server streamで1秒ごとに取得</p>
         {loading && <p className="text-gray-500 text-center">Loading...</p>}
@@ -118,9 +122,6 @@ const Orders = (props: Props) => {
         ) : (
           <p className="text-gray-500 text-center">No data available</p>
         )}
-      </div>
-      <div className={'pr-6'}>
-        <AddOrder userId={selectedUserId} />
       </div>
     </>
   );
