@@ -9,8 +9,8 @@ resource "google_cloud_run_service" "backend_grpc" {
       service_account_name = google_service_account.cloudrun_service_account.email
 
       containers {
-        image = "gcr.io/cloudrun/hello"
-        # image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}/backend-grpc"
+        # image = "gcr.io/cloudrun/hello"
+        image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}/backend-grpc"
         ports {
           container_port = 8080
         }

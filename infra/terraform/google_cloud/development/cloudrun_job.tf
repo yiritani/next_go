@@ -1,7 +1,7 @@
-resource "google_cloud_run_service" "backend_job" {
+resource "google_cloud_run_service" "job" {
   depends_on = [google_project_service.cloud_run_api]
 
-  name     = "${var.service_name}-cloudrun-backend-job"
+  name     = "${var.service_name}-cloudrun-job"
   location = var.region
 
   template {
@@ -10,7 +10,7 @@ resource "google_cloud_run_service" "backend_job" {
 
       containers {
         image = "gcr.io/cloudrun/hello"
-        # image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}/backend-job"
+        # image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}/job"
         ports {
           container_port = 8080
         }

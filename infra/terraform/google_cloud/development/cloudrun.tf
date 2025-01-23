@@ -18,8 +18,8 @@ resource "google_cloud_run_service" "backend" {
       containers {
         # TODO: こうすることで初回のterraform apply時にcloudbuildとの相互参照を回避できる
         # 2回目以降は正しいimageに変える
-        image = "gcr.io/cloudrun/hello"
-        # image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}/backend"
+        # image = "gcr.io/cloudrun/hello"
+        image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}/backend"
         ports {
           container_port = 8080
         }
@@ -53,10 +53,14 @@ resource "google_cloud_run_service" "frontend" {
       service_account_name = google_service_account.cloudrun_service_account.email
 
       containers {
-        image = "gcr.io/cloudrun/hello"
-        # image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}/frontend"
+        # image = "gcr.io/cloudrun/hello"
+        image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}/frontend"
         env {
-          name  = "NEXT_PUBLIC_API_URL"
+          name  = "NEXT_PUBLIC_API_URL_REST"
+          value = google_cloud_run_service.backend.status[0].url
+        }
+        env {
+          name  = "NEXT_PUBLIC_API_URL_GRPC"
           value = google_cloud_run_service.backend.status[0].url
         }
         ports {
@@ -94,6 +98,8 @@ resource "google_cloud_run_service_iam_policy" "noauth-frontend" {
 
 # Network Endpoint Group for Cloud Run (Serverless NEG)
 resource "google_compute_region_network_endpoint_group" "app" {
+  depends_on = [google_project_service.cloud_run_api]
+
   name                  = "neg-frontend"
   network_endpoint_type = "SERVERLESS"
   region                = var.region
