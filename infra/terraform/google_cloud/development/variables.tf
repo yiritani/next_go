@@ -1,6 +1,5 @@
 variable "project_id" {
   type        = string
-  default     = "next-go-446700"
 }
 
 variable "region" {

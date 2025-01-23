@@ -18,8 +18,8 @@ resource "google_cloud_run_service" "backend" {
       containers {
         # TODO: こうすることで初回のterraform apply時にcloudbuildとの相互参照を回避できる
         # 2回目以降は正しいimageに変える
-        # image = "gcr.io/cloudrun/hello"
-        image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}/backend"
+        image = "gcr.io/cloudrun/hello"
+        # image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}/backend"
         ports {
           container_port = 8080
         }
@@ -53,8 +53,8 @@ resource "google_cloud_run_service" "frontend" {
       service_account_name = google_service_account.cloudrun_service_account.email
 
       containers {
-        # image = "gcr.io/cloudrun/hello"
-        image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}/frontend"
+        image = "gcr.io/cloudrun/hello"
+        # image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}/frontend"
         env {
           name  = "NEXT_PUBLIC_API_URL"
           value = google_cloud_run_service.backend.status[0].url

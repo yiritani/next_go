@@ -1,3 +1,30 @@
+resource "google_cloud_run_service" "backend_job" {
+  depends_on = [google_project_service.cloud_run_api]
+
+  name     = "${var.service_name}-cloudrun-backend-job"
+  location = var.region
+
+  template {
+    spec {
+      service_account_name = google_service_account.cloudrun_service_account.email
+
+      containers {
+        image = "gcr.io/cloudrun/hello"
+        # image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}/backend-job"
+        ports {
+          container_port = 8080
+        }
+      }
+    }
+  }
+
+  metadata {
+    annotations = {
+      "run.googleapis.com/client-name" = "terraform"
+    }
+  }
+}
+
 resource "google_cloud_run_v2_job" "job" {
   name     = "${var.service_name}-cloudrun-job"
   location = var.region
