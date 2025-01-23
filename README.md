@@ -56,3 +56,7 @@ unaryとserver streamingの2つを実装<br>
 ```
 
 # App demo
+
+
+https://github.com/user-attachments/assets/825f0740-9856-47fb-b1dc-7c3b646b2988
+
