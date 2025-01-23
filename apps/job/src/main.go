@@ -15,9 +15,9 @@ func main() {
 
 func callSampleFetch() {
 	// 環境変数からURLを取得
-	url, ok := os.LookupEnv("NEXT_PUBLIC_API_URL")
+	url, ok := os.LookupEnv("NEXT_PUBLIC_API_URL_REST")
 	if !ok {
-		panic("NEXT_PUBLIC_API_URL is not set")
+		panic("NEXT_PUBLIC_API_URL_REST is not set")
 	}
 
 	fmt.Println("Request URL:", url+"/ping")

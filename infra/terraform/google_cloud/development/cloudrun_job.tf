@@ -11,8 +11,13 @@ resource "google_cloud_run_service" "job" {
       containers {
         image = "gcr.io/cloudrun/hello"
         # image = "${var.region}-docker.pkg.dev/${var.project_id}/${var.image_repo}/job"
-        ports {
-          container_port = 8080
+        env {
+          name  = "NEXT_PUBLIC_API_URL_REST"
+          value = google_cloud_run_service.backend.status[0].url
+        }
+        env {
+          name  = "NEXT_PUBLIC_API_URL_GRPC"
+          value = google_cloud_run_service.backend_grpc.status[0].url
         }
       }
     }
