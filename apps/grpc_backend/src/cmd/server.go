@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"golang.org/x/net/http2"
+	"golang.org/x/net/http2/h2c"
 	"grpc_backend/src/_generated/proto/v1/proto_v1connect"
 	"grpc_backend/src/sqlc"
 	"log"
@@ -37,12 +39,9 @@ func NewServer(queries *sqlc.Queries) *Server {
 	path, handler = proto_v1connect.NewOrdersServiceHandler(order)
 	mux.Handle(path, handler)
 
-	// corsHandler := withCORS(h2c.NewHandler(mux, &http2.Server{}))
+	corsHandler := withCORS(h2c.NewHandler(mux, &http2.Server{}))
 
-	rest := http.NewServeMux()
-	rest.Handle("/grpc/", http.StripPrefix("/grpc", mux))
-
-	if err := http.ListenAndServe(":8080", rest); err != nil {
+	if err := http.ListenAndServe(":8080", corsHandler); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}
 	return server

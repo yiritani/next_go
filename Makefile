@@ -26,6 +26,6 @@ server:
 	cd apps/backend && air -c .air.toml
 
 protoc_go:
-	protoc -I. --go_out=./apps/grpc_backend/src/ --go-grpc_out=./apps/grpc_backend/src/ proto/*.proto
+	cd apps/grpc_backend && buf generate
 protoc_job:
 	protoc -I. --go_out=./apps/job/src/ --go-grpc_out=./apps/job/src/ proto/*.proto
