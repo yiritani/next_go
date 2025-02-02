@@ -7,7 +7,11 @@
 
 ---
 ## 構成
-![infra.png](assets/infra.png)
+### モノリス版
+![monolith.png](assets/monolith.png)
+### マイクロサービス版
+![microservices.png](assets/microservices.png)
+
 
 ---
 ## REST API

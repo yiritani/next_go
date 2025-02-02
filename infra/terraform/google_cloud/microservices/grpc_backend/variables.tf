@@ -14,12 +14,6 @@ variable "dockerfile_backend_grpc" {
   default     = "apps/backend_grpc/Dockerfile"
 }
 
-variable "dockerfile_migration" {
-  description = "migrationのDockerfileパス"
-  type        = string
-  default     = "apps/backend/Dockerfile.migration"
-}
-
 variable "service_name" {
   description = "サービス名"
   type        = string
