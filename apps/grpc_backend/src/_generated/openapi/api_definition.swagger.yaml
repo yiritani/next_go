@@ -1,0 +1,85 @@
+swagger: "2.0"
+info:
+  title: proto/v1/order.proto
+  version: version not set
+tags:
+  - name: OrdersService
+  - name: PingService
+  - name: UserService
+consumes:
+  - application/json
+produces:
+  - application/json
+paths: {}
+definitions:
+  orderCreateOrderResponse:
+    type: object
+    properties:
+      Order:
+        $ref: '#/definitions/orderOrder'
+  orderListOrdersResponse:
+    type: object
+    properties:
+      Order:
+        $ref: '#/definitions/orderOrder'
+  orderOrder:
+    type: object
+    properties:
+      userId:
+        type: string
+        format: int64
+      orderId:
+        type: string
+        format: int64
+      username:
+        type: string
+      productId:
+        type: string
+        format: int64
+      quantity:
+        type: string
+        format: int64
+      orderDate:
+        type: string
+  pingPingResponse:
+    type: object
+    properties:
+      message:
+        type: string
+  protobufAny:
+    type: object
+    properties:
+      '@type':
+        type: string
+    additionalProperties: {}
+  rpcStatus:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      details:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/protobufAny'
+  userListUserResponse:
+    type: object
+    properties:
+      users:
+        type: array
+        items:
+          type: object
+          $ref: '#/definitions/userUser'
+  userUser:
+    type: object
+    properties:
+      userId:
+        type: string
+        format: int64
+      username:
+        type: string
+      email:
+        type: string

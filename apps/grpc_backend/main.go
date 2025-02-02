@@ -1,7 +1,7 @@
 package main
 
 import (
-	"grpc_backend/src/controller"
+	"grpc_backend/src/cmd"
 	"grpc_backend/src/sqlc"
 )
 
@@ -13,5 +13,5 @@ func main() {
 
 	queries := sqlc.New(conn)
 
-	controller.NewServer(queries)
+	cmd.NewServer(queries)
 }

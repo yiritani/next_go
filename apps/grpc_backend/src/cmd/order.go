@@ -1,4 +1,4 @@
-package controller
+package cmd
 
 import (
 	"connectrpc.com/connect"

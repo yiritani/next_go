@@ -1,12 +1,13 @@
-package controller
+package cmd
 
 import (
-	"connectrpc.com/connect"
 	"context"
 	"grpc_backend/src/_generated/proto"
 	"grpc_backend/src/services"
 	"grpc_backend/src/sqlc"
 	"log"
+
+	"connectrpc.com/connect"
 )
 
 type UserServer struct {

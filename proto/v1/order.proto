@@ -1,7 +1,7 @@
 syntax = "proto3";
 
-package grpc_backend.v1;
-option go_package = "grpc_backend/src/_generated/proto";
+package api.v1.order;
+option go_package = "grpc_backend/src/_generated/proto/v1;proto_v1";
 
 message Order {
   int64 user_id = 1;

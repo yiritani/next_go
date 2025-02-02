@@ -1,4 +1,4 @@
-package controller
+package cmd
 
 import (
 	connectcors "connectrpc.com/cors"
