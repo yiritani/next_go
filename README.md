@@ -36,7 +36,7 @@ unaryとserver streamingの2つを実装<br>
 ---
 ### Infra: Terraform
 - Google Cloud Platform
-- [Atlantis](./infra/terraform/atlantis/README.md)
+- Atlantis[Demo](./infra/terraform/atlantis/README.md)
 
 ### Database: PostgreSQL, sqlite
 - お金をかけたくない時期はsqliteを使用
