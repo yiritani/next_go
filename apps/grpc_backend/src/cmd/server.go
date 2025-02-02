@@ -1,14 +1,13 @@
 package cmd
 
 import (
-	connectcors "connectrpc.com/cors"
-	"github.com/rs/cors"
-	"golang.org/x/net/http2"
-	"golang.org/x/net/http2/h2c"
-	"grpc_backend/src/_generated/proto/protoconnect"
+	"grpc_backend/src/_generated/proto/v1/proto_v1connect"
 	"grpc_backend/src/sqlc"
 	"log"
 	"net/http"
+
+	connectcors "connectrpc.com/cors"
+	"github.com/rs/cors"
 )
 
 type Server struct {
@@ -25,22 +24,25 @@ func NewServer(queries *sqlc.Queries) *Server {
 	server.Queries = queries
 
 	ping := &PingServer{}
-	path, handler := protoconnect.NewPingServiceHandler(ping)
+	path, handler := proto_v1connect.NewPingServiceHandler(ping)
 	mux.Handle(path, handler)
 	user := &UserServer{
 		Queries: queries,
 	}
-	path, handler = protoconnect.NewUserServiceHandler(user)
+	path, handler = proto_v1connect.NewUserServiceHandler(user)
 	mux.Handle(path, handler)
 	order := &OrderServer{
 		Queries: queries,
 	}
-	path, handler = protoconnect.NewOrdersServiceHandler(order)
+	path, handler = proto_v1connect.NewOrdersServiceHandler(order)
 	mux.Handle(path, handler)
 
-	corsHandler := withCORS(h2c.NewHandler(mux, &http2.Server{}))
+	// corsHandler := withCORS(h2c.NewHandler(mux, &http2.Server{}))
 
-	if err := http.ListenAndServe(":8080", corsHandler); err != nil {
+	rest := http.NewServeMux()
+	rest.Handle("/grpc/", http.StripPrefix("/grpc", mux))
+
+	if err := http.ListenAndServe(":8080", rest); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}
 	return server

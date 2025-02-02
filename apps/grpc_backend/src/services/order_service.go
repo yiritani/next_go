@@ -3,7 +3,7 @@ package services
 import (
 	"context"
 	"fmt"
-	"grpc_backend/src/_generated/proto"
+	proto "grpc_backend/src/_generated/proto/v1"
 	"grpc_backend/src/sqlc"
 )
 

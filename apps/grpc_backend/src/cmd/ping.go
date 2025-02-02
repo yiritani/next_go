@@ -3,7 +3,7 @@ package cmd
 import (
 	"connectrpc.com/connect"
 	"context"
-	"grpc_backend/src/_generated/proto"
+	proto "grpc_backend/src/_generated/proto/v1"
 	"log"
 )
 

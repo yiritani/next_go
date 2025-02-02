@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"context"
-	"grpc_backend/src/_generated/proto"
+	proto "grpc_backend/src/_generated/proto/v1"
 	"grpc_backend/src/services"
 	"grpc_backend/src/sqlc"
 	"log"
