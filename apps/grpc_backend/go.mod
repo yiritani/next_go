@@ -6,6 +6,8 @@ require (
 	connectrpc.com/connect v1.17.0
 	connectrpc.com/cors v0.1.0
 	github.com/rs/cors v1.11.1
+	golang.org/x/net v0.30.0
+	google.golang.org/genproto/googleapis/api v0.0.0-20241015192408-796eee8c2d53
 	google.golang.org/grpc v1.69.2
 	google.golang.org/protobuf v1.36.1
 	modernc.org/sqlite v1.34.4
@@ -18,7 +20,6 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/ncruces/go-strftime v0.1.9 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
-	golang.org/x/net v0.30.0 // indirect
 	golang.org/x/sys v0.26.0 // indirect
 	golang.org/x/text v0.19.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20241015192408-796eee8c2d53 // indirect
