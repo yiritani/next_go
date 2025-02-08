@@ -3,6 +3,8 @@ syntax = "proto3";
 package api.v1.user;
 option go_package = "grpc_backend/src/_generated/proto/v1;proto_v1";
 
+import "google/api/annotations.proto";
+
 message User {
   int64 user_id = 1;
   string username = 2;
@@ -15,5 +17,10 @@ message ListUserResponse {
 }
 
 service UserService {
-  rpc ListUsers(ListUserRequest) returns (ListUserResponse);
+  rpc ListUsers(ListUserRequest) returns (ListUserResponse){
+    option (google.api.http) = {
+      post: "/api.v1.user.UserService/ListUsers"
+      body: "*"
+    };
+  }
 }

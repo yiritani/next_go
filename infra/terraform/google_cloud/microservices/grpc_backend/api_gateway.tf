@@ -39,7 +39,7 @@ resource "google_api_gateway_gateway" "gateway" {
   depends_on = [google_api_gateway_api_config.config, google_project_service.api_gateway_api]
   provider = google-beta
   project = var.project_id
-  gateway_id = "backend-gateway"
+  gateway_id = "grpc-backend-gateway"
   api_config = google_api_gateway_api_config.config.id
   region = "us-central1"
 }

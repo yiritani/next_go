@@ -23,6 +23,12 @@ func (p *OrderServer) ListOrders(
 	req *connect.Request[proto.ListOrdersRequest],
 	stream *connect.ServerStream[proto.ListOrdersResponse]) error {
 	log.Println("Called Order")
+	if req == nil {
+		return connect.NewError(connect.CodeInvalidArgument, fmt.Errorf("request cannot be nil"))
+	}
+	if req.Msg == nil {
+		return connect.NewError(connect.CodeInvalidArgument, fmt.Errorf("ListOrdersRequest cannot be nil"))
+	}
 
 	userId := req.Msg.UserId
 	fmt.Println("User ID: ", userId)
@@ -58,6 +64,12 @@ func (p *OrderServer) CreateOrder(
 	ctx context.Context,
 	req *connect.Request[proto.CreateOrderRequest]) (*connect.Response[proto.CreateOrderResponse], error) {
 	log.Println("Called Create Order")
+	if req == nil {
+		return nil, connect.NewError(connect.CodeInvalidArgument, fmt.Errorf("request cannot be nil"))
+	}
+	if req.Msg == nil {
+		return nil, connect.NewError(connect.CodeInvalidArgument, fmt.Errorf("CreateOrderRequest cannot be nil"))
+	}
 
 	var order sqlc.InsertOrderParams
 	order.UserID = req.Msg.UserId
