@@ -21,4 +21,12 @@ service PingService {
       body: "*"
     };
   }
+
+  rpc PingSample(PingRequest) returns (PingResponse){
+    option (google.api.http) = {
+      post: "/api.v1.ping.PingService/PingSample"
+      body: "*"
+    };
+  }
 }
+// aaa
