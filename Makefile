@@ -29,3 +29,6 @@ protoc_go:
 	cd apps/grpc_backend && buf generate
 protoc_job:
 	protoc -I. --go_out=./apps/job/src/ --go-grpc_out=./apps/job/src/ proto/*.proto
+
+pull_protos:
+	git subtree pull --prefix=protos git@github.com:yiritani/next_go_proto.git main --squash
