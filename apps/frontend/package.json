@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "gen": "grpc_tools_node_protoc --js_out=import_style=commonjs,binary:./src/_generated --grpc_out=grpc_js:./src/_generated --plugin=protoc-gen-grpc=./node_modules/.bin/grpc_tools_node_protoc_plugin --ts_out=grpc_js:./src/_generated -I ../../proto ../../proto/*.proto"
+    "gen": "buf generate ."
   },
   "dependencies": {
     "@buf/connectrpc_eliza.bufbuild_es": "2.2.3-20230913231627-233fca715f49.1",

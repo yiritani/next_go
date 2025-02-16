@@ -1,4 +1,4 @@
-import { User } from '@/_generated/user_pb';
+import { User } from '@/_generated/proto/v1/user_pb';
 
 type Props = {
   users: User[];

@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { z } from 'zod';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { User } from '@/_generated/user_pb';
-import { orderFetcher } from '@/hooks/order-hook';
-import { Order } from '@/_generated/order_pb';
+import { User } from '@/_generated/proto/v1/user_pb';
+import { orderFetcher } from '@/hooks/grpc/order-hook';
+import { Order } from '@/_generated/proto/v1/order_pb';
 import AddOrder from '@/components/grpc/form/addOrder';
 
 type Props = {

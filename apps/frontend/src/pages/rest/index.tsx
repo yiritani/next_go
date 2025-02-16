@@ -1,6 +1,5 @@
 import Ping from '@/components/rest/ping';
 import Users from '@/components/rest/users';
-import Orders from '@/components/rest/orders';
 import { useState } from 'react';
 import { User } from '@/types/user';
 import useSWR from 'swr';
@@ -37,7 +36,10 @@ export default function Rest() {
           <Users users={users} />
         </div>
         <div className="flex-1 bg-blue-200 flex items-start justify-start pl-10 pt-10">
-          <Orders users={users} />
+          <div>
+            <p>connect restだとpostのserver streamができず</p>
+          </div>
+          {/* <Orders users={users} /> */}
         </div>
       </div>
     </>

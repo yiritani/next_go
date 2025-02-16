@@ -25,6 +25,8 @@ test:
 server:
 	cd apps/backend && air -c .air.toml
 
+protoc_frontend:
+	cd apps/frontend && sh buf_gen.sh
 protoc_go:
 	cd apps/grpc_backend && buf generate
 protoc_job:

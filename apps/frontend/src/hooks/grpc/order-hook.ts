@@ -1,5 +1,5 @@
 import { createClient } from '@connectrpc/connect';
-import { OrdersService } from '@/_generated/order_pb';
+import { OrdersService } from '@/_generated/proto/v1/order_pb';
 import { transport } from '@/lib/connect_client';
 
 const client = createClient(OrdersService, transport);
