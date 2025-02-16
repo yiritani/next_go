@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Order } from '@/types/order';
 import { User } from '@/types/user';
 import { z } from 'zod';
@@ -28,36 +28,32 @@ const Orders = (props: Props) => {
   const [streamedOrders, setStreamedOrders] = useState<Order[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
 
-  const reconnectStream = () => {
+  const reconnectStream = useCallback(async () => {
     if (!selectedUserId) return;
 
     setStreamedOrders([]);
-    const eventSource = new EventSource(
-      `${process.env.NEXT_PUBLIC_API_URL_REST}/api/v1/order/user/${selectedUserId}`,
+
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL_GRPC}/api.v1.order.OrdersService/ListOrders`,
+      {
+        method: 'POST',
+        body: JSON.stringify({ user_id: selectedUserId }),
+      },
     );
+
+    const data = await res.json();
+    setStreamedOrders(data.orders);
 
     setIsStreaming(true);
 
-    eventSource.onmessage = (event) => {
-      const newOrder: Order = JSON.parse(event.data);
-      setStreamedOrders((prevOrders) => [...prevOrders, newOrder]);
-    };
-
-    eventSource.onerror = () => {
-      console.error('Error connecting to SSE');
-      eventSource.close();
-      setIsStreaming(false);
-    };
-
     return () => {
-      eventSource.close();
       setIsStreaming(false);
     };
-  };
+  }, [selectedUserId]);
 
   useEffect(() => {
     reconnectStream();
-  }, [selectedUserId]);
+  }, [selectedUserId, reconnectStream]);
 
   return (
     <>

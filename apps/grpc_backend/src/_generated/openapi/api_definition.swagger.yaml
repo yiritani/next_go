@@ -77,6 +77,26 @@ paths:
             $ref: '#/definitions/pingPingRequest'
       tags:
         - PingService
+  /api.v1.ping.PingService/PingSample:
+    post:
+      operationId: PingService_PingSample
+      responses:
+        "200":
+          description: A successful response.
+          schema:
+            $ref: '#/definitions/pingPingResponse'
+        default:
+          description: An unexpected error response.
+          schema:
+            $ref: '#/definitions/rpcStatus'
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/pingPingRequest'
+      tags:
+        - PingService
   /api.v1.user.UserService/ListUsers:
     post:
       operationId: UserService_ListUsers

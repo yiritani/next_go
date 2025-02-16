@@ -1,5 +1,5 @@
 import Grpc from '@/pages/grpc';
-import Rest from '@/pages/rest';
+import Rest from './rest';
 
 export default function Home() {
   return (

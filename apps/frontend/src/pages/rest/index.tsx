@@ -1,6 +1,5 @@
 import Ping from '@/components/rest/ping';
 import Users from '@/components/rest/users';
-import Orders from '@/components/rest/orders';
 import { useState } from 'react';
 import { User } from '@/types/user';
 import useSWR from 'swr';
@@ -9,7 +8,7 @@ import { userFetcher } from '@/hooks/rest/user-hook';
 export default function Rest() {
   const [users, setUsers] = useState<User[]>([]);
   const { data, error } = useSWR<User[]>(
-    `${process.env.NEXT_PUBLIC_API_URL_REST}/api/v1/user/list`,
+    `${process.env.NEXT_PUBLIC_API_URL_GRPC}/api.v1.user.UserService/ListUsers`,
     userFetcher,
   );
   if (data && users.length === 0) {
@@ -37,7 +36,10 @@ export default function Rest() {
           <Users users={users} />
         </div>
         <div className="flex-1 bg-blue-200 flex items-start justify-start pl-10 pt-10">
-          <Orders users={users} />
+          <div>
+            <p>connect restだとpostのserver streamができず</p>
+          </div>
+          {/* <Orders users={users} /> */}
         </div>
       </div>
     </>

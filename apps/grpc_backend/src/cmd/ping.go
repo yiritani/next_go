@@ -28,3 +28,13 @@ func (p *PingServer) Ping(
 	res.Header().Set("Content-Type", "application/json")
 	return res, nil
 }
+
+// protoに定義されている関数はすべて実装しないとエラーになる
+func (p *PingServer) PingSample(
+	ctx context.Context,
+	req *connect.Request[proto.PingRequest],
+) (*connect.Response[proto.PingResponse], error) {
+	return connect.NewResponse(&proto.PingResponse{
+		Message: "PingSample",
+	}), nil
+}

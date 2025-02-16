@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { createClient } from '@connectrpc/connect';
-import { PingService } from '@/_generated/ping_pb';
+import { PingService } from '@/_generated/proto/v1/ping_pb';
 import { transport } from '@/lib/connect_client';
 
 const Ping = () => {

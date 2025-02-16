@@ -35,11 +35,14 @@ const (
 const (
 	// PingServicePingProcedure is the fully-qualified name of the PingService's Ping RPC.
 	PingServicePingProcedure = "/api.v1.ping.PingService/Ping"
+	// PingServicePingSampleProcedure is the fully-qualified name of the PingService's PingSample RPC.
+	PingServicePingSampleProcedure = "/api.v1.ping.PingService/PingSample"
 )
 
 // PingServiceClient is a client for the api.v1.ping.PingService service.
 type PingServiceClient interface {
 	Ping(context.Context, *connect.Request[v1.PingRequest]) (*connect.Response[v1.PingResponse], error)
+	PingSample(context.Context, *connect.Request[v1.PingRequest]) (*connect.Response[v1.PingResponse], error)
 }
 
 // NewPingServiceClient constructs a client for the api.v1.ping.PingService service. By default, it
@@ -59,12 +62,19 @@ func NewPingServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 			connect.WithSchema(pingServiceMethods.ByName("Ping")),
 			connect.WithClientOptions(opts...),
 		),
+		pingSample: connect.NewClient[v1.PingRequest, v1.PingResponse](
+			httpClient,
+			baseURL+PingServicePingSampleProcedure,
+			connect.WithSchema(pingServiceMethods.ByName("PingSample")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
 // pingServiceClient implements PingServiceClient.
 type pingServiceClient struct {
-	ping *connect.Client[v1.PingRequest, v1.PingResponse]
+	ping       *connect.Client[v1.PingRequest, v1.PingResponse]
+	pingSample *connect.Client[v1.PingRequest, v1.PingResponse]
 }
 
 // Ping calls api.v1.ping.PingService.Ping.
@@ -72,9 +82,15 @@ func (c *pingServiceClient) Ping(ctx context.Context, req *connect.Request[v1.Pi
 	return c.ping.CallUnary(ctx, req)
 }
 
+// PingSample calls api.v1.ping.PingService.PingSample.
+func (c *pingServiceClient) PingSample(ctx context.Context, req *connect.Request[v1.PingRequest]) (*connect.Response[v1.PingResponse], error) {
+	return c.pingSample.CallUnary(ctx, req)
+}
+
 // PingServiceHandler is an implementation of the api.v1.ping.PingService service.
 type PingServiceHandler interface {
 	Ping(context.Context, *connect.Request[v1.PingRequest]) (*connect.Response[v1.PingResponse], error)
+	PingSample(context.Context, *connect.Request[v1.PingRequest]) (*connect.Response[v1.PingResponse], error)
 }
 
 // NewPingServiceHandler builds an HTTP handler from the service implementation. It returns the path
@@ -90,10 +106,18 @@ func NewPingServiceHandler(svc PingServiceHandler, opts ...connect.HandlerOption
 		connect.WithSchema(pingServiceMethods.ByName("Ping")),
 		connect.WithHandlerOptions(opts...),
 	)
+	pingServicePingSampleHandler := connect.NewUnaryHandler(
+		PingServicePingSampleProcedure,
+		svc.PingSample,
+		connect.WithSchema(pingServiceMethods.ByName("PingSample")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/api.v1.ping.PingService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case PingServicePingProcedure:
 			pingServicePingHandler.ServeHTTP(w, r)
+		case PingServicePingSampleProcedure:
+			pingServicePingSampleHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -105,4 +129,8 @@ type UnimplementedPingServiceHandler struct{}
 
 func (UnimplementedPingServiceHandler) Ping(context.Context, *connect.Request[v1.PingRequest]) (*connect.Response[v1.PingResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.v1.ping.PingService.Ping is not implemented"))
+}
+
+func (UnimplementedPingServiceHandler) PingSample(context.Context, *connect.Request[v1.PingRequest]) (*connect.Response[v1.PingResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.v1.ping.PingService.PingSample is not implemented"))
 }

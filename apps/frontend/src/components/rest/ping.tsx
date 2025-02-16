@@ -3,7 +3,16 @@ import { useState } from 'react';
 const Ping = () => {
   const [fetchedData, setFetchedData] = useState(null);
   const fetchPing = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL_REST}/ping`);
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL_GRPC}/api.v1.ping.PingService/Ping`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: 'Ping' }),
+      },
+    );
     const data = await res.json();
     setFetchedData(data.message);
   };
