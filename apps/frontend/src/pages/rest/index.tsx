@@ -9,7 +9,7 @@ import { userFetcher } from '@/hooks/rest/user-hook';
 export default function Rest() {
   const [users, setUsers] = useState<User[]>([]);
   const { data, error } = useSWR<User[]>(
-    `${process.env.NEXT_PUBLIC_API_URL_REST}/api/v1/user/list`,
+    `${process.env.NEXT_PUBLIC_API_URL_GRPC}/api.v1.user.UserService/ListUsers`,
     userFetcher,
   );
   if (data && users.length === 0) {
