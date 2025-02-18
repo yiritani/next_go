@@ -7,9 +7,7 @@
 
 ---
 ## 構成
-### モノリス版
-![monolith.png](assets/monolith.png)
-### マイクロサービス版
+※ Googlo Cloud 2, 3 は予定
 ![microservices.png](assets/microservices.png)
 
 
@@ -33,13 +31,13 @@ unaryとserver streamingの2つを実装<br>
 - connectのバックエンドを実装
 - それ以外はREST APIと同じ
 ### protoフォルダの管理方法
-- root直下に配置して各app内にシンボリックリンクを張る
+- root直下にsubtreeとして配置して各app内にシンボリックリンクを張る
 - それぞれのappの言語で.pb生成コマンドを使用するのと、上位ディレクトリを参照するのが良くなさそうで。
 - .pbはローカルで生成してgit管理する
 
 ---
 ### Infra: Terraform
-- Google Cloud Platform
+- Google Cloud
 - Atlantis [Demo](./infra/terraform/atlantis/README.md)
 
 ### Database: PostgreSQL, sqlite

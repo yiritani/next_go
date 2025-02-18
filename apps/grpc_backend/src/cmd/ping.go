@@ -29,7 +29,7 @@ func (p *PingServer) Ping(
 	return res, nil
 }
 
-// protoに定義されている関数はすべて実装しないとエラーになる
+// どうやらprotoに定義されている関数はすべて実装しないとエラーになる
 func (p *PingServer) PingSample(
 	ctx context.Context,
 	req *connect.Request[proto.PingRequest],
