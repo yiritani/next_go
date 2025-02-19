@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { User } from '@/_generated/user_pb';
+import { User } from '@/_generated/proto/v1/user_pb';
 import { userFetcher } from '@/hooks/grpc/user-hook';
 import { useState } from 'react';
 import Users from '@/components/grpc/users';
