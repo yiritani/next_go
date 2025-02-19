@@ -14,6 +14,12 @@ variable "dockerfile_backend_grpc" {
   default     = "apps/backend_grpc/Dockerfile"
 }
 
+variable "dockerfile_frontend" {
+  description = "フロントエンドのDockerfileパス"
+  type        = string
+  default     = "apps/frontend/Dockerfile"
+}
+
 variable "service_name" {
   description = "サービス名"
   type        = string

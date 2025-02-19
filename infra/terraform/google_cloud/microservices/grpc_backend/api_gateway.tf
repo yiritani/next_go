@@ -21,10 +21,10 @@ resource "google_api_gateway_api_config" "config" {
 
   openapi_documents {
     document {
-      path = "../../../../apps/grpc_backend/src/_generated/openapi/api_definition.swagger.yaml"
+      path = "../../../../../apps/grpc_backend/src/_generated/openapi/api_definition.swagger.yaml"
       contents = base64encode(
         join("\n", [
-          file("../../../../apps/grpc_backend/src/_generated/openapi/api_definition.swagger.yaml"),
+          file("../../../../../apps/grpc_backend/src/_generated/openapi/api_definition.swagger.yaml"),
           "x-google-backend:",
           "  address: ${google_cloud_run_service.backend_grpc.status[0].url}",
           "  protocol: h2",
