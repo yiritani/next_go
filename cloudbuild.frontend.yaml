@@ -10,8 +10,6 @@ steps:
       - '--cache-from'
       - '${_IMAGE}:latest'
       - '--build-arg'
-      - 'NEXT_PUBLIC_API_URL_REST=${_NEXT_PUBLIC_API_URL_REST}'
-      - '--build-arg'
       - 'NEXT_PUBLIC_API_URL_GRPC=${_NEXT_PUBLIC_API_URL_GRPC}'
   - name: 'gcr.io/cloud-builders/docker'
     args:
