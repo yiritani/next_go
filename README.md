@@ -7,16 +7,14 @@
 
 ---
 ## 構成
-※ Googlo Cloud 2, 3 は予定
+※ Google Cloud 2以降 は予定
 ![microservices.png](assets/microservices.png)
-
 
 ---
 ## REST API
 ### Frontend: Next.js
 - ただbackendにgetリクエストするだけ
-### Backend: golang/gin/sqlc
-- Framework: Gin
+### Backend: golang/sqlc
 - SQL Builder: sqlc
 - ローカルでは`air`でホットリロード。
 ### job: golang
@@ -46,7 +44,6 @@ unaryとserver streamingの2つを実装<br>
 ## ディレクトリ
 ```
 ├── apps
-│ ├── backend        # golang/gin
 │ ├── frontend       # nextjs/Page router
 │ ├── grpc_backend   # golang/gRPC(connect)
 │ ├── grpc_frontend  # nextjs/Page router/gRPC(connect)
