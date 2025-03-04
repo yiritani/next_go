@@ -1,8 +1,10 @@
 syntax = "proto3";
 
-package api.v1.ping;
+package next_go_anex.api.v1.ping;
 
 option go_package = "backend/src/_generated/proto/v1;proto_v1";
+
+import "google/api/annotations.proto";
 
 message PingRequest {
   string message = 1;
@@ -14,5 +16,9 @@ message PingResponse {
 
 service PingService {
   rpc Ping(PingRequest) returns (PingResponse){
+    option (google.api.http) = {
+      post: "/api.v1.ping.PingService/Ping"
+      body: "*"
+    };
   }
 }
