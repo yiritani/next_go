@@ -22,7 +22,7 @@ const _ = connect.IsAtLeastVersion1_13_0
 
 const (
 	// UserServiceName is the fully-qualified name of the UserService service.
-	UserServiceName = "next_go.api.v1.UserService"
+	UserServiceName = "api.v1.user.UserService"
 )
 
 // These constants are the fully-qualified names of the RPCs defined in this package. They're
@@ -34,18 +34,18 @@ const (
 // period.
 const (
 	// UserServiceListUsersProcedure is the fully-qualified name of the UserService's ListUsers RPC.
-	UserServiceListUsersProcedure = "/next_go.api.v1.UserService/ListUsers"
+	UserServiceListUsersProcedure = "/api.v1.user.UserService/ListUsers"
 )
 
-// UserServiceClient is a client for the next_go.api.v1.UserService service.
+// UserServiceClient is a client for the api.v1.user.UserService service.
 type UserServiceClient interface {
 	ListUsers(context.Context, *connect.Request[v1.ListUserRequest]) (*connect.Response[v1.ListUserResponse], error)
 }
 
-// NewUserServiceClient constructs a client for the next_go.api.v1.UserService service. By default,
-// it uses the Connect protocol with the binary Protobuf Codec, asks for gzipped responses, and
-// sends uncompressed requests. To use the gRPC or gRPC-Web protocols, supply the connect.WithGRPC()
-// or connect.WithGRPCWeb() options.
+// NewUserServiceClient constructs a client for the api.v1.user.UserService service. By default, it
+// uses the Connect protocol with the binary Protobuf Codec, asks for gzipped responses, and sends
+// uncompressed requests. To use the gRPC or gRPC-Web protocols, supply the connect.WithGRPC() or
+// connect.WithGRPCWeb() options.
 //
 // The URL supplied here should be the base URL for the Connect or gRPC server (for example,
 // http://api.acme.com or https://acme.com/grpc).
@@ -67,12 +67,12 @@ type userServiceClient struct {
 	listUsers *connect.Client[v1.ListUserRequest, v1.ListUserResponse]
 }
 
-// ListUsers calls next_go.api.v1.UserService.ListUsers.
+// ListUsers calls api.v1.user.UserService.ListUsers.
 func (c *userServiceClient) ListUsers(ctx context.Context, req *connect.Request[v1.ListUserRequest]) (*connect.Response[v1.ListUserResponse], error) {
 	return c.listUsers.CallUnary(ctx, req)
 }
 
-// UserServiceHandler is an implementation of the next_go.api.v1.UserService service.
+// UserServiceHandler is an implementation of the api.v1.user.UserService service.
 type UserServiceHandler interface {
 	ListUsers(context.Context, *connect.Request[v1.ListUserRequest]) (*connect.Response[v1.ListUserResponse], error)
 }
@@ -90,7 +90,7 @@ func NewUserServiceHandler(svc UserServiceHandler, opts ...connect.HandlerOption
 		connect.WithSchema(userServiceMethods.ByName("ListUsers")),
 		connect.WithHandlerOptions(opts...),
 	)
-	return "/next_go.api.v1.UserService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	return "/api.v1.user.UserService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case UserServiceListUsersProcedure:
 			userServiceListUsersHandler.ServeHTTP(w, r)
@@ -104,5 +104,5 @@ func NewUserServiceHandler(svc UserServiceHandler, opts ...connect.HandlerOption
 type UnimplementedUserServiceHandler struct{}
 
 func (UnimplementedUserServiceHandler) ListUsers(context.Context, *connect.Request[v1.ListUserRequest]) (*connect.Response[v1.ListUserResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("next_go.api.v1.UserService.ListUsers is not implemented"))
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.v1.user.UserService.ListUsers is not implemented"))
 }

@@ -19,7 +19,7 @@ paths:
         "200":
           description: A successful response.
           schema:
-            $ref: '#/definitions/v1CreateOrderResponse'
+            $ref: '#/definitions/orderCreateOrderResponse'
         default:
           description: An unexpected error response.
           schema:
@@ -29,7 +29,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/v1CreateOrderRequest'
+            $ref: '#/definitions/orderCreateOrderRequest'
       tags:
         - OrdersService
   /api.v1.order.OrdersService/ListOrders:
@@ -42,10 +42,10 @@ paths:
             type: object
             properties:
               result:
-                $ref: '#/definitions/v1ListOrdersResponse'
+                $ref: '#/definitions/orderListOrdersResponse'
               error:
                 $ref: '#/definitions/rpcStatus'
-            title: Stream result of v1ListOrdersResponse
+            title: Stream result of orderListOrdersResponse
         default:
           description: An unexpected error response.
           schema:
@@ -55,7 +55,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/v1ListOrdersRequest'
+            $ref: '#/definitions/orderListOrdersRequest'
       tags:
         - OrdersService
   /api.v1.ping.PingService/Ping:
@@ -65,7 +65,7 @@ paths:
         "200":
           description: A successful response.
           schema:
-            $ref: '#/definitions/v1pingPingResponse'
+            $ref: '#/definitions/next_go_anexapiv1pingPingResponse'
         default:
           description: An unexpected error response.
           schema:
@@ -75,7 +75,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/v1pingPingRequest'
+            $ref: '#/definitions/next_go_anexapiv1pingPingRequest'
       tags:
         - PingService
   /api.v1.ping.PingService/PingSample:
@@ -85,7 +85,7 @@ paths:
         "200":
           description: A successful response.
           schema:
-            $ref: '#/definitions/apiv1PingResponse'
+            $ref: '#/definitions/apiv1pingPingResponse'
         default:
           description: An unexpected error response.
           schema:
@@ -95,7 +95,7 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/apiv1PingRequest'
+            $ref: '#/definitions/apiv1pingPingRequest'
       tags:
         - PingService
   /api.v1.user.UserService/ListUsers:
@@ -105,7 +105,7 @@ paths:
         "200":
           description: A successful response.
           schema:
-            $ref: '#/definitions/v1ListUserResponse'
+            $ref: '#/definitions/userListUserResponse'
         default:
           description: An unexpected error response.
           schema:
@@ -115,16 +115,26 @@ paths:
           in: body
           required: true
           schema:
-            $ref: '#/definitions/v1ListUserRequest'
+            $ref: '#/definitions/userListUserRequest'
       tags:
         - UserService
 definitions:
-  apiv1PingRequest:
+  apiv1pingPingRequest:
     type: object
     properties:
       message:
         type: string
-  apiv1PingResponse:
+  apiv1pingPingResponse:
+    type: object
+    properties:
+      message:
+        type: string
+  next_go_anexapiv1pingPingRequest:
+    type: object
+    properties:
+      message:
+        type: string
+  next_go_anexapiv1pingPingResponse:
     type: object
     properties:
       message:
@@ -149,6 +159,53 @@ definitions:
       phoneNumber:
         type: string
       address:
+        type: string
+  orderCreateOrderRequest:
+    type: object
+    properties:
+      userId:
+        type: string
+        format: int64
+      productId:
+        type: string
+        format: int64
+      quantity:
+        type: string
+        format: int64
+  orderCreateOrderResponse:
+    type: object
+    properties:
+      Order:
+        $ref: '#/definitions/orderOrder'
+  orderListOrdersRequest:
+    type: object
+    properties:
+      userId:
+        type: string
+        format: int64
+  orderListOrdersResponse:
+    type: object
+    properties:
+      Order:
+        $ref: '#/definitions/orderOrder'
+  orderOrder:
+    type: object
+    properties:
+      userId:
+        type: string
+        format: int64
+      orderId:
+        type: string
+        format: int64
+      username:
+        type: string
+      productId:
+        type: string
+        format: int64
+      quantity:
+        type: string
+        format: int64
+      orderDate:
         type: string
   protobufAny:
     type: object
@@ -284,64 +341,17 @@ definitions:
         items:
           type: object
           $ref: '#/definitions/protobufAny'
-  v1CreateOrderRequest:
+  userListUserRequest:
     type: object
-    properties:
-      userId:
-        type: string
-        format: int64
-      productId:
-        type: string
-        format: int64
-      quantity:
-        type: string
-        format: int64
-  v1CreateOrderResponse:
-    type: object
-    properties:
-      Order:
-        $ref: '#/definitions/v1Order'
-  v1ListOrdersRequest:
-    type: object
-    properties:
-      userId:
-        type: string
-        format: int64
-  v1ListOrdersResponse:
-    type: object
-    properties:
-      Order:
-        $ref: '#/definitions/v1Order'
-  v1ListUserRequest:
-    type: object
-  v1ListUserResponse:
+  userListUserResponse:
     type: object
     properties:
       users:
         type: array
         items:
           type: object
-          $ref: '#/definitions/v1User'
-  v1Order:
-    type: object
-    properties:
-      userId:
-        type: string
-        format: int64
-      orderId:
-        type: string
-        format: int64
-      username:
-        type: string
-      productId:
-        type: string
-        format: int64
-      quantity:
-        type: string
-        format: int64
-      orderDate:
-        type: string
-  v1User:
+          $ref: '#/definitions/userUser'
+  userUser:
     type: object
     properties:
       userId:
@@ -350,14 +360,4 @@ definitions:
       username:
         type: string
       email:
-        type: string
-  v1pingPingRequest:
-    type: object
-    properties:
-      message:
-        type: string
-  v1pingPingResponse:
-    type: object
-    properties:
-      message:
         type: string

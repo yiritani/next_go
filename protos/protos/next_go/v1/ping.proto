@@ -1,7 +1,12 @@
 syntax = "proto3";
 
-package next_go.api.v1;
+// NOTE: 実は超大事。
+// このパッケージ名は、生成されたコードのパッケージ名と一致している必要があります。
+// そうしないと、生成されたクライアントのコードを使ってもエンドポイントが違うので404になる。
+package api.v1.ping;
 
+// NOTE: これも超大事。
+// .pb.go が出力されるフォルダと合わせないといけない。かもしれない。
 option go_package = "github.com/yiritani/next_go_proto/sdk/golang/_generated/protos/next_go/v1;next_go_proto_v1";
 import "google/api/annotations.proto";
 
@@ -23,8 +28,7 @@ service PingService {
 
   rpc PingSample(PingRequest) returns (PingResponse){
     option (google.api.http) = {
-      post: "/api.v1.ping.PingService/PingSample"
-      body: "*"
+      get: "/v1/ping_sample"
     };
   }
 }
