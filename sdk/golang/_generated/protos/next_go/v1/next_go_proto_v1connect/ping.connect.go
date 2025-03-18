@@ -22,7 +22,7 @@ const _ = connect.IsAtLeastVersion1_13_0
 
 const (
 	// PingServiceName is the fully-qualified name of the PingService service.
-	PingServiceName = "next_go.api.v1.PingService"
+	PingServiceName = "api.v1.ping.PingService"
 )
 
 // These constants are the fully-qualified names of the RPCs defined in this package. They're
@@ -34,21 +34,21 @@ const (
 // period.
 const (
 	// PingServicePingProcedure is the fully-qualified name of the PingService's Ping RPC.
-	PingServicePingProcedure = "/next_go.api.v1.PingService/Ping"
+	PingServicePingProcedure = "/api.v1.ping.PingService/Ping"
 	// PingServicePingSampleProcedure is the fully-qualified name of the PingService's PingSample RPC.
-	PingServicePingSampleProcedure = "/next_go.api.v1.PingService/PingSample"
+	PingServicePingSampleProcedure = "/api.v1.ping.PingService/PingSample"
 )
 
-// PingServiceClient is a client for the next_go.api.v1.PingService service.
+// PingServiceClient is a client for the api.v1.ping.PingService service.
 type PingServiceClient interface {
 	Ping(context.Context, *connect.Request[v1.PingRequest]) (*connect.Response[v1.PingResponse], error)
 	PingSample(context.Context, *connect.Request[v1.PingRequest]) (*connect.Response[v1.PingResponse], error)
 }
 
-// NewPingServiceClient constructs a client for the next_go.api.v1.PingService service. By default,
-// it uses the Connect protocol with the binary Protobuf Codec, asks for gzipped responses, and
-// sends uncompressed requests. To use the gRPC or gRPC-Web protocols, supply the connect.WithGRPC()
-// or connect.WithGRPCWeb() options.
+// NewPingServiceClient constructs a client for the api.v1.ping.PingService service. By default, it
+// uses the Connect protocol with the binary Protobuf Codec, asks for gzipped responses, and sends
+// uncompressed requests. To use the gRPC or gRPC-Web protocols, supply the connect.WithGRPC() or
+// connect.WithGRPCWeb() options.
 //
 // The URL supplied here should be the base URL for the Connect or gRPC server (for example,
 // http://api.acme.com or https://acme.com/grpc).
@@ -77,17 +77,17 @@ type pingServiceClient struct {
 	pingSample *connect.Client[v1.PingRequest, v1.PingResponse]
 }
 
-// Ping calls next_go.api.v1.PingService.Ping.
+// Ping calls api.v1.ping.PingService.Ping.
 func (c *pingServiceClient) Ping(ctx context.Context, req *connect.Request[v1.PingRequest]) (*connect.Response[v1.PingResponse], error) {
 	return c.ping.CallUnary(ctx, req)
 }
 
-// PingSample calls next_go.api.v1.PingService.PingSample.
+// PingSample calls api.v1.ping.PingService.PingSample.
 func (c *pingServiceClient) PingSample(ctx context.Context, req *connect.Request[v1.PingRequest]) (*connect.Response[v1.PingResponse], error) {
 	return c.pingSample.CallUnary(ctx, req)
 }
 
-// PingServiceHandler is an implementation of the next_go.api.v1.PingService service.
+// PingServiceHandler is an implementation of the api.v1.ping.PingService service.
 type PingServiceHandler interface {
 	Ping(context.Context, *connect.Request[v1.PingRequest]) (*connect.Response[v1.PingResponse], error)
 	PingSample(context.Context, *connect.Request[v1.PingRequest]) (*connect.Response[v1.PingResponse], error)
@@ -112,7 +112,7 @@ func NewPingServiceHandler(svc PingServiceHandler, opts ...connect.HandlerOption
 		connect.WithSchema(pingServiceMethods.ByName("PingSample")),
 		connect.WithHandlerOptions(opts...),
 	)
-	return "/next_go.api.v1.PingService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	return "/api.v1.ping.PingService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case PingServicePingProcedure:
 			pingServicePingHandler.ServeHTTP(w, r)
@@ -128,9 +128,9 @@ func NewPingServiceHandler(svc PingServiceHandler, opts ...connect.HandlerOption
 type UnimplementedPingServiceHandler struct{}
 
 func (UnimplementedPingServiceHandler) Ping(context.Context, *connect.Request[v1.PingRequest]) (*connect.Response[v1.PingResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("next_go.api.v1.PingService.Ping is not implemented"))
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.v1.ping.PingService.Ping is not implemented"))
 }
 
 func (UnimplementedPingServiceHandler) PingSample(context.Context, *connect.Request[v1.PingRequest]) (*connect.Response[v1.PingResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("next_go.api.v1.PingService.PingSample is not implemented"))
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.v1.ping.PingService.PingSample is not implemented"))
 }

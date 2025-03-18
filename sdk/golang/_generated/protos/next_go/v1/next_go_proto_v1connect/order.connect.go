@@ -22,7 +22,7 @@ const _ = connect.IsAtLeastVersion1_13_0
 
 const (
 	// OrdersServiceName is the fully-qualified name of the OrdersService service.
-	OrdersServiceName = "next_go.api.v1.OrdersService"
+	OrdersServiceName = "api.v1.order.OrdersService"
 )
 
 // These constants are the fully-qualified names of the RPCs defined in this package. They're
@@ -35,19 +35,19 @@ const (
 const (
 	// OrdersServiceListOrdersProcedure is the fully-qualified name of the OrdersService's ListOrders
 	// RPC.
-	OrdersServiceListOrdersProcedure = "/next_go.api.v1.OrdersService/ListOrders"
+	OrdersServiceListOrdersProcedure = "/api.v1.order.OrdersService/ListOrders"
 	// OrdersServiceCreateOrderProcedure is the fully-qualified name of the OrdersService's CreateOrder
 	// RPC.
-	OrdersServiceCreateOrderProcedure = "/next_go.api.v1.OrdersService/CreateOrder"
+	OrdersServiceCreateOrderProcedure = "/api.v1.order.OrdersService/CreateOrder"
 )
 
-// OrdersServiceClient is a client for the next_go.api.v1.OrdersService service.
+// OrdersServiceClient is a client for the api.v1.order.OrdersService service.
 type OrdersServiceClient interface {
 	ListOrders(context.Context, *connect.Request[v1.ListOrdersRequest]) (*connect.ServerStreamForClient[v1.ListOrdersResponse], error)
 	CreateOrder(context.Context, *connect.Request[v1.CreateOrderRequest]) (*connect.Response[v1.CreateOrderResponse], error)
 }
 
-// NewOrdersServiceClient constructs a client for the next_go.api.v1.OrdersService service. By
+// NewOrdersServiceClient constructs a client for the api.v1.order.OrdersService service. By
 // default, it uses the Connect protocol with the binary Protobuf Codec, asks for gzipped responses,
 // and sends uncompressed requests. To use the gRPC or gRPC-Web protocols, supply the
 // connect.WithGRPC() or connect.WithGRPCWeb() options.
@@ -79,17 +79,17 @@ type ordersServiceClient struct {
 	createOrder *connect.Client[v1.CreateOrderRequest, v1.CreateOrderResponse]
 }
 
-// ListOrders calls next_go.api.v1.OrdersService.ListOrders.
+// ListOrders calls api.v1.order.OrdersService.ListOrders.
 func (c *ordersServiceClient) ListOrders(ctx context.Context, req *connect.Request[v1.ListOrdersRequest]) (*connect.ServerStreamForClient[v1.ListOrdersResponse], error) {
 	return c.listOrders.CallServerStream(ctx, req)
 }
 
-// CreateOrder calls next_go.api.v1.OrdersService.CreateOrder.
+// CreateOrder calls api.v1.order.OrdersService.CreateOrder.
 func (c *ordersServiceClient) CreateOrder(ctx context.Context, req *connect.Request[v1.CreateOrderRequest]) (*connect.Response[v1.CreateOrderResponse], error) {
 	return c.createOrder.CallUnary(ctx, req)
 }
 
-// OrdersServiceHandler is an implementation of the next_go.api.v1.OrdersService service.
+// OrdersServiceHandler is an implementation of the api.v1.order.OrdersService service.
 type OrdersServiceHandler interface {
 	ListOrders(context.Context, *connect.Request[v1.ListOrdersRequest], *connect.ServerStream[v1.ListOrdersResponse]) error
 	CreateOrder(context.Context, *connect.Request[v1.CreateOrderRequest]) (*connect.Response[v1.CreateOrderResponse], error)
@@ -114,7 +114,7 @@ func NewOrdersServiceHandler(svc OrdersServiceHandler, opts ...connect.HandlerOp
 		connect.WithSchema(ordersServiceMethods.ByName("CreateOrder")),
 		connect.WithHandlerOptions(opts...),
 	)
-	return "/next_go.api.v1.OrdersService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	return "/api.v1.order.OrdersService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case OrdersServiceListOrdersProcedure:
 			ordersServiceListOrdersHandler.ServeHTTP(w, r)
@@ -130,9 +130,9 @@ func NewOrdersServiceHandler(svc OrdersServiceHandler, opts ...connect.HandlerOp
 type UnimplementedOrdersServiceHandler struct{}
 
 func (UnimplementedOrdersServiceHandler) ListOrders(context.Context, *connect.Request[v1.ListOrdersRequest], *connect.ServerStream[v1.ListOrdersResponse]) error {
-	return connect.NewError(connect.CodeUnimplemented, errors.New("next_go.api.v1.OrdersService.ListOrders is not implemented"))
+	return connect.NewError(connect.CodeUnimplemented, errors.New("api.v1.order.OrdersService.ListOrders is not implemented"))
 }
 
 func (UnimplementedOrdersServiceHandler) CreateOrder(context.Context, *connect.Request[v1.CreateOrderRequest]) (*connect.Response[v1.CreateOrderResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("next_go.api.v1.OrdersService.CreateOrder is not implemented"))
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("api.v1.order.OrdersService.CreateOrder is not implemented"))
 }
