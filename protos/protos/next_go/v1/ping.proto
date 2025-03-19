@@ -21,13 +21,15 @@ message PingResponse {
 service PingService {
   rpc Ping(PingRequest) returns (PingResponse){
     option (google.api.http) = {
-      get: "/v1/ping"
+      post: "/api.v1.ping.PingService/Ping"
+      body: "*"
     };
   }
 
   rpc PingSample(PingRequest) returns (PingResponse){
     option (google.api.http) = {
-      get: "/v1/ping_sample"
+      post: "/api.v1.ping.PingService/PingSample"
+      body: "*"
     };
   }
 }
